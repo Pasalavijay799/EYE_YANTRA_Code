@@ -1,0 +1,19 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Govind Narayan Sahu_2223_3333-03-31_2026-03-28.jpg
+lv: 2.00px 
+lh: 3.16px 
+rv: 2.24px 
+rh: 3.16px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 4.12 px
+Strabismus detected in Left Eye with type: Hypotropia (Downward).
+Type: Hypotropia (Downward):Left Eye likely Hypotropia
+ 
+rvd: 6.708 deg 
+rhd: 18.974 deg
+ 
+ 
+lvd: 0.000 deg 
+lhd: 0.000 deg 
+ 

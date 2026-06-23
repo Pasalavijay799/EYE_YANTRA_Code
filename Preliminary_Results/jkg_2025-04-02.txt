@@ -1,0 +1,14 @@
+Preliminary test  Analysis Report
+
+Input Image Path: jkg_2025-04-02.jpg
+ 
+
+left Esotropia
+ 
+
+left_estro_degree:-15.945395900922858
+ 
+
+left_hypo_degree: 0.0
+HER: 1.56353533
+VER: 1.92353841

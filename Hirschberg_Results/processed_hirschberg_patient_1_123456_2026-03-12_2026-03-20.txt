@@ -1,0 +1,19 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_patient_1_123456_2026-03-12_2026-03-20.jpg
+lv: 5.10px 
+lh: 6.08px 
+rv: 5.10px 
+rh: 6.08px
+Left Iris White Spot from center: 16.12 px
+Right Iris White Spot: 0.00 px
+Strabismus detected in Right Eye with type: Hypotropia (Downward).
+Type: Hypotropia (Downward):Right Eye likely Hypotropia
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 5.883 deg 
+lhd: 39.456 deg 
+ 

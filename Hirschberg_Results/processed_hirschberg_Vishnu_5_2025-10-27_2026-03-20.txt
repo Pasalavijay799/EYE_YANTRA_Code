@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Vishnu_5_2025-10-27_2026-03-20.jpg
+lv: 7.00px 
+lh: 10.00px 
+rv: 7.00px 
+rh: 9.00px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

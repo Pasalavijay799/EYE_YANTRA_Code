@@ -1,0 +1,6 @@
+Preliminary test  Analysis Report
+
+Input Image Path: ram_2025-05-13.jpg
+ 
+right Exotropia:right_extro_degree:45.00000000000001right_hyper_degree:right_hyper_degree:2.2906100426385936HER: 2.51315736
+VER: 1.5974117

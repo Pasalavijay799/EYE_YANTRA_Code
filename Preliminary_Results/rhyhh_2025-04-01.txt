@@ -1,0 +1,12 @@
+Preliminary test  Analysis Report
+
+Input Image Path: rhyhh_2025-04-01.jpg
+ 
+
+right Exotropia
+ 
+
+right_extro_degree:27.645975363738668
+ 
+left_hyper_degree:13.570434385161501HER: 2.33836668
+VER: 1.82081027

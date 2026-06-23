@@ -1,0 +1,5 @@
+Hirschberg Test Results:
+- Left Pupil: [583.08636475 504.00042057]
+- Right Pupil: [619.05923462 535.87521744]
+- Corneal Reflection: [601.0727996826172, 519.9378190040588]
+- Diagnosis: ⚠️ Possible Strabismus (Squint Detected)

@@ -1,0 +1,9 @@
+Preliminary test  Analysis Report
+
+Input Image Path: arkati_245555_2006-06-06_2026-03-17.jpg
+ 
+left Exotropia
+left extro degree wrt to LTP degree:33.6900675259798
+ 
+left_hyper_degree:5.71HER: 1.663
+VER: 1.996

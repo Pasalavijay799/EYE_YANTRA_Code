@@ -1,0 +1,10 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_jsr_2025-05-13.jpg
+lv: 3.00px lh: 5.00px rv: 3.16px rh: 4.12px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

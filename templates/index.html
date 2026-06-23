@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% set active_screen = 'intake' %}
+
+{% block topbar_title %}Patient Intake{% endblock %}
+{% block topbar_sub %}Begin a new ocular alignment assessment{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-intake">
+  <div class="eyebrow">New Session</div>
+  <div class="h-title">Welcome to EyeYantra</div>
+  <div class="h-desc">Enter the patient's details to begin a comprehensive ocular alignment assessment &mdash; Preliminary, Hirschberg and Nine‑Position Gaze testing in a single guided session.</div>
+
+  <div class="intake-wrap">
+    <div class="card intake-card">
+      <svg class="iris-bg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="48" fill="none" stroke="#1B2A6B" stroke-width="0.8"/><circle cx="50" cy="50" r="36" fill="none" stroke="#1B2A6B" stroke-width="0.8"/><circle cx="50" cy="50" r="24" fill="none" stroke="#1B2A6B" stroke-width="0.8"/><circle cx="50" cy="50" r="12" fill="#1B2A6B"/></svg>
+      
+      <form action="{{ url_for('index') }}" method="POST">
+        <div class="field">
+          <label for="patient_name">Patient Name</label>
+          <input type="text" id="patient_name" name="patient_name" placeholder="e.g. Viswanath" required value="{{ personDetails.get('userName', '') if personDetails else '' }}">
+        </div>
+        <div class="field">
+          <label for="patient_id">Patient ID</label>
+          <input type="text" id="patient_id" name="patient_id" placeholder="e.g. EYT-0054" required value="{{ personDetails.get('id', '') if personDetails else '' }}">
+        </div>
+        <div class="field">
+          <label for="patient_dob">Date of Birth</label>
+          <input type="text" id="patient_dob" name="patient_dob" placeholder="DD / MM / YYYY" required value="{{ personDetails.get('dob', '') if personDetails else '' }}">
+        </div>
+        <button type="submit" class="btn-3d">Start Assessment &nbsp;&rarr;</button>
+      </form>
+    </div>
+
+    <div class="side-illustration">
+      <svg width="280" height="280" viewBox="0 0 280 280">
+        <circle cx="140" cy="140" r="118" fill="none" stroke="#1B2A6B" stroke-opacity="0.10" stroke-width="1.5"/>
+        <circle cx="140" cy="140" r="86" fill="none" stroke="#1B2A6B" stroke-opacity="0.14" stroke-width="1.5"/>
+        <circle cx="140" cy="140" r="54" fill="none" stroke="#14B8AA" stroke-opacity="0.5" stroke-width="2"/>
+        <circle cx="140" cy="140" r="30" fill="#1B2A6B" fill-opacity="0.9"/>
+        <circle cx="148" cy="132" r="7" fill="#fff" fill-opacity="0.7"/>
+        <g stroke="#14B8AA" stroke-width="1.4" stroke-opacity="0.6">
+          <line x1="140" y1="6" x2="140" y2="26"/>
+          <line x1="140" y1="254" x2="140" y2="274"/>
+          <line x1="6" y1="140" x2="26" y2="140"/>
+          <line x1="254" y1="140" x2="274" y2="140"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+Preliminary test  Analysis Report
+
+Input Image Path: rac_2025-04-02.jpg
+ 
+
+left Esotropia
+ 
+
+left_estro_degree:-0.0
+ 
+
+No Vertical Squint
+HER: 1.28930115
+VER: 1.10760573

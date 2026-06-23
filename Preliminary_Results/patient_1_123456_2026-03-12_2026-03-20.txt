@@ -1,0 +1,11 @@
+Preliminary test  Analysis Report
+
+Input Image Path: patient_1_123456_2026-03-12_2026-03-20.jpg
+ 
+left Exotropia
+left extro degree wrt to LTP degree:21.037511025421825
+ 
+
+No Vertical Squint
+HER: 1.269
+VER: 1.32

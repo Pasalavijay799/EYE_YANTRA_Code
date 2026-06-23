@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_sai1_1122333_11111-02-12_2026-03-29.jpg
+lv: 4.12px 
+lh: 6.08px 
+rv: 4.12px 
+rh: 6.08px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

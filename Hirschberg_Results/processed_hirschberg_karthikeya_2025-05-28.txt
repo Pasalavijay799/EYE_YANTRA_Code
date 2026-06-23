@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_karthikeya_2025-05-28.jpg
+lv: 5.00px 
+lh: 7.00px 
+rv: 5.00px 
+rh: 7.00px
+Left Iris White Spot from center: 13.04 px
+Right Iris White Spot: 10.30 px
+No Strabismus Detected
+ 
+rvd: 15.0 deg 
+rhd: 19.28571428571429 deg
+ 
+ 
+lvd: 21.0 deg 
+lhd: 23.57142857142857 deg 
+ 

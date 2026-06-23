@@ -1,0 +1,12 @@
+Preliminary test  Analysis Report
+
+Input Image Path: jsr_2025-05-13.jpg
+ 
+
+right Exotropia
+ 
+
+right_extro_degree:29.744881296942214
+ 
+left_hyper_degree:4.085616779974798HER: 1.32063395
+VER: 1.54540338

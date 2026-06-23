@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_arkati_23_7777-07-08_2026-03-28.jpg
+lv: 7.07px 
+lh: 8.06px 
+rv: 7.07px 
+rh: 7.07px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

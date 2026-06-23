@@ -1,0 +1,3 @@
+Processed Image: ghjk_2025-03-31.jpg
+Original Image: ghjk_2025-03-31.jpg
+Processing: Grayscale conversion

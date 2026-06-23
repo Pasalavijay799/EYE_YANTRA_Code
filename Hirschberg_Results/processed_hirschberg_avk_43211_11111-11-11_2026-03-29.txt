@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_avk_43211_11111-11-11_2026-03-29.jpg
+lv: 6.08px 
+lh: 8.06px 
+rv: 6.00px 
+rh: 8.06px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 2.00 px
+No Strabismus Detected
+ 
+rvd: 0.000 deg 
+rhd: 3.721 deg
+ 
+ 
+lvd: 0.000 deg 
+lhd: 0.000 deg 
+ 

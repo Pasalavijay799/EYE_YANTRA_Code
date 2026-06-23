@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: teja5_2025-05-28.jpg
+ 
+right Exotropia:right_extro_degree:23.962488974578182
+No Vertical Squint
+HER: 1.2479044
+VER: 1.09878248

@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Teja Kumar Narayana_12345678_2005-06-27_2025-06-02.jpg
+ 
+right Exotropia:right_extro_degree:22.62
+No Vertical Squint
+HER: 1.369
+VER: 1.128

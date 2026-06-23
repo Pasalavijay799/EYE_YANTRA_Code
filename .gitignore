@@ -1,0 +1,78 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+
+# Flask instance folder
+instance/
+
+# Pytest / coverage / testing
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+*.py,cover
+.cache
+nosetests.xml
+test-results/
+junit-*.xml
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code settings
+.vscode/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# Profiling data
+.prof
+
+# SQLite database
+*.sqlite3
+*.db
+
+# Logs
+*.log
+
+# Env variables file
+.env
+.env.*
+
+# Docker
+*.pid
+*.pid.lock
+
+# System files
+.DS_Store
+Thumbs.db
+venv/
+.venv/
+Python-3.10.20/
+__pycache__/
+venv/
+.venv/
+Python-3.10.20/
+__pycache__/

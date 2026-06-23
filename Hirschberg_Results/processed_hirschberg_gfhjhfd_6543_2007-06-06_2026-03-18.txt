@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_gfhjhfd_6543_2007-06-06_2026-03-18.jpg
+lv: 5.10px 
+lh: 6.08px 
+rv: 5.10px 
+rh: 6.08px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

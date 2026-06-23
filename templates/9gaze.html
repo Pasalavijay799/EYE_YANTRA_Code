@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% set active_screen = 'gaze' %}
+
+{% block topbar_title %}9‑Gaze Test{% endblock %}
+{% block topbar_sub %}Complete eye movement assessment{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-gaze">
+  <div class="eyebrow">9‑Gaze Test</div>
+  <div class="h-title">Nine‑Position Gaze Capture</div>
+  <div class="h-desc">Have the patient follow the dot through all nine cardinal positions while the camera captures each fixation.</div>
+
+  <div class="gaze-layout">
+    <div class="card gaze-target-card">
+      <div class="gaze-pos-label" style="margin-bottom: 12px;">LOOK AT THIS TARGET DOT</div>
+      <!-- Redesigned gaze target display with standard png files -->
+      <div class="gaze-target" style="display:flex; align-items:center; justify-content:center;">
+        <img id="gaze-image" src="/static/gaze_images/gaze1.png" alt="Gaze Target" style="max-width: 90%; max-height: 90%; object-fit: contain;">
+      </div>
+    </div>
+
+    <div class="card stream-card" style="width:480px;">
+      <div class="stream-frame" style="aspect-ratio:16/11;">
+        <div class="live-dot"><span></span> LIVE</div>
+        {% if stream_ip %}
+        <img id="video-stream" src="http://{{ stream_ip }}:80" alt="Live Stream">
+        {% else %}
+        <svg class="face-illust" width="140" height="140" viewBox="0 0 100 100">
+          <circle cx="50" cy="46" r="30" fill="#27336E"/>
+          <ellipse cx="38" cy="42" rx="5.5" ry="4" fill="#0B1023"/>
+          <ellipse cx="62" cy="42" rx="5.5" ry="4" fill="#0B1023"/>
+          <circle cx="40" cy="40" r="1.4" fill="#7FE0D6"/>
+          <circle cx="64" cy="40" r="1.4" fill="#7FE0D6"/>
+          <path d="M40 60 Q50 67 60 60" stroke="#0B1023" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        {% endif %}
+      </div>
+      
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+      </div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin: 10px 0;">
+        <span class="gaze-pos-label">Gaze Position <span id="gaze-position">1</span> / 9</span>
+      </div>
+      
+      <div class="chips-row" style="margin-bottom: 18px;">
+        <div class="chip-num" id="chip-1">1</div>
+        <div class="chip-num" id="chip-2">2</div>
+        <div class="chip-num" id="chip-3">3</div>
+        <div class="chip-num" id="chip-4">4</div>
+        <div class="chip-num" id="chip-5">5</div>
+        <div class="chip-num" id="chip-6">6</div>
+        <div class="chip-num" id="chip-7">7</div>
+        <div class="chip-num" id="chip-8">8</div>
+        <div class="chip-num" id="chip-9">9</div>
+      </div>
+      
+      <div class="gaze-controls">
+        <button class="btn-3d ghost" style="flex:1; padding: 12px 6px;" onclick="previousGaze()">&larr; Previous</button>
+        <button class="btn-3d danger" style="flex:1.2; padding: 12px 6px;" onclick="captureImage()">Capture</button>
+        <button class="btn-3d ghost" style="flex:1; padding: 12px 6px;" onclick="nextGaze()">Next &rarr;</button>
+      </div>
+
+      <div style="margin-top: 18px; text-align: center;">
+        <button class="btn-3d teal" id="view-results" style="width:100%;" onclick="viewResults()" disabled>📊 View 9 Gaze Results</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let currentGaze = 1;
+let personName = "";
+let capturedGazes = new Set();
+
+function updateGazeImage() {
+  const gazeImage = document.getElementById("gaze-image");
+  gazeImage.src = `/static/gaze_images/gaze${currentGaze}.png`;
+  
+  // Highlight active chip
+  for (let i = 1; i <= 9; i++) {
+    const chip = document.getElementById(`chip-${i}`);
+    if (capturedGazes.has(i)) {
+      chip.className = 'chip-num done';
+    } else if (i === currentGaze) {
+      chip.className = 'chip-num active';
+    } else {
+      chip.className = 'chip-num';
+    }
+  }
+}
+
+function nextGaze() {
+  if (currentGaze < 9) {
+    currentGaze++;
+    document.getElementById("gaze-position").textContent = currentGaze;
+    updateGazeImage();
+  }
+}
+
+function previousGaze() {
+  if (currentGaze > 1) {
+    currentGaze--;
+    document.getElementById("gaze-position").textContent = currentGaze;
+    updateGazeImage();
+  }
+}
+
+function updateProgress() {
+  const percentage = (capturedGazes.size / 9) * 100;
+  document.getElementById("progress-fill").style.width = percentage + "%";
+  document.getElementById("view-results").disabled = (capturedGazes.size !== 9);
+}
+
+function captureImage() {
+  const videoStream = document.getElementById("video-stream");
+  if (videoStream) {
+    videoStream.src = ""; // Stop stream
+  }
+  
+  const formData = new FormData();
+  formData.append("gaze", currentGaze);
+  
+  Swal.fire({
+    title: `Capturing Gaze Position ${currentGaze}...`,
+    text: 'Hold position and follow the dot.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  fetch("/capture_9gaze", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    Swal.fire({
+      title: data.status === 'success' ? 'Captured' : 'Capture Failed',
+      text: data.message,
+      icon: data.status === 'success' ? 'success' : 'warning'
+    });
+    
+    if (data.status === 'success' && !data.retry) {
+      capturedGazes.add(currentGaze);
+      const chip = document.getElementById(`chip-${currentGaze}`);
+      chip.className = 'chip-num done';
+      updateProgress();
+    }
+    
+    if (videoStream && "{{ stream_ip }}") {
+      videoStream.src = "http://{{ stream_ip }}:80"; // Restart stream
+    }
+    
+    if (capturedGazes.size === 9) {
+      Swal.fire({
+        title: 'Assessment Complete!',
+        text: 'All 9 cardinal gazes successfully captured. Ready to view results.',
+        icon: 'success'
+      });
+    }
+  })
+  .catch(err => {
+    console.error("Error capturing gaze:", err);
+    Swal.fire({
+      title: 'Error',
+      text: 'An error occurred. Please try again.',
+      icon: 'error'
+    });
+    if (videoStream && "{{ stream_ip }}") {
+      videoStream.src = "http://{{ stream_ip }}:80"; // Restart stream
+    }
+  });
+}
+
+function viewResults() {
+  if (personName) {
+    window.location.href = `/9gaze_results?name=${encodeURIComponent(personName)}`;
+  } else {
+    Swal.fire({
+      title: 'Error',
+      text: 'Patient details missing. Please restart session.',
+      icon: 'error'
+    });
+  }
+}
+
+function fetchName() {
+  fetch("/get_stream_ip")
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.userName) {
+        personName = data.userName;
+      }
+    });
+}
+
+fetchName();
+updateGazeImage();
+updateProgress();
+</script>
+{% endblock %}

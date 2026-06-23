@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% set active_screen = 'results' %}
+
+{% block topbar_title %}Test Results{% endblock %}
+{% block topbar_sub %}Processed Hirschberg Corneal Reflex test results{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-results">
+  <div class="eyebrow">Hirschberg Test &middot; Results</div>
+  <div class="h-title">Processed Hirschberg Reflex</div>
+  <div class="h-desc">Annotated corneal light-reflex offsets relative to pupil center &mdash; full-resolution capture and detailed text analysis are ready to export.</div>
+
+  {% if status == "fail" %}
+  <div class="alert-error">
+    ⚠️ {{ message }}
+  </div>
+  <a href="/hirschberg" class="btn-3d ghost" style="width: auto;">⬅️ Try Again</a>
+  {% else %}
+  
+  <div class="results-grid" style="grid-template-columns: 1fr 1fr; max-width: 900px; margin-bottom: 28px;">
+    <!-- Processed Image Card -->
+    <div class="card result-thumb" style="height: auto;">
+      <div class="thumb-img" style="height: 300px;">
+        <img src="{{ url_for('download_image', test_type='hirschberg', filename=processed_image) }}" alt="Processed Hirschberg Image" style="width:100%; height:100%; object-fit:contain;">
+      </div>
+      <div class="thumb-meta">
+        <span class="gpos">Reflex Markers Overlay</span>
+        <span class="grade-tag neutral">Processed</span>
+      </div>
+    </div>
+
+    <!-- Details Card -->
+    <div class="card" style="padding: 24px;">
+      <div class="section-label">Hirschberg Analysis</div>
+      
+      <div style="margin: 18px 0; font-size: 14px; line-height: 1.6;">
+        <p><strong>Status:</strong> <span style="color: var(--success); font-weight: bold;">{{ message }}</span></p>
+        <p style="margin-top: 10px;">The Hirschberg test measures the distance between the corneal light reflection and the pupil center. Large offsets indicate misalignment angles (strabismus).</p>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:10px; margin-top:20px;">
+        <a href="{{ url_for('download_image', test_type='hirschberg', filename=processed_image) }}" class="btn-3d teal" style="width:100%;">📥 Download Processed Image</a>
+        <a href="{{ url_for('download_text', test_type='hirschberg', filename=text_file) }}" download class="btn-3d ghost" style="width:100%;">📄 Download Analysis Report</a>
+      </div>
+    </div>
+  </div>
+  
+  <a href="/dashboard" class="btn-3d" style="width: auto;">Continue to Dashboard &nbsp;&rarr;</a>
+  {% endif %}
+</div>
+{% endblock %}

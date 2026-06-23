@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: 123_1234_2026-03-10_2026-03-17.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.22
+VER: 1.241

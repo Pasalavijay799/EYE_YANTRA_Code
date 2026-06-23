@@ -1,0 +1,351 @@
+{% extends "base.html" %}
+{% set active_screen = 'connect' %}
+
+{% block topbar_title %}Device Connection{% endblock %}
+{% block topbar_sub %}Pair the EyeYantra headset and configure Wi-Fi{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-connect">
+  <div class="eyebrow">Device Pairing</div>
+  <div class="h-title">Connect the EyeYantra device</div>
+  <div class="h-desc">Pair the headset over Bluetooth, then hand off to Wi‑Fi for low‑latency video streaming during testing.</div>
+
+  <style>
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  </style>
+
+  <!-- Messages / Alerts -->
+  {% if messages %}
+  <div class="alert-success" style="margin-bottom: 15px;">
+    <h4>📬 System Messages:</h4>
+    <ul style="list-style-type: none; margin-top: 5px;">
+      {% for msg in messages %}
+      <li>{{ msg }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  
+  <!-- Dynamic AJAX Connection Messages -->
+  <div id="dynamic-alert-container"></div>
+
+  <div class="connect-grid">
+    <div class="card ble-card">
+      <div class="section-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>
+        Available Bluetooth Devices
+      </div>
+      
+      {% if devices %}
+        {% for name, address in devices %}
+        <div class="device-row {% if connected == address %}connected{% endif %}">
+          <div class="device-info">
+            <div class="device-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5l11 11L12 22V2l5.5 5.5-11 11"/></svg>
+            </div>
+            <div>
+              <div class="device-name">{{ name }}</div>
+              <div class="device-mac">{{ address }}</div>
+            </div>
+          </div>
+          {% if connected == address %}
+          <div class="btn-sm connected">Connected</div>
+          {% else %}
+          <form class="connect-form" action="{{ url_for('index') }}" method="POST" style="margin:0; display: flex; align-items: center;">
+            <input type="hidden" name="address" value="{{ address }}">
+            <input type="hidden" name="name" value="{{ name }}">
+            <button type="submit" class="btn-sm connect-btn">Connect</button>
+            <span class="connecting-status" style="display:none; color: var(--muted); font-size: 0.8rem; font-weight: 500; align-items: center;">
+              <span class="spinner-sm" style="display:inline-block; width:10px; height:10px; border:2px solid var(--muted); border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite; margin-right:5px;"></span>
+              Connecting...
+            </span>
+          </form>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        {% if connected %}
+        <div class="device-row connected">
+          <div class="device-info">
+            <div class="device-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.5 6.5l11 11L12 22V2l5.5 5.5-11 11"/></svg>
+            </div>
+            <div>
+              <div class="device-name">Connected Device</div>
+              <div class="device-mac">{{ connected }}</div>
+            </div>
+          </div>
+          <div class="btn-sm connected">Connected</div>
+        </div>
+        {% else %}
+        <div style="padding: 10px; color: var(--muted); text-align: center;">No Bluetooth devices found. Scanning...</div>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    <div class="card wifi-card">
+      <div class="section-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13a7 7 0 0 1 14 0"/><path d="M8.5 16a3.5 3.5 0 0 1 7 0"/></svg>
+        Wi‑Fi Configuration
+      </div>
+      
+      <form class="wifi-form" action="{{ url_for('index') }}" method="POST">
+        <div class="field">
+          <label for="ssid">Network Name (SSID)</label>
+          <input type="text" id="ssid" name="ssid" placeholder="e.g. IITT" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="••••••••" required>
+        </div>
+        
+        <span class="wifi-status" style="display:none; align-items:center; justify-content:center; gap:5px; color:var(--muted); font-size:0.85rem; margin-bottom:12px; font-weight:500;">
+          <span class="spinner-sm" style="display:inline-block; width:10px; height:10px; border:2px solid var(--muted); border-top-color:transparent; border-radius:50%; animation:spin 1s linear infinite;"></span>
+          Sending credentials...
+        </span>
+        
+        <button type="submit" class="btn-3d teal wifi-btn" style="margin-bottom: 12px; width: 100%;">Send Credentials</button>
+      </form>
+      
+      <a class="btn-3d" href="/dashboard" style="width:100%;">Continue to Dashboard &nbsp;&rarr;</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('.connect-form').forEach(form => {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Disable all connect buttons
+    document.querySelectorAll('.connect-btn').forEach(btn => {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+    });
+    
+    // Hide the submit button and show the connecting status for this row
+    const btn = form.querySelector('.connect-btn');
+    const status = form.querySelector('.connecting-status');
+    if (btn) btn.style.display = 'none';
+    if (status) status.style.display = 'inline-flex';
+    
+    // Get form details
+    const address = form.querySelector('input[name="address"]').value;
+    const name = form.querySelector('input[name="name"]').value;
+    
+    // Create Alert Banner
+    const alertContainer = document.getElementById('dynamic-alert-container');
+    alertContainer.innerHTML = `
+      <div class="alert-info" style="margin-bottom: 20px; padding: 15px; background: rgba(52,152,219,0.1); border: 1px solid rgba(52,152,219,0.3); border-radius: 12px; color: var(--primary);">
+        <h4 style="margin: 0 0 5px 0;">🔗 Connecting to Device...</h4>
+        <p style="margin: 0; font-size: 0.85rem;">Initiating Bluetooth pairing with <strong>${name}</strong> (${address}). Please wait.</p>
+        <div id="connection-logs" style="margin-top: 10px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; max-height: 100px; overflow-y: auto; text-align: left; line-height: 1.4;">
+          [1/2] Sending connection request to server...
+        </div>
+      </div>
+    `;
+    
+    const logs = document.getElementById('connection-logs');
+    
+    // Post connection to server
+    const formData = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => {
+      logs.innerHTML += `<br>[2/2] Connection task started in background. Polling status...`;
+      startStatusPolling(address, name);
+    })
+    .catch(err => {
+      showError(`Failed to trigger connection: ${err.message}`);
+    });
+  });
+});
+
+let pollInterval = null;
+
+function startStatusPolling(targetAddress, targetName) {
+  const alertContainer = document.getElementById('dynamic-alert-container');
+  const logs = document.getElementById('connection-logs');
+  
+  if (pollInterval) clearInterval(pollInterval);
+  
+  pollInterval = setInterval(() => {
+    fetch("/get_stream_ip")
+      .then(res => res.json())
+      .then(data => {
+        // Log messages from queue
+        if (data.messages && data.messages.length > 0) {
+          data.messages.forEach(msg => {
+            logs.innerHTML += `<br>${msg}`;
+            logs.scrollTop = logs.scrollHeight;
+            
+            // If message contains connection error, handle it
+            if (msg.includes("error") || msg.includes("❌")) {
+              showError(msg);
+              clearInterval(pollInterval);
+            }
+          });
+        }
+        
+        // Check if connected
+        if (data.connected_device === targetAddress) {
+          logs.innerHTML += `<br>🎉 <strong>Connection confirmed by server!</strong>`;
+          clearInterval(pollInterval);
+          
+          alertContainer.innerHTML = `
+            <div class="alert-success" style="margin-bottom: 20px; padding: 15px; background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); border-radius: 12px; color: var(--success);">
+              <h4 style="margin: 0 0 5px 0;">✅ Connection Successful!</h4>
+              <p style="margin: 0; font-size: 0.85rem;">Successfully connected and paired with <strong>${targetName}</strong>.</p>
+            </div>
+          `;
+          
+          // Refresh the page after 1.5 seconds to show the connected state
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      })
+      .catch(err => console.error("Error polling device status:", err));
+  }, 1000);
+}
+
+function showError(msg) {
+  const alertContainer = document.getElementById('dynamic-alert-container');
+  alertContainer.innerHTML = `
+    <div class="alert-danger" style="margin-bottom: 20px; padding: 15px; background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); border-radius: 12px; color: var(--danger);">
+      <h4 style="margin: 0 0 5px 0;">❌ Connection Failed</h4>
+      <p style="margin: 0; font-size: 0.85rem;">${msg}</p>
+      <button onclick="window.location.reload()" class="btn-sm" style="margin-top: 10px; background: var(--danger); color: white; border: none; cursor: pointer;">Retry Scanning</button>
+    </div>
+  `;
+  
+  // Re-enable connect buttons
+  document.querySelectorAll('.connect-btn').forEach(btn => {
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.display = 'inline-block';
+  });
+  document.querySelectorAll('.connecting-status').forEach(status => {
+    status.style.display = 'none';
+  });
+}
+
+document.querySelectorAll('.wifi-form').forEach(form => {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const btn = form.querySelector('.wifi-btn');
+    const status = form.querySelector('.wifi-status');
+    
+    if (btn) btn.disabled = true;
+    if (btn) btn.style.opacity = '0.5';
+    if (status) status.style.display = 'flex';
+    
+    const ssid = document.getElementById('ssid').value;
+    
+    const alertContainer = document.getElementById('dynamic-alert-container');
+    alertContainer.innerHTML = `
+      <div class="alert-info" style="margin-bottom: 20px; padding: 15px; background: rgba(52,152,219,0.1); border: 1px solid rgba(52,152,219,0.3); border-radius: 12px; color: var(--primary);">
+        <h4 style="margin: 0 0 5px 0;">📤 Sending Wi-Fi Credentials...</h4>
+        <p style="margin: 0; font-size: 0.85rem;">Sending network configuration for <strong>${ssid}</strong> over Bluetooth.</p>
+        <div id="wifi-logs" style="margin-top: 10px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; max-height: 100px; overflow-y: auto; text-align: left; line-height: 1.4;">
+          [1/2] Packaging credentials...
+        </div>
+      </div>
+    `;
+    
+    const logs = document.getElementById('wifi-logs');
+    
+    const formData = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => {
+      logs.innerHTML += `<br>[2/2] Request received by server. Writing characteristic...`;
+      startWifiStatusPolling(ssid);
+    })
+    .catch(err => {
+      showWifiError(`Failed to send credentials: ${err.message}`);
+    });
+  });
+});
+
+let wifiPollInterval = null;
+
+function startWifiStatusPolling(ssid) {
+  const alertContainer = document.getElementById('dynamic-alert-container');
+  const logs = document.getElementById('wifi-logs');
+  const wifiBtn = document.querySelector('.wifi-btn');
+  const wifiStatus = document.querySelector('.wifi-status');
+  
+  if (wifiPollInterval) clearInterval(wifiPollInterval);
+  
+  wifiPollInterval = setInterval(() => {
+    fetch("/get_stream_ip")
+      .then(res => res.json())
+      .then(data => {
+        if (data.messages && data.messages.length > 0) {
+          data.messages.forEach(msg => {
+            logs.innerHTML += `<br>${msg}`;
+            logs.scrollTop = logs.scrollHeight;
+            
+            if (msg.includes("Sent:")) {
+              clearInterval(wifiPollInterval);
+              
+              // Show success alert
+              alertContainer.innerHTML = `
+                <div class="alert-success" style="margin-bottom: 20px; padding: 15px; background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); border-radius: 12px; color: var(--success);">
+                  <h4 style="margin: 0 0 5px 0;">✅ Wi-Fi Credentials Sent!</h4>
+                  <p style="margin: 0; font-size: 0.85rem;">Wi-Fi credentials successfully written to the device. Device is connecting to network <strong>${ssid}</strong>.</p>
+                </div>
+              `;
+              
+              if (wifiBtn) wifiBtn.disabled = false;
+              if (wifiBtn) wifiBtn.style.opacity = '1';
+              if (wifiStatus) wifiStatus.style.display = 'none';
+            }
+            
+            if (msg.includes("Failed") || msg.includes("❌")) {
+              clearInterval(wifiPollInterval);
+              showWifiError(msg);
+            }
+          });
+        }
+      })
+      .catch(err => console.error("Error polling wifi status:", err));
+  }, 1000);
+}
+
+function showWifiError(msg) {
+  const alertContainer = document.getElementById('dynamic-alert-container');
+  alertContainer.innerHTML = `
+    <div class="alert-danger" style="margin-bottom: 20px; padding: 15px; background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); border-radius: 12px; color: var(--danger);">
+      <h4 style="margin: 0 0 5px 0;">❌ Wi-Fi Transfer Failed</h4>
+      <p style="margin: 0; font-size: 0.85rem;">${msg}</p>
+    </div>
+  `;
+  
+  const wifiBtn = document.querySelector('.wifi-btn');
+  const wifiStatus = document.querySelector('.wifi-status');
+  if (wifiBtn) wifiBtn.disabled = false;
+  if (wifiBtn) wifiBtn.style.opacity = '1';
+  if (wifiStatus) wifiStatus.style.display = 'none';
+}
+
+// Automatically reload list of bluetooth devices if not connected and not actively pairing
+{% if not connected %}
+setTimeout(function() {
+  if (!pollInterval && !wifiPollInterval) {
+    window.location.reload();
+  }
+}, 20000);
+{% endif %}
+</script>
+{% endblock %}

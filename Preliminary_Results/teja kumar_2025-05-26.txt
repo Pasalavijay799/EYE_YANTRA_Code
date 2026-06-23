@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: teja kumar_2025-05-26.jpg
+ 
+right Exotropia:right_extro_degree:30.963756532073536
+No Vertical Squint
+HER: 1.34947984
+VER: 1.24064499

@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: arkat_245555_2006-06-06_2026-03-17.jpg
+ 
+
+No Vertical Squint
+HER: 1.252
+VER: 1.121

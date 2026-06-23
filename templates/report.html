@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% set active_screen = 'report' %}
+
+{% block topbar_title %}Clinical Report{% endblock %}
+{% block topbar_sub %}Compile and export the final report{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-report">
+  <div class="eyebrow">Final Step</div>
+  <div class="h-title">Generate Clinical Report</div>
+  <div class="h-desc">A hospital-grade PDF report is compiled from all completed assessments, ready to print, share or attach to the patient record.</div>
+
+  <div class="report-layout">
+    <div class="card report-summary">
+      <div class="section-label">Session Summary</div>
+      <div class="summary-row">
+        <span class="sr-label">Preliminary Test</span>
+        <span class="status-chip done" style="position:static;">COMPLETE</span>
+      </div>
+      <div class="summary-row">
+        <span class="sr-label">Hirschberg Test</span>
+        <span class="status-chip done" style="position:static;">COMPLETE</span>
+      </div>
+      <div class="summary-row">
+        <span class="sr-label">9‑Gaze Test</span>
+        <span class="status-chip done" style="position:static;">COMPLETE</span>
+      </div>
+      <div class="summary-row">
+        <span class="sr-label">Pattern Analysis</span>
+        <span class="status-chip pending" id="pattern-status-chip" style="position:static; background:var(--warn-bg); color:var(--warn);">PENDING</span>
+      </div>
+      
+      <button class="btn-3d" style="margin-top:18px;" onclick="generateReport()">Generate Overall Report</button>
+      <a class="btn-3d teal" id="download-report-btn" style="margin-top:10px; display: none;" href="/download_overall_report">📥 Download Overall Report</a>
+    </div>
+
+    <div class="card preview-card">
+      <div class="section-label">Report Preview</div>
+      <div class="report-mock">
+        <div class="rm-head">
+          <div class="rm-brand">EyeYantra</div>
+          <div class="rm-tag">Ocular Alignment Diagnostics</div>
+        </div>
+        <div class="rm-body">
+          <div class="rm-line short" style="height:10px; width:70%; background:#D7DEF0;"></div>
+          <div class="rm-line" style="margin-top:10px;"></div>
+          <div class="rm-line short"></div>
+          <div class="rm-box"></div>
+          <div class="rm-line"></div>
+          <div class="rm-line short"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function generateReport() {
+  Swal.fire({
+    title: 'Compiling Report...',
+    text: 'Please wait while generating your hospital-grade Clinical PDF report.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  fetch("/generate_overall_report")
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        Swal.fire({
+          title: 'Report Compiled!',
+          text: 'The PDF has been generated and is ready to download.',
+          icon: 'success'
+        });
+        document.getElementById('download-report-btn').style.display = 'inline-flex';
+        
+        // Update pattern status chip
+        const chip = document.getElementById('pattern-status-chip');
+        if (data.pattern) {
+          chip.textContent = data.pattern.toUpperCase();
+          chip.style.background = 'var(--danger-bg)';
+          chip.style.color = 'var(--danger)';
+        }
+      } else {
+        Swal.fire({
+          title: 'Generation Failed',
+          text: 'Error: ' + data.error,
+          icon: 'error'
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      Swal.fire({
+        title: 'Error',
+        text: 'An error occurred while compiling the report.',
+        icon: 'error'
+      });
+    });
+}
+</script>
+{% endblock %}

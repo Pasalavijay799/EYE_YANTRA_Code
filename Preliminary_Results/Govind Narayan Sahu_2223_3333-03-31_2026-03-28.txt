@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Govind Narayan Sahu_2223_3333-03-31_2026-03-28.jpg
+ 
+right Exotropia:right_extro_degree:45.00
+No Vertical Squint
+HER: 1.914
+VER: 1.29

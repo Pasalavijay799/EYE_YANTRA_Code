@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_teja1_2025-05-27.jpg
+lv: 3.00px lh: 4.00px rv: 3.00px rh: 5.00px
+Left Iris White Spot from center: 6.40 px
+Right Iris White Spot: 0.00 px
+No Strabismus Detected
+ 
+rvd: 0 deg ,rhd: 0 deg
+ 
+ 
+lvd: 20.0 deg ,lhd: 18.75 deg 
+ 

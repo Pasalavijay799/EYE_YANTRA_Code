@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_ram_2025-05-13.jpg
+lv: 4.00px lh: 6.00px rv: 4.12px rh: 6.08px
+Left Iris White Spot from center: 6.71 px
+Right Iris White Spot: 7.21 px
+No Strabismus Detected
+ 
+rvd: 21.82820625326997 deg ,rhd: 9.863939238321437 deg
+ 
+ 
+lvd: 22.5 deg ,lhd: 7.5 deg 
+ 

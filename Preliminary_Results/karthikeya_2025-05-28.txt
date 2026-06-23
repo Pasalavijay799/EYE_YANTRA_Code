@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: karthikeya_2025-05-28.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.12746108
+VER: 1.0205489

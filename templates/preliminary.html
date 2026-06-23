@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% set active_screen = 'capture' %}
+
+{% block topbar_title %}Preliminary Test{% endblock %}
+{% block topbar_sub %}Corneal light reflex baseline screening{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-capture">
+  <div class="eyebrow">Preliminary Screening</div>
+  <div class="h-title">Basic Alignment Screening</div>
+  
+  <div class="capture-tabs">
+    <a class="cap-tab active" href="/preliminary">Preliminary</a>
+    <a class="cap-tab" href="/hirschberg">Hirschberg</a>
+    <a class="cap-tab" href="/9gaze">9‑Gaze</a>
+  </div>
+
+  <div class="capture-grid">
+    <div class="card stream-card">
+      <div class="instr-banner">Ask the patient to look directly at the camera. Ensure even facial illumination for an accurate reading.</div>
+      
+      <div class="stream-frame">
+        <div class="live-dot"><span></span> LIVE</div>
+        {% if stream_ip %}
+        <img id="video-stream" src="http://{{ stream_ip }}:80" alt="Live Stream">
+        {% else %}
+        <svg class="face-illust" width="150" height="150" viewBox="0 0 100 100">
+          <circle cx="50" cy="46" r="30" fill="#27336E"/>
+          <ellipse cx="38" cy="42" rx="5.5" ry="4" fill="#0B1023"/>
+          <ellipse cx="62" cy="42" rx="5.5" ry="4" fill="#0B1023"/>
+          <circle cx="40" cy="41" r="1.4" fill="#7FE0D6"/>
+          <circle cx="64" cy="41" r="1.4" fill="#7FE0D6"/>
+          <path d="M40 60 Q50 67 60 60" stroke="#0B1023" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        {% endif %}
+      </div>
+      
+      <div class="cap-controls">
+        <button class="btn-3d danger" onclick="captureImage()">📷 Capture Image</button>
+        <button class="btn-3d ghost" id="view-results" onclick="viewResults()" disabled>View Results</button>
+      </div>
+    </div>
+
+    <div class="card side-panel">
+      <div class="section-label">Session Checklist</div>
+      <div class="checklist-item"><div class="tick off" id="chk-prelim">1</div> Preliminary Test</div>
+      <div class="checklist-item"><div class="tick off" id="chk-hirsch">2</div> Hirschberg Test</div>
+      <div class="checklist-item"><div class="tick off" id="chk-gaze">3</div> 9‑Gaze Test</div>
+      <div class="checklist-item"><div class="tick off" id="chk-report">4</div> Generate Report</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function captureImage() {
+  const videoStream = document.getElementById("video-stream");
+  const viewResultsButton = document.getElementById("view-results");
+  
+  if (videoStream) {
+    videoStream.src = ""; // Stop stream
+  }
+  
+  const today = new Date().toISOString().split('T')[0];
+  const formData = new FormData();
+  formData.append("date", today);
+  
+  Swal.fire({
+    title: 'Capturing Baseline...',
+    text: 'Please wait while capturing and processing image.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
+
+  fetch("/preliminaryroute", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    Swal.fire({
+      title: data.status === 'success' ? 'Success' : 'Attention Required',
+      text: data.message,
+      icon: data.status === 'success' ? 'success' : 'warning'
+    });
+    
+    if (data.status === 'success') {
+      viewResultsButton.disabled = false;
+      document.getElementById('chk-prelim').className = 'tick on';
+      document.getElementById('chk-prelim').innerHTML = '✓';
+    }
+    
+    if (videoStream && "{{ stream_ip }}") {
+      videoStream.src = "http://{{ stream_ip }}:80"; // Restart stream
+    }
+  })
+  .catch(err => {
+    console.error("Error capturing:", err);
+    Swal.fire({
+      title: 'Error',
+      text: 'An error occurred during capture. Please try again.',
+      icon: 'error'
+    });
+    if (videoStream && "{{ stream_ip }}") {
+      videoStream.src = "http://{{ stream_ip }}:80"; // Restart stream
+    }
+  });
+}
+
+function viewResults() {
+  window.location.href = "/results";
+}
+
+// Update checklist state on load
+function updateChecklist() {
+  fetch('/dashboard')
+    .then(res => res.text())
+    .then(html => {
+      // Very simple parsing of the status flags by calling dashboard status
+      // We can also fetch it directly from the get_stream_ip or a custom state endpoint.
+      // Let's call /get_stream_ip and check if connected_device is active, etc.
+      // Or we can just read the status flags from the python backend check.
+      // Let's call the dashboard route to see if we can parse the COMPLETE flags:
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const cards = doc.querySelectorAll('.test-card');
+      
+      if (cards.length >= 3) {
+        const prelimDone = cards[0].querySelector('.status-chip').classList.contains('done');
+        const hirschDone = cards[1].querySelector('.status-chip').classList.contains('done');
+        const gazeDone = cards[2].querySelector('.status-chip').classList.contains('done');
+        
+        if (prelimDone) {
+          document.getElementById('chk-prelim').className = 'tick on';
+          document.getElementById('chk-prelim').innerHTML = '✓';
+          document.getElementById('view-results').disabled = false;
+        }
+        if (hirschDone) {
+          document.getElementById('chk-hirsch').className = 'tick on';
+          document.getElementById('chk-hirsch').innerHTML = '✓';
+        }
+        if (gazeDone) {
+          document.getElementById('chk-gaze').className = 'tick on';
+          document.getElementById('chk-gaze').innerHTML = '✓';
+        }
+        if (prelimDone && hirschDone && gazeDone) {
+          document.getElementById('chk-report').className = 'tick on';
+          document.getElementById('chk-report').innerHTML = '✓';
+        }
+      }
+    });
+}
+updateChecklist();
+</script>
+{% endblock %}

@@ -1,0 +1,10 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_ram12345_2025-04-01.jpg
+lv: 2.00px lh: 4.12px rv: 2.00px rh: 4.00px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Chitta Mounika_2_2025-07-02_2026-03-20.jpg
+ 
+right Exotropia:right_extro_degree:57.65
+No Vertical Squint
+HER: 2.159
+VER: 1.325

@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Dr. Govind sir_2025-04-13.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.01098243
+VER: 1.09445511

@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: awer_2025-04-02.jpg
+ 
+
+No Horizontal Squint
+left_hyper_degree:9.462322208025613HER: 1.00337345
+VER: 3.18724592

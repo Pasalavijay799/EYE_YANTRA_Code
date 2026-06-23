@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: teja3_2025-05-21.jpg
+ 
+
+No Horizontal Squint
+left_hyper_degree:5.042451069170885HER: 1.21732975
+VER: 1.58457734

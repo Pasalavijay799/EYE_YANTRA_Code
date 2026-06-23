@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Sai rithwik_3_2025-05-07_2026-03-20.jpg
+ 
+right Exotropia:right_extro_degree:35.54
+No Vertical Squint
+HER: 1.32
+VER: 1.18

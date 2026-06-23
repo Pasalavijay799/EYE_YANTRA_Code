@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Niharika_4_2025-06-18_2026-03-20.jpg
+lv: 6.08px 
+lh: 8.06px 
+rv: 6.00px 
+rh: 6.08px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

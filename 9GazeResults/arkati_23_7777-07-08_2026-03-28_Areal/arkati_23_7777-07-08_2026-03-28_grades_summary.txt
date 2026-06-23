@@ -1,0 +1,120 @@
+Image: gaze_1.jpg
+Grades:
+  L_Lateral: -4
+  R_Medial: -4
+Distances:
+  R_Lateral: 30.81
+  R_Medial: 83.82
+  R_Upper: 21.63
+  R_Lower: 42.20
+  L_Lateral: 53.46
+  L_Medial: 59.62
+  L_Upper: 18.87
+  L_Lower: 29.07
+
+Image: gaze_2.jpg
+Grades:
+Distances:
+  R_Lateral: 39.62
+  R_Medial: 74.04
+  R_Upper: 19.24
+  R_Lower: 36.36
+  L_Lateral: 52.15
+  L_Medial: 61.35
+  L_Upper: 20.25
+  L_Lower: 28.16
+
+Image: gaze_3.jpg
+Grades:
+  R_Lateral: -2
+  L_Medial: -4
+Distances:
+  R_Lateral: 48.04
+  R_Medial: 52.77
+  R_Upper: 16.12
+  R_Lower: 24.00
+  L_Lateral: 24.74
+  L_Medial: 88.77
+  L_Upper: 29.21
+  L_Lower: 46.23
+
+Image: gaze_4.jpg
+Grades:
+  L_Lateral: -4
+  R_Medial: -4
+Distances:
+  R_Lateral: 25.08
+  R_Medial: 82.57
+  R_Upper: 26.91
+  R_Lower: 39.60
+  L_Lateral: 59.08
+  L_Medial: 45.69
+  L_Upper: 22.63
+  L_Lower: 26.57
+
+Image: gaze_5.jpg
+Grades:
+Distances:
+  R_Lateral: 39.01
+  R_Medial: 80.60
+  R_Upper: 26.00
+  R_Lower: 36.24
+  L_Lateral: 52.01
+  L_Medial: 65.19
+  L_Upper: 18.97
+  L_Lower: 29.00
+
+Image: gaze_6.jpg
+Grades:
+  R_Lateral: -3
+  L_Medial: -4
+Distances:
+  R_Lateral: 56.44
+  R_Medial: 48.33
+  R_Upper: 21.40
+  R_Lower: 27.51
+  L_Lateral: 26.02
+  L_Medial: 79.56
+  L_Upper: 26.87
+  L_Lower: 36.07
+
+Image: gaze_7.jpg
+Grades:
+  L_Lateral: -4
+  R_Medial: -4
+Distances:
+  R_Lateral: 37.95
+  R_Medial: 78.92
+  R_Upper: 18.38
+  R_Lower: 30.00
+  L_Lateral: 59.08
+  L_Medial: 52.50
+  L_Upper: 23.32
+  L_Lower: 25.00
+
+Image: gaze_8.jpg
+Grades:
+Distances:
+  R_Lateral: 54.23
+  R_Medial: 68.59
+  R_Upper: 18.03
+  R_Lower: 20.25
+  L_Lateral: 53.08
+  L_Medial: 61.20
+  L_Upper: 23.35
+  L_Lower: 19.00
+
+Image: gaze_9.jpg
+Grades:
+  R_Lateral: -2
+  L_Medial: -4
+Distances:
+  R_Lateral: 52.35
+  R_Medial: 56.57
+  R_Upper: 18.68
+  R_Lower: 20.22
+  L_Lateral: 40.79
+  L_Medial: 76.66
+  L_Upper: 26.40
+  L_Lower: 27.66
+

@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Gowda priyanka_1_2025-10-10_2026-03-20.jpg
+lv: 8.06px 
+lh: 9.06px 
+rv: 8.00px 
+rh: 9.06px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

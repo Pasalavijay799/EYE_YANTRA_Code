@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% set active_screen = 'dashboard' %}
+
+{% block topbar_title %}Assessment Dashboard{% endblock %}
+{% block topbar_sub %}Choose a test to begin or review{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-dashboard">
+  <div class="eyebrow">Session #33 &middot; {{ personDetails.get('userName', 'Patient') }}</div>
+  <div class="h-title">Choose an assessment</div>
+  <div class="h-desc">Complete all three tests for a full ocular alignment profile. Order doesn't matter &mdash; the report compiles automatically once finished.</div>
+
+  <div class="test-grid">
+    <!-- Preliminary Test Card -->
+    <a href="/preliminary" class="card test-card">
+      {% if prelim_status %}
+      <span class="status-chip done">COMPLETE</span>
+      {% else %}
+      <span class="status-chip pending">PENDING</span>
+      {% endif %}
+      <div class="test-icon c1">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/></svg>
+      </div>
+      <div class="test-title">Preliminary Test</div>
+      <div class="test-desc">Quick baseline screening of eye alignment and corneal landmarks.</div>
+      {% if prelim_status %}
+      <button class="btn-3d ghost" style="width:auto; padding:9px 18px; font-size:12.5px; pointer-events: none;">Review</button>
+      {% else %}
+      <button class="btn-3d" style="width:auto; padding:9px 18px; font-size:12.5px; pointer-events: none;">Start Test</button>
+      {% endif %}
+    </a>
+
+    <!-- Hirschberg Test Card -->
+    <a href="/hirschberg" class="card test-card">
+      {% if hirschberg_status %}
+      <span class="status-chip done">COMPLETE</span>
+      {% else %}
+      <span class="status-chip pending">PENDING</span>
+      {% endif %}
+      <div class="test-icon c2">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.6" fill="currentColor" stroke="none"/></svg>
+      </div>
+      <div class="test-title">Hirschberg Test</div>
+      <div class="test-desc">Corneal light reflex examination for misalignment detection.</div>
+      {% if hirschberg_status %}
+      <button class="btn-3d ghost" style="width:auto; padding:9px 18px; font-size:12.5px; pointer-events: none;">Review</button>
+      {% else %}
+      <button class="btn-3d" style="width:auto; padding:9px 18px; font-size:12.5px; pointer-events: none;">Start Test</button>
+      {% endif %}
+    </a>
+
+    <!-- 9-Gaze Test Card -->
+    <a href="/9gaze" class="card test-card">
+      {% if nine_gaze_status %}
+      <span class="status-chip done">COMPLETE</span>
+      {% else %}
+      <span class="status-chip pending">PENDING</span>
+      {% endif %}
+      <div class="test-icon c3">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="9" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="9" width="16" height="6" rx="1"/></svg>
+      </div>
+      <div class="test-title">9‑Gaze Test</div>
+      <div class="test-desc">Complete eye movement assessment across nine cardinal positions.</div>
+      {% if nine_gaze_status %}
+      <button class="btn-3d ghost" style="width:auto; padding:9px 18px; font-size:12.5px; pointer-events: none;">Review</button>
+      {% else %}
+      <button class="btn-3d" style="width:auto; padding:9px 18px; font-size:12.5px; pointer-events: none;">Start Test</button>
+      {% endif %}
+    </a>
+  </div>
+
+  <div class="report-bar">
+    <div class="rb-left">
+      <div class="rl-title">Generate Clinical Report</div>
+      <div class="rl-sub">Available once all three assessments are complete</div>
+    </div>
+    {% if prelim_status and hirschberg_status and nine_gaze_status %}
+    <a class="btn-3d teal" href="/report">Go to Report &nbsp;&rarr;</a>
+    {% else %}
+    <a class="btn-3d teal" href="/report" style="opacity: 0.6; cursor: not-allowed; pointer-events: none;">Go to Report &nbsp;&rarr;</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

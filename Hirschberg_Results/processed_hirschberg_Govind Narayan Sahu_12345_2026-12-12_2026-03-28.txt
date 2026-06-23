@@ -1,0 +1,19 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Govind Narayan Sahu_12345_2026-12-12_2026-03-28.jpg
+lv: 6.00px 
+lh: 9.06px 
+rv: 6.08px 
+rh: 7.07px
+Left Iris White Spot from center: 19.03 px
+Right Iris White Spot: 0.00 px
+Strabismus detected in Right Eye with type: Esotropia (Inward).
+Type: Esotropia (Inward):Right Eye likely Esotropia
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 47.500 deg 
+lhd: 1.656 deg 
+ 

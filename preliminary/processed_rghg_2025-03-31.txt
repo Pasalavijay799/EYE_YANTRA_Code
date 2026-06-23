@@ -1,0 +1,3 @@
+Processed Image: processed_rghg_2025-03-31.jpg
+Original Image: rghg_2025-03-31.jpg
+Processing: Grayscale conversion

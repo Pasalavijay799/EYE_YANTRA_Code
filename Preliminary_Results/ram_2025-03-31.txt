@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.08420289
+VER: 1.03077641

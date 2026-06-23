@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_hemanth3_12345_31232-02-12_2026-03-29.jpg
+lv: 6.08px 
+lh: 8.06px 
+rv: 6.08px 
+rh: 8.06px
+Left Iris White Spot from center: 3.00 px
+Right Iris White Spot: 1.41 px
+No Strabismus Detected
+ 
+rvd: 2.466 deg 
+rhd: 1.861 deg
+ 
+ 
+lvd: 0.000 deg 
+lhd: 5.582 deg 
+ 

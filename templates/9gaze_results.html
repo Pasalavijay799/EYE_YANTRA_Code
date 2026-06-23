@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% set active_screen = 'results' %}
+
+{% block topbar_title %}Test Results{% endblock %}
+{% block topbar_sub %}Processed 9-gaze test results with grading{% endblock %}
+
+{% block content %}
+<div class="screen" id="screen-results">
+  <div class="eyebrow">9‑Gaze Test &middot; Results</div>
+  <div class="h-title">Processed Gaze Captures for {{ name.split('_')[0] }}</div>
+  <div class="h-desc">Compact, grade‑annotated thumbnails &mdash; full-resolution captures remain available for download without cluttering the review screen.</div>
+
+  {% if images %}
+  <div class="results-grid" style="margin-bottom: 28px;">
+    {% for img in images %}
+    <div class="card result-thumb">
+      <div class="thumb-img">
+        <img src="{{ url_for('serve_9gaze_file', name=name, filename=img) }}" alt="Gaze {{ loop.index }}">
+      </div>
+      <div class="thumb-meta">
+        <span class="gpos">Gaze Position {{ loop.index }}</span>
+        <span class="grade-tag neutral">Grade</span>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert-error">⚠️ No processed images found.</div>
+  {% endif %}
+
+  <div style="display: flex; gap: 28px; align-items: flex-start; margin-top: 30px; margin-bottom: 30px;">
+    {% if combined_image %}
+    <div class="card" style="padding: 22px; flex: 1.5;">
+      <div class="section-label">Composite 9-Gaze View</div>
+      <div style="background: #fff; padding: 10px; border-radius: var(--r-md); border: 1.2px solid #E7EAF5; display: flex; justify-content: center; align-items: center; min-height: 250px;">
+        <img src="{{ url_for('serve_9gaze_file', name=name, filename=combined_image) }}" alt="Combined 9 Gaze Image" style="max-width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px;">
+      </div>
+      <div style="margin-top: 15px; text-align: right;">
+        <a href="{{ url_for('serve_9gaze_file', name=name, filename=combined_image) }}" download="combined_9gaze.jpg" class="btn-3d teal" style="width: auto; display: inline-flex;">📥 Download Combined Image</a>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="card" style="padding: 22px; flex: 1; min-height: 280px;">
+      <div class="section-label">Areal Ratios Analysis</div>
+      <div style="margin: 15px 0; font-size: 13.5px; line-height: 1.6; color: var(--text);">
+        <p>Areal ratio metrics assess the relative dilation or contraction of pupil landmarks across gazes.</p>
+      </div>
+      {% if text_file %}
+      <div style="margin-top: 25px;">
+        <a href="{{ url_for('serve_9gaze_file', name=name, filename=text_file) }}" download="{{ text_file }}" class="btn-3d ghost" style="width:100%;">📄 Download Areal Ratios File</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <a href="/dashboard" class="btn-3d" style="width: auto;">Continue to Dashboard &nbsp;&rarr;</a>
+</div>
+{% endblock %}

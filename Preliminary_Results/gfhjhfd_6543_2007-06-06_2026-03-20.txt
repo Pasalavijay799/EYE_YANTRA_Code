@@ -1,0 +1,11 @@
+Preliminary test  Analysis Report
+
+Input Image Path: gfhjhfd_6543_2007-06-06_2026-03-20.jpg
+ 
+left Exotropia
+left extro degree wrt to LTP degree:22.83365417791755
+ 
+
+No Vertical Squint
+HER: 1.235
+VER: 1.163

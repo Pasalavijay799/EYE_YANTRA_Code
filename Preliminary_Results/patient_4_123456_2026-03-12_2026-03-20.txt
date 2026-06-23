@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: patient_4_123456_2026-03-12_2026-03-20.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.168
+VER: 1.223

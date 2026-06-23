@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_teja kumar_2025-05-24.jpg
+lv: 4.00px lh: 6.00px rv: 4.00px rh: 5.00px
+Left Iris White Spot from center: 8.60 px
+Right Iris White Spot: 6.71 px
+No Strabismus Detected
+ 
+rvd: 22.5 deg ,rhd: 9.0 deg
+ 
+ 
+lvd: 26.25 deg ,lhd: 12.5 deg 
+ 

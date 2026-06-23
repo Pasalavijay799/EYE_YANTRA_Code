@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: arkati_23_7777-07-08_2026-03-28.jpg
+ 
+right Exotropia:right_extro_degree:39.09
+No Vertical Squint
+HER: 1.495
+VER: 1.067

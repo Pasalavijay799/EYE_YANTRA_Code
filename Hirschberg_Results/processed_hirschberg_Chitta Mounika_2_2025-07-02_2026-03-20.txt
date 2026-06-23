@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Chitta Mounika_2_2025-07-02_2026-03-20.jpg
+lv: 7.07px 
+lh: 9.06px 
+rv: 7.28px 
+rh: 8.06px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 
