@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eye Yantra - Clinical Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Sora:wght@600;700&amp;family=Fira+Code:wght@450&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#4fdbcc",
+                        "primary-container": "#1b2a6b",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "surface-container-highest": "#e4e1e8",
+                        "on-primary-container": "#8694db",
+                        "inverse-primary": "#b9c3ff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dde1ff",
+                        "on-surface": "#1b1b20",
+                        "surface-container-low": "#f5f2f9",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1b1b20",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-fixed-dim": "#c3c6ce",
+                        "surface-tint": "#4c5a9d",
+                        "inverse-on-surface": "#f2f0f6",
+                        "surface-bright": "#fbf8ff",
+                        "surface-container": "#efedf3",
+                        "on-error": "#ffffff",
+                        "secondary": "#006a62",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#94989f",
+                        "surface": "#fbf8ff",
+                        "inverse-surface": "#303035",
+                        "surface-variant": "#e4e1e8",
+                        "on-tertiary-fixed": "#181c21",
+                        "secondary-container": "#71f8e8",
+                        "tertiary-fixed": "#dfe2ea",
+                        "tertiary-container": "#2c3036",
+                        "surface-dim": "#dbd9df",
+                        "outline": "#767681",
+                        "tertiary": "#171b21",
+                        "outline-variant": "#c6c5d2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#344283",
+                        "primary": "#001256",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e9e7ed",
+                        "background": "#fbf8ff",
+                        "on-surface-variant": "#454650",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-secondary-container": "#007168",
+                        "on-primary-fixed": "#001257",
+                        "secondary-fixed": "#71f8e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "base": "4px",
+                        "container-max": "1440px",
+                        "sm": "16px",
+                        "md": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "code-diagnostic": ["Fira Code"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "code-diagnostic": ["13px", {"lineHeight": "20px", "fontWeight": "450"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            background-image: radial-gradient(circle at 10% 20%, rgba(79, 219, 204, 0.05) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(0, 18, 86, 0.05) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .dark .glass-panel {
+            background-color: rgba(239, 237, 243, 0.6); /* surface-container low opacity */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen flex flex-col font-body-md relative overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed w-full top-0 z-50 bg-white/60 dark:bg-surface-container/60 backdrop-blur-xl border-b border-white/40 dark:border-white/10 shadow-sm backdrop-blur-[20px]">
+<div class="flex items-center justify-between px-md py-xs w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" data-icon="visibility" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="text-headline-lg font-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">Eye Yantra</span>
+</div>
+<nav class="hidden md:flex gap-md">
+<a class="text-on-surface-variant font-body-md hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Overview</a>
+<a class="text-secondary font-bold font-body-md hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Clinical Dashboard</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Settings</a>
+</nav>
+</div>
+</header>
+<div class="flex flex-1 pt-[80px] pb-[60px]">
+<!-- NavigationDrawer (SideNav - mapped from JSON, suppressed on mobile via md:flex) -->
+<aside class="hidden md:flex flex-col gap-sm p-md h-full w-xl rounded-r-xl border-r border-white/40 shadow-md backdrop-blur-[20px] bg-surface/60 dark:bg-surface-container-low/60 backdrop-blur-xl fixed left-0 top-[80px] bottom-[60px] z-40">
+<!-- Header Type: Profile -->
+<div class="flex flex-col mb-md left_align">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-secondary mb-xs">
+<img alt="Active Patient Avatar" class="w-full h-full object-cover" data-alt="A macro photography style portrait of a professional patient avatar for a medical application, bright and clinical lighting, very subtle teal background glow, high resolution and crisp detail." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdmUQUduMn2DxM9xXMRqhjcfdI_P14Rix7FdUxd9zUgTl_b9fGWnatBnDbln5XeiVKdVa_gSpJD2qjCzcpwAEKHi8OY8bLOv8q94sJHSVWa6a61ExiHeac1KkZYRWGjLo_Srl3Z-b_e3KOXoZWGMPU--Um7RPY9daVHoytimy2kcZ1YiNZxQSbRb4XGgytrPlQ_CI6prW_N-C-AhqG0qjisvbTa2cB9hnH05a8W7niXHQu4g2U0R80"/>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-primary">John Doe</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ID: #AX-78210</p>
+<p class="font-label-caps text-label-caps text-secondary mt-1">Source: RetinalCam X1</p>
+</div>
+<nav class="flex flex-col gap-2 flex-1">
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:bg-secondary-fixed/20 transition-all duration-200 hover:shadow-[0_0_15px_rgba(79,219,204,0.4)]" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-body-md text-body-md">Preliminary</span>
+</a>
+<a class="flex items-center gap-sm p-sm bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg font-bold hover:shadow-[0_0_15px_rgba(79,219,204,0.4)] transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="view_in_ar" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
+<span class="font-body-md text-body-md">Hirschberg</span>
+</a>
+<a class="flex items-center gap-sm p-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:bg-secondary-fixed/20 transition-all duration-200 hover:shadow-[0_0_15px_rgba(79,219,204,0.4)]" href="#">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-body-md text-body-md">9-Gaze</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 w-full max-w-container-max mx-auto px-sm md:px-lg md:ml-xl transition-all duration-300">
+<!-- Warning Banner -->
+<div class="mt-md mb-md glass-panel rounded-lg p-sm border-l-4 border-l-[#ffb4ab] bg-[#ffdad6]/20 flex items-start gap-sm">
+<span class="material-symbols-outlined text-[#ba1a1a]" data-icon="warning">warning</span>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-[#ba1a1a]">Incomplete Assessments</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Please complete all required pending tests before generating the final report.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Active Patient Card (Bento spanning 12 cols on mobile, 4 on desktop) -->
+<div class="md:col-span-4 glass-panel rounded-xl p-md flex flex-col justify-between hover:shadow-[0_0_20px_rgba(79,219,204,0.15)] transition-shadow duration-300">
+<div>
+<div class="flex justify-between items-start mb-md">
+<h2 class="font-headline-md text-headline-md text-primary">Patient Info</h2>
+<span class="px-2 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-caps text-label-caps flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span> Active
+                            </span>
+</div>
+<div class="flex items-center gap-md mb-md">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white/60 shadow-sm">
+<img alt="Akshay" class="w-full h-full object-cover" data-alt="Close up photograph of a young man named Akshay, clear clinical lighting, professional portrait style, subtle high key white background with a hint of clinical blue, sharp focus." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3D8slTK1xJxKRWwO18BrKxwN9ESsXRl4Z7jlm1DzVoTeeOA5W60vYbnIgGNlc00YOSZNMZXf77SqC-02vK2e4ZNAggNb6AjqBP8-rbmP224kRlu7UryXqJetcZ3flRO2IZ9C0bF6tbX-RHI5gPLA7xxjy-Kwjd3woWat1MmxPKDcBNs1EtjzZNpWkE8--4OD0CS6xZu1xZPYwSgfmevr-fZ0880GL_Hw0IF9VyuSFuXvI5EdvNdeJ"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Akshay</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ID: 18239</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between border-b border-white/20 pb-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">DOB</span>
+<span class="font-body-sm text-body-sm font-semibold text-on-surface">18_10_2001</span>
+</div>
+<div class="flex justify-between pt-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Source</span>
+<span class="font-label-caps text-label-caps text-primary bg-primary-fixed px-2 py-1 rounded">RetinalCam X1</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Assessments Grid (Bento spanning 12 cols on mobile, 8 on desktop) -->
+<div class="md:col-span-8">
+<h2 class="font-headline-md text-headline-md text-primary mb-sm">Assessment Protocol</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-sm">
+<!-- Test 1: Preliminary -->
+<div class="glass-panel rounded-lg p-md flex flex-col gap-sm cursor-pointer hover:border-secondary hover:shadow-[0_0_15px_rgba(79,219,204,0.3)] transition-all duration-300 group">
+<div class="flex justify-between items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-secondary-container" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<span class="px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps">Pending</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Preliminary</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Initial ocular alignment and visual acuity check.</p>
+</div>
+<div class="mt-auto pt-2 flex justify-end">
+<span class="font-label-caps text-label-caps text-secondary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    START TEST <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Test 2: Hirschberg -->
+<div class="glass-panel rounded-lg p-md flex flex-col gap-sm cursor-pointer border-secondary shadow-[0_0_15px_rgba(79,219,204,0.2)] transition-all duration-300 group relative overflow-hidden">
+<!-- Active indicator glow -->
+<div class="absolute inset-0 bg-gradient-to-br from-secondary-fixed/10 to-transparent pointer-events-none"></div>
+<div class="flex justify-between items-center relative z-10">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="lightbulb" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<span class="px-2 py-1 rounded-full bg-[#fff0c2] text-[#7a5900] font-label-caps text-label-caps flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-[#e6a300]"></span> In Progress
+                                </span>
+</div>
+<div class="relative z-10">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Hirschberg</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Corneal light reflex evaluation.</p>
+</div>
+<div class="mt-auto pt-2 flex justify-end relative z-10">
+<span class="font-label-caps text-label-caps text-secondary flex items-center gap-1">
+                                    CONTINUE <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Test 3: 9-Gaze -->
+<div class="glass-panel rounded-lg p-md flex flex-col gap-sm cursor-pointer hover:border-secondary hover:shadow-[0_0_15px_rgba(79,219,204,0.3)] transition-all duration-300 group">
+<div class="flex justify-between items-center">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center group-hover:bg-secondary-container transition-colors">
+<span class="material-symbols-outlined text-primary group-hover:text-on-secondary-container" data-icon="grid_on">grid_on</span>
+</div>
+<span class="px-2 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-caps text-label-caps">Pending</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">9-Gaze Grid</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Extraocular muscle motility assessment.</p>
+</div>
+<div class="mt-auto pt-2 flex justify-end">
+<span class="font-label-caps text-label-caps text-secondary flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    START TEST <span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</span>
+</div>
+</div>
+<!-- Test 4: Latest Results (Disabled) -->
+<div class="glass-panel rounded-lg p-md flex flex-col gap-sm opacity-50 cursor-not-allowed bg-surface-container-highest/30">
+<div class="flex justify-between items-center">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="analytics">analytics</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="lock">lock</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface-variant">Latest Results</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Complete pending tests to unlock synthesis.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Comprehensive Report Section (Full Width) -->
+<div class="md:col-span-12 mt-md">
+<div class="glass-panel rounded-xl p-lg flex flex-col md:flex-row items-center justify-between gap-md border-t border-white/60">
+<div class="flex-1">
+<h2 class="font-headline-md text-headline-md text-primary mb-xs">Comprehensive Report</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+                                Generate a highly detailed, PDF-formatted clinical report encompassing all completed diagnostic modules, patient metadata, and algorithmic confidence scores.
+                            </p>
+</div>
+<button class="bg-secondary text-on-secondary px-xl py-3 rounded-lg font-label-caps text-label-caps tracking-wide hover:shadow-[0_0_20px_rgba(79,219,204,0.6)] hover:bg-secondary-fixed-dim hover:text-on-secondary-fixed transition-all duration-300 flex items-center gap-2 flex-shrink-0 opacity-50 cursor-not-allowed" disabled="">
+<span class="material-symbols-outlined text-[18px]" data-icon="picture_as_pdf">picture_as_pdf</span>
+                            GENERATE PDF
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="fixed bottom-0 w-full bg-surface-dim/80 dark:bg-tertiary-container/80 backdrop-blur-lg border-t border-white/20 z-50 flex justify-between items-center px-lg py-xs font-label-caps text-label-caps text-on-surface-variant">
+<span>© 2024 Eye Yantra Ocular Diagnostics</span>
+<div class="flex gap-md">
+<a class="hover:text-primary transition-colors cursor-default text-secondary font-bold flex items-center gap-1" href="#">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Server: Online
+            </a>
+<a class="hover:text-primary transition-colors cursor-default" href="#">Admin Settings</a>
+</div>
+</footer>
+</body></html>

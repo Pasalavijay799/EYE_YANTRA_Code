@@ -1,0 +1,12 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Falsel_2345_12_23_2026_2026-06-30.jpg
+ 
+
+left Esotropia
+ 
+
+left_estro_degree:-18.43
+ 
+right_hyper_degree:right_hyper_degree:3.09HER: 1.999
+VER: 1.728

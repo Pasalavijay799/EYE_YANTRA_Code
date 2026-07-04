@@ -9,7 +9,7 @@
 #define CHANNEL 0
 
 // Video Configuration
-VideoSetting config(1024, 576, CAM_FPS, VIDEO_JPEG, 1);
+VideoSetting config(640, 480, 15, VIDEO_JPEG, 1);
 
 // WiFi Credentials (Initially Empty)
 char ssid[32] = "";
@@ -29,6 +29,12 @@ BLEAdvertData advdata;
 BLEAdvertData scndata;
 
 bool notify = false;
+uint8_t activeConnID = 0;
+
+// WiFi Connection State
+bool wifiConnectRequested = false;
+unsigned long lastConnectAttempt = 0;
+int wifiRetryCount = 0;
 
 // Stream Parameters
 uint32_t img_addr = 0;
@@ -56,6 +62,7 @@ void sendChunk(WiFiClient& client, uint8_t* buf, uint32_t len) {
 // BLE Callback: Handle Data from Flask
 String bleBuffer = "";
 void writeCB(BLECharacteristic* chr, uint8_t connID) {
+    activeConnID = connID;
     if (chr->getDataLen() > 0) {
         String receivedData = chr->readString();
         bleBuffer += receivedData;
@@ -79,14 +86,20 @@ void writeCB(BLECharacteristic* chr, uint8_t connID) {
                 Serial.println(pass);
                 
                 status = WL_IDLE_STATUS; // Reset WiFi status so main loop attempts connection
+                wifiConnectRequested = true;
+                wifiRetryCount = 0;
+                lastConnectAttempt = 0; // Trigger immediate connection attempt
             }
         }
     }
 }
 
-// BLE Callback: Enable Notifications
 void notifCB(BLECharacteristic* chr, uint8_t connID, uint16_t cccd) {
     notify = (cccd & GATT_CLIENT_CHAR_CONFIG_NOTIFY) != 0;
+    activeConnID = connID;
+    if (notify && status == WL_CONNECTED) {
+        sendDataToFlask("IP:" + ipToString(WiFi.localIP()));
+    }
 }
 
 // Helper: Convert IP Address to String
@@ -106,31 +119,7 @@ void sendDataToFlask(String message) {
     }
 }
 
-// Connect to WiFi with dynamic credentials
-void connectToWiFi() {
-    if (strlen(ssid) == 0 || strlen(pass) == 0) return;
-
-    Serial.println("🔌 Connecting to WiFi...");
-    sendDataToFlask("Status: Connecting to WiFi...");
-
-    int retries = 0;
-    while (status != WL_CONNECTED) {
-        retries++;
-        sendDataToFlask("Status: Connection attempt " + String(retries) + "...");
-        status = WiFi.begin(ssid, pass);
-        if (status != WL_CONNECTED) {
-            delay(5000);
-        }
-    }
-
-    Serial.println("✅ WiFi Connected");
-    sendDataToFlask("Status: WiFi Connected!");
-
-    // Convert IP to String and Send to Flask
-    sendDataToFlask("IP:" + ipToString(WiFi.localIP()));
-
-    server.begin();
-}
+// connectToWiFi is replaced by non-blocking logic in loop()
 
 void setup() {
     Serial.begin(115200);
@@ -139,11 +128,6 @@ void setup() {
     advdata.addFlags(GAP_ADTYPE_FLAGS_LIMITED | GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED);
     advdata.addCompleteName("AMEBA_BLE_DEV");
     scndata.addCompleteServices(BLEUUID(UART_SERVICE_UUID));
-
-    // Start Video Stream
-    Camera.configVideoChannel(CHANNEL, config);
-    Camera.videoInit();
-    Camera.channelBegin(CHANNEL);
 
     // Set Up BLE Service
     Rx.setWriteProperty(true);
@@ -165,12 +149,44 @@ void setup() {
     BLE.beginPeripheral();
 delay(2000);
     Serial.println("🔄 BLE UART Service Started...");
+
+    // Start Video Stream
+    Camera.configVideoChannel(CHANNEL, config);
+    Camera.videoInit();
+    Camera.channelBegin(CHANNEL);
+    Serial.println("🎥 Camera Initialized...");
 }
 
 void loop() {
-    // Attempt to connect to WiFi if not connected
-    if (status != WL_CONNECTED) {
-        connectToWiFi();
+    // Attempt to connect to WiFi non-blockingly if requested and not already connected
+    if (wifiConnectRequested && status != WL_CONNECTED) {
+        unsigned long currentMillis = millis();
+        // Wait 6 seconds between retries to keep BLE alive and responsive
+        if (currentMillis - lastConnectAttempt >= 6000) {
+            lastConnectAttempt = currentMillis;
+            wifiRetryCount++;
+            
+            Serial.print("🔌 WiFi Connection attempt ");
+            Serial.print(wifiRetryCount);
+            Serial.println("...");
+            sendDataToFlask("Status: Connection attempt " + String(wifiRetryCount) + "...");
+            
+            status = WiFi.begin(ssid, pass);
+            
+            if (status == WL_CONNECTED) {
+                Serial.println("✅ WiFi Connected");
+                sendDataToFlask("Status: WiFi Connected!");
+                sendDataToFlask("IP:" + ipToString(WiFi.localIP()));
+                server.begin();
+                wifiConnectRequested = false;
+            } else if (wifiRetryCount >= 3) {
+                Serial.println("❌ WiFi Connection Failed");
+                sendDataToFlask("Status: WiFi Connection Failed. Please check credentials and try again.");
+                wifiConnectRequested = false;
+                ssid[0] = '\0';
+                pass[0] = '\0';
+            }
+        }
     }
 
     WiFiClient client = server.available();

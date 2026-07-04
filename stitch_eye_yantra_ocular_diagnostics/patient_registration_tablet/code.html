@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Patient Registration - Ocular Suite</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-primary-fixed-variant": "#344283",
+                        "surface-variant": "#e4e1e8",
+                        "tertiary-fixed-dim": "#c3c6ce",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#181c21",
+                        "inverse-primary": "#b9c3ff",
+                        "primary-fixed": "#dde1ff",
+                        "surface-container": "#efedf3",
+                        "on-primary-fixed": "#001257",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#4fdbcc",
+                        "primary": "#001256",
+                        "surface-dim": "#dbd9df",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "inverse-surface": "#303035",
+                        "on-secondary-fixed": "#00201d",
+                        "background": "#fbf8ff",
+                        "on-primary-container": "#8694db",
+                        "inverse-on-surface": "#f2f0f6",
+                        "surface-container-high": "#e9e7ed",
+                        "on-tertiary-container": "#94989f",
+                        "on-surface": "#1b1b20",
+                        "surface-tint": "#4c5a9d",
+                        "surface-bright": "#fbf8ff",
+                        "surface-container-highest": "#e4e1e8",
+                        "primary-container": "#1b2a6b",
+                        "on-secondary-container": "#007168",
+                        "tertiary-container": "#2c3036",
+                        "tertiary-fixed": "#dfe2ea",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#71f8e8",
+                        "error-container": "#ffdad6",
+                        "surface": "#fbf8ff",
+                        "surface-container-low": "#f5f2f9",
+                        "secondary": "#006a62",
+                        "outline": "#767681",
+                        "outline-variant": "#c6c5d2",
+                        "on-surface-variant": "#454650",
+                        "on-background": "#1b1b20",
+                        "secondary-container": "#71f8e8",
+                        "tertiary": "#171b21"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "64px",
+                        "sm": "16px",
+                        "xs": "8px",
+                        "lg": "40px",
+                        "base": "4px",
+                        "container-max": "1440px",
+                        "md": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Sora"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Sora"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Sora"],
+                        "headline-sm": ["Sora"],
+                        "code-diagnostic": ["Fira Code"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "code-diagnostic": ["13px", { "lineHeight": "20px", "fontWeight": "450" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&amp;family=Inter:wght@400;600&amp;family=Sora:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(113, 248, 232, 0.3);
+        }
+        .bg-gradient-clinical {
+            background: linear-gradient(135deg, #fbf8ff 0%, #efedf3 100%);
+        }
+        .custom-input:focus {
+            border-color: #006a62;
+            box-shadow: 0 0 8px rgba(113, 248, 232, 0.4);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-gradient-clinical text-on-surface font-body-md antialiased h-screen overflow-hidden flex">
+<!-- Side Navigation Shell -->
+<aside class="flex flex-col h-screen py-md px-sm sticky left-0 z-40 bg-white/60 dark:bg-surface-container/60 backdrop-blur-xl border-r border-white/40 dark:border-white/10 shadow-md docked left-0 h-full w-64">
+<!-- Header -->
+<div class="mb-xl flex flex-col items-center justify-center text-center">
+<div class="w-16 h-16 rounded-full glass-panel mb-sm flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-[32px] text-primary" data-icon="ophthalmology" data-weight="fill" style="font-variation-settings: 'FILL' 1;">ophthalmology</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm text-primary">Ocular Suite</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">V1.0.4 Diagnostic</p>
+</div>
+<!-- Navigation Tabs -->
+<nav class="flex-1 space-y-xs font-body-md text-body-md">
+<!-- Active Tab Intent: Patients (Since this is Patient Registration) -->
+<a class="flex items-center px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/30 transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-sm group-hover:scale-110 transition-transform" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center px-sm py-xs bg-secondary-container text-on-secondary-container rounded-lg font-semibold transition-all duration-200 ease-in-out group" href="#">
+<span class="material-symbols-outlined mr-sm" data-icon="group" data-weight="fill" style="font-variation-settings: 'FILL' 1;">group</span>
+<span>Patients</span>
+</a>
+<a class="flex items-center px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/30 transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-sm group-hover:scale-110 transition-transform" data-icon="visibility">visibility</span>
+<span>Diagnostics</span>
+</a>
+<a class="flex items-center px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/30 transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-sm group-hover:scale-110 transition-transform" data-icon="analytics">analytics</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 dark:hover:bg-surface-container-highest/30 transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-sm group-hover:scale-110 transition-transform" data-icon="inventory_2">inventory_2</span>
+<span>Archive</span>
+</a>
+</nav>
+<!-- CTA & Footer -->
+<div class="mt-auto space-y-md">
+<button class="w-full bg-secondary text-on-secondary font-headline-sm text-headline-sm py-xs rounded-lg hover:bg-secondary/90 hover:glow-active transition-all active:scale-95 shadow-sm">
+                New Scan
+            </button>
+<a class="flex items-center px-sm py-xs text-on-surface-variant hover:text-error hover:bg-error-container/50 transition-all duration-200 ease-in-out rounded-lg group" href="#">
+<span class="material-symbols-outlined mr-sm group-hover:scale-110 transition-transform" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-full relative overflow-y-auto">
+<!-- Top App Bar - Suppressed based on mandate for focused/task journeys, but included to match prompt aesthetic if viewed as top level, but rule says task focused hides shell. Wait, the prompt specifically requested a tablet view of Patient Registration. Registration is a linear/transactional intent. Therefore, TopAppBar should be suppressed to prioritize the Canvas. -->
+<div class="flex-1 px-[24px] py-[24px] md:px-[40px] md:py-[40px] max-w-container-max mx-auto w-full">
+<!-- Page Header -->
+<div class="mb-lg flex justify-between items-end">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-base">New Patient Intake</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Initialize demographic and diagnostic session parameters.</p>
+</div>
+<!-- Progress Indicator -->
+<div class="flex items-center space-x-2">
+<div class="h-2 w-8 bg-secondary rounded-full glow-active"></div>
+<div class="h-2 w-8 bg-surface-variant rounded-full"></div>
+<div class="h-2 w-8 bg-surface-variant rounded-full"></div>
+</div>
+</div>
+<!-- Split Layout Container -->
+<div class="grid grid-cols-1 md:grid-cols-8 gap-gutter h-[calc(100%-120px)]">
+<!-- Left Column: Patient Form (5 cols on tablet) -->
+<div class="md:col-span-5 flex flex-col gap-sm">
+<div class="glass-panel rounded-xl p-md flex-1 flex flex-col shadow-sm">
+<div class="border-b border-white/40 pb-sm mb-md flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-primary-container flex items-center">
+<span class="material-symbols-outlined mr-2" data-icon="person_add">person_add</span>
+                                Demographics
+                            </h3>
+<span class="px-2 py-1 bg-primary/10 text-primary rounded text-label-caps font-label-caps">REQUIRED</span>
+</div>
+<form class="flex-1 space-y-md">
+<div class="space-y-1">
+<label class="font-body-sm text-body-sm text-on-surface-variant ml-1" for="fullName">Full Legal Name</label>
+<input class="w-full bg-white/50 border border-white/60 rounded-xl px-sm py-3 text-on-surface custom-input transition-all" id="fullName" placeholder="e.g. Jane Doe" type="text"/>
+</div>
+<div class="grid grid-cols-2 gap-sm">
+<div class="space-y-1">
+<label class="font-body-sm text-body-sm text-on-surface-variant ml-1" for="patientId">Patient ID (Auto-generated)</label>
+<input class="w-full bg-surface-container-highest/30 border border-transparent rounded-xl px-sm py-3 font-code-diagnostic text-code-diagnostic text-on-surface-variant cursor-not-allowed" id="patientId" readonly="" type="text" value="PT-8892-A"/>
+</div>
+<div class="space-y-1">
+<label class="font-body-sm text-body-sm text-on-surface-variant ml-1" for="dob">Date of Birth</label>
+<input class="w-full bg-white/50 border border-white/60 rounded-xl px-sm py-3 text-on-surface custom-input transition-all" id="dob" type="date"/>
+</div>
+</div>
+<div class="space-y-1 flex-1 flex flex-col h-full pb-4">
+<label class="font-body-sm text-body-sm text-on-surface-variant ml-1" for="notes">Initial Clinical Notes</label>
+<textarea class="w-full bg-white/50 border border-white/60 rounded-xl px-sm py-3 text-on-surface custom-input transition-all flex-1 resize-none h-32" id="notes" placeholder="Enter presenting symptoms or relevant history..."></textarea>
+</div>
+</form>
+</div>
+</div>
+<!-- Right Column: Capture Source (3 cols on tablet) -->
+<div class="md:col-span-3 flex flex-col gap-sm">
+<div class="glass-panel rounded-xl p-md flex-1 flex flex-col shadow-sm relative overflow-hidden">
+<div class="border-b border-white/40 pb-sm mb-md flex items-center">
+<h3 class="font-headline-md text-headline-md text-primary-container flex items-center">
+<span class="material-symbols-outlined mr-2" data-icon="sensors">sensors</span>
+                                Capture Source
+                            </h3>
+</div>
+<div class="space-y-sm flex-1">
+<!-- Option 1: Headset -->
+<label class="cursor-pointer group block">
+<input checked="" class="peer sr-only" name="source" type="radio"/>
+<div class="glass-panel border-2 border-transparent rounded-xl p-sm flex items-start gap-sm peer-checked:border-secondary peer-checked:glow-active transition-all bg-white/40 hover:bg-white/60">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary peer-checked:text-secondary peer-checked:bg-secondary-container transition-colors shrink-0">
+<span class="material-symbols-outlined" data-icon="vr_pano">vrpano</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">Eye Yantra V2</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">High-fidelity stereoscopic capture. Requires paired headset.</p>
+<div class="mt-2 inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-fixed-dim/20 text-on-secondary-container text-[10px] font-bold uppercase tracking-wider">
+<div class="w-2 h-2 rounded-full bg-secondary mr-1 animate-pulse"></div> Paired - Ready
+                                        </div>
+</div>
+</div>
+</label>
+<!-- Option 2: Tablet -->
+<label class="cursor-pointer group block">
+<input class="peer sr-only" name="source" type="radio"/>
+<div class="glass-panel border-2 border-transparent rounded-xl p-sm flex items-start gap-sm peer-checked:border-secondary peer-checked:glow-active transition-all bg-white/40 hover:bg-white/60">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-primary peer-checked:text-secondary peer-checked:bg-secondary-container transition-colors shrink-0">
+<span class="material-symbols-outlined" data-icon="tablet_mac">tablet_mac</span>
+</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1">Tablet Camera</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Standard monocular capture. Best for quick triage.</p>
+</div>
+</div>
+</label>
+</div>
+<!-- Decorative element for empty space -->
+<div class="absolute -bottom-10 -right-10 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[150px]" data-icon="biotech">biotech</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Action -->
+<div class="mt-lg flex justify-end items-center h-16">
+<button class="bg-secondary hover:bg-on-secondary-container text-on-secondary px-8 py-4 rounded-xl font-headline-sm text-headline-sm flex items-center justify-center gap-2 glow-active transition-all active:scale-95 shadow-lg w-full md:w-auto min-w-[250px]">
+<span class="material-symbols-outlined" data-icon="power_settings_new">power_settings_new</span>
+                    Start Session
+                </button>
+</div>
+</div>
+</main>
+</body></html>

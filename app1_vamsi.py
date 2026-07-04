@@ -1,3 +1,24 @@
+import sys
+import builtins
+
+_original_print = print
+def safe_print(*args, **kwargs):
+    encoding = sys.stdout.encoding or 'utf-8'
+    new_args = []
+    for arg in args:
+        if isinstance(arg, str):
+            try:
+                arg.encode(encoding)
+                new_args.append(arg)
+            except UnicodeEncodeError:
+                safe_str = arg.encode(encoding, errors='replace').decode(encoding)
+                new_args.append(safe_str)
+        else:
+            new_args.append(arg)
+    _original_print(*new_args, **kwargs)
+
+builtins.print = safe_print
+
 from flask import Flask, render_template, request, jsonify, Response,send_from_directory,send_file, redirect, url_for, session, flash
 import asyncio
 from bleak import BleakClient, BleakScanner
@@ -46,6 +67,143 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)  # Ensure the folder exists
 ble_loop = asyncio.new_event_loop()
 threading.Thread(target=ble_loop.run_forever, daemon=True).start()
 
+import time
+
+latest_frame = None
+latest_frame_lock = threading.Lock()
+camera_connected = False
+
+def stream_reader():
+    global stream_ip, latest_frame, camera_connected
+    current_ip = None
+
+    # Try to pre-load the stream IP from file on startup
+    try:
+        with open("stream_ip.json", "r") as f:
+            data = json.load(f)
+            loaded_ip = data.get("stream_ip", None)
+            if loaded_ip:
+                stream_ip = loaded_ip
+                print(f"🎬 Preloaded stream IP from json: {stream_ip}")
+    except Exception:
+        pass
+
+    while True:
+        if not stream_ip or stream_ip.lower() == "none":
+            camera_connected = False
+            time.sleep(1)
+            continue
+
+        current_ip = stream_ip
+        stream_url = f"http://{current_ip}:80"
+        print(f"🎥 Connecting to Ameba camera stream at {stream_url}...")
+
+        try:
+            response = requests.get(stream_url, stream=True, timeout=5)
+            if response.status_code == 200:
+                print(f"✅ Camera stream connected successfully to {current_ip}")
+                camera_connected = True
+                bytes_data = bytes()
+
+                for chunk in response.iter_content(chunk_size=4096):
+                    # Check if stream_ip was changed or cleared during streaming
+                    if stream_ip != current_ip:
+                        print("🔄 Stream IP changed, reconnecting...")
+                        break
+
+                    bytes_data += chunk
+
+                    while True:
+                        a = bytes_data.find(b'\xff\xd8') # JPEG Start
+                        b = bytes_data.find(b'\xff\xd9') # JPEG End
+
+                        if a != -1 and b != -1:
+                            if a < b:
+                                jpg = bytes_data[a:b+2]
+                                bytes_data = bytes_data[b+2:]
+
+                                # Decode the image frame
+                                image_np = np.frombuffer(jpg, np.uint8)
+                                frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
+                                if frame is not None:
+                                    with latest_frame_lock:
+                                        latest_frame = frame
+                            else:
+                                bytes_data = bytes_data[a:]
+                        else:
+                            break
+            else:
+                print(f"⚠️ Stream returned status code: {response.status_code}")
+                camera_connected = False
+                time.sleep(2)
+        except Exception as e:
+            print(f"❌ Error in camera stream reader: {e}")
+            camera_connected = False
+            time.sleep(2)
+
+# Start the background stream reader thread
+threading.Thread(target=stream_reader, daemon=True).start()
+
+placeholder_frame = None
+
+def get_placeholder_frame():
+    global placeholder_frame
+    if placeholder_frame is None:
+        # Create a black image (480x320)
+        img = np.zeros((320, 480, 3), dtype=np.uint8)
+        # Fill with a beautiful dark slate background to match the glassmorphism theme
+        img[:] = (35, 16, 11) # BGR for dark slate #111023
+        
+        # Add text: "Connecting to" and "Headset Camera..."
+        text1 = "Connecting to"
+        text2 = "Headset Camera..."
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        
+        # Center the text
+        size1 = cv2.getTextSize(text1, font, 0.7, 2)[0]
+        size2 = cv2.getTextSize(text2, font, 0.7, 2)[0]
+        
+        x1 = (480 - size1[0]) // 2
+        y1 = 140
+        x2 = (480 - size2[0]) // 2
+        y2 = 180
+        
+        cv2.putText(img, text1, (x1, y1), font, 0.7, (214, 224, 127), 2, cv2.LINE_AA) # teal/gold accent color
+        cv2.putText(img, text2, (x2, y2), font, 0.7, (214, 224, 127), 2, cv2.LINE_AA)
+        placeholder_frame = img
+    return placeholder_frame
+
+@app.route("/video_feed")
+def video_feed():
+    def generate():
+        global latest_frame
+        while True:
+            frame_to_send = None
+            is_placeholder = False
+            with latest_frame_lock:
+                if latest_frame is not None:
+                    frame_to_send = latest_frame.copy()
+                else:
+                    frame_to_send = get_placeholder_frame()
+                    is_placeholder = True
+
+            if frame_to_send is not None:
+                ret, jpeg = cv2.imencode('.jpg', frame_to_send)
+                if ret:
+                    frame_bytes = jpeg.tobytes()
+                    yield (b'--frame\r\n'
+                           b'Content-Type: image/jpeg\r\n'
+                           b'Content-Length: ' + str(len(frame_bytes)).encode() + b'\r\n\r\n' +
+                           frame_bytes + b'\r\n')
+            
+            if is_placeholder:
+                time.sleep(0.5) # Sleep longer for placeholder to conserve resources
+            else:
+                time.sleep(0.04) # ~25 fps for live stream
+
+    return Response(generate(), content_type="multipart/x-mixed-replace; boundary=frame")
+
+
 '''
 def add_message(message):
     global stream_ip
@@ -74,7 +232,15 @@ def add_message(message):
 
 @app.route("/get_stream_ip")
 def get_stream_ip():
-    return jsonify({"stream_ip": stream_ip,"connected_device":connected_device,"userName":userName})
+    messages = []
+    while not received_messages.empty():
+        messages.append(received_messages.get())
+    return jsonify({
+        "stream_ip": stream_ip,
+        "connected_device": connected_device,
+        "userName": userName,
+        "messages": messages
+    })
 
 
 async def scan_devices():
@@ -121,7 +287,7 @@ def global_notification_handler(sender, data):
 #         await client.start_notify(CHARACTERISTIC_UUID_TX, notification_handler)
 #         print("🔔 Notifications enabled!")
 
-#         while client.is_connected:
+#         while clyient.is_connected:
 #             await asyncio.sleep(0.5)
 
 #     except Exception as e:
@@ -133,33 +299,36 @@ def global_notification_handler(sender, data):
 #testing
 async def connect_and_store_client(address):
     global client, connected_device
-
+ 
     print(f"🔗 [BLE] Connecting to {address} in shared event loop...")
     client = BleakClient(address)
-
+ 
     try:
         await client.connect()
         connected_device = address
         print(f"✅ [BLE] Connected to {address}")
         received_messages.put(f"✅ [BLE] Connected to {address}")
-
+ 
         # Start notifications using a global or shared handler
         await client.start_notify(CHARACTERISTIC_UUID_TX, global_notification_handler)
         print("🔔 [BLE] Notifications enabled")
         received_messages.put("🔔 [BLE] Notifications enabled")
-
+ 
         while client.is_connected:
              await asyncio.sleep(0.5)
-
+ 
     except Exception as e:
         print(f"❌ [BLE] Connection error: {repr(e)}")
-        connected_device = None
         received_messages.put(f"❌ [BLE] Connection error: {repr(e)}")
+    finally:
+        print(f"❌ [BLE] Connection closed for {address}")
+        received_messages.put("❌ [BLE] Connection closed")
+        connected_device = None
 
 async def send_ble_message(message):
     if client and client.is_connected:
         try:
-            await client.write_gatt_char(CHARACTERISTIC_UUID_RX, message.encode())
+            await client.write_gatt_char(CHARACTERISTIC_UUID_RX, (message + "\n").encode())
             print(f"📤 Sent to BLE: {message}")
             received_messages.put(f"📤 Sent: {message}")
             #return redirect(url_for("index"))
@@ -203,56 +372,122 @@ async def send_ble_message(message):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    global connected_device, stream_ip, userName,personDetails
+    global connected_device, stream_ip, userName, personDetails
     print(userName)
-    print(request.path,request.endpoint)
+    print(request.path, request.endpoint)
+   
     if request.method == "POST":
-        if "userName" in request.form:
-            if(len(request.form.get("userName").strip())==0):
+        print(request.form)
+        if "patient_name" in request.form:
+            patient_name = request.form.get("patient_name", "").strip()
+            if patient_name == "":
                 received_messages.put("UserName Required*")
             else:
-                personDetails["userName"]=request.form.get("userName").strip()
-                personDetails["dob"]=request.form.get("dob").strip()
-                personDetails["id"]=request.form.get("userId").strip()
-                userName=f'{personDetails["userName"]}_{personDetails["id"]}_{personDetails["dob"]}'
-            
-            
-        if "address" in request.form:
+                personDetails["userName"] = patient_name
+                personDetails["dob"] = request.form.get("patient_dob", "")
+                personDetails["id"] = request.form.get("patient_id", "")
+                userName = f'{personDetails["userName"]}_{personDetails["id"]}_{personDetails["dob"]}'
+                print("Login successful. Opening Bluetooth page...")
+                return redirect(url_for("bluetooth"))
+        
+        elif "address" in request.form:
             address = request.form.get("address")
             name = request.form.get("name")
-
-            if name == REALTEK_DEVICE_NAME:
-                # ✅ Use the shared BLE loop for connecting
-                asyncio.run_coroutine_threadsafe(connect_and_store_client(address), ble_loop)
-            else:
-                received_messages.put("❌ Not a Realtek IoT Camera.")
+            print(f"🔗 [BLE] Received request to connect to {name} ({address})")
+            asyncio.run_coroutine_threadsafe(connect_and_store_client(address), ble_loop)
+            return redirect(url_for("bluetooth"))
 
         elif "ssid" in request.form and "password" in request.form and connected_device:
             ssid = request.form.get("ssid")
             password = request.form.get("password")
             wifi_credentials = f"{ssid},{password}"
-            
-            # ✅ Send Wi-Fi credentials via BLE inside shared BLE loop
             asyncio.run_coroutine_threadsafe(send_ble_message(wifi_credentials), ble_loop)
-
-
-    # ✅ Safe scan (still run directly)
+            return redirect(url_for("bluetooth"))
 
     messages = []
     while not received_messages.empty():
         messages.append(received_messages.get())
 
-    if(not userName):
-       return render_template("index.html", devices=[], connected=connected_device, messages=messages, stream_ip=stream_ip,userName=userName,personDetails=personDetails)
+    if not userName:
+       return render_template("index.html", devices=[], connected=connected_device, messages=messages, stream_ip=stream_ip, userName=userName, personDetails=personDetails)
     
-    if(connected_device):
-        devices=[]
+    if connected_device:
+        devices = []
     else:
         devices = asyncio.run(scan_devices())
 
-    return render_template("index.html", devices=devices, connected=connected_device, messages=messages, stream_ip=stream_ip,userName=userName,personDetails=personDetails)
+    return render_template("index.html", devices=devices, connected=connected_device, messages=messages, stream_ip=stream_ip, userName=userName, personDetails=personDetails)
 
+@app.route("/bluetooth")
+def bluetooth():
+    global connected_device, stream_ip, userName, personDetails
+    
+    if connected_device:
+        devices = []
+    else:
+        devices = asyncio.run(scan_devices())
 
+    messages = []
+    while not received_messages.empty():
+        messages.append(received_messages.get())
+
+    return render_template(
+        "index2.html",
+        devices=devices,
+        connected=connected_device,
+        messages=messages,
+        stream_ip=stream_ip,
+        userName=userName,
+        personDetails=personDetails
+    )
+
+@app.route("/dashboard")
+def dashboard():
+    global connected_device, stream_ip, userName, personDetails
+    
+    prelim_status = False
+    hirschberg_status = False
+    nine_gaze_status = False
+    
+    if userName:
+        import glob
+        # Check Preliminary Results
+        prelim_files = glob.glob(os.path.join("Preliminary_Results", f"{userName}*.jpg"))
+        if prelim_files:
+            prelim_status = True
+        
+        # Check Hirschberg Results
+        hirsch_files = glob.glob(os.path.join("Hirschberg_Results", f"processed_hirschberg_{userName}*.jpg"))
+        if hirsch_files:
+            hirschberg_status = True
+            
+        # Check 9Gaze Results
+        gaze_folder = os.path.join("9GazeResults", f"{userName}_*Areal")
+        gaze_dirs = glob.glob(gaze_folder)
+        if gaze_dirs:
+            nine_gaze_status = True
+
+    return render_template(
+        "dashboard.html",
+        userName=userName,
+        personDetails=personDetails,
+        connected=connected_device,
+        stream_ip=stream_ip,
+        prelim_status=prelim_status,
+        hirschberg_status=hirschberg_status,
+        nine_gaze_status=nine_gaze_status
+    )
+
+@app.route("/report")
+def report_page():
+    global connected_device, stream_ip, userName, personDetails
+    return render_template(
+        "report.html",
+        userName=userName,
+        personDetails=personDetails,
+        connected=connected_device,
+        stream_ip=stream_ip
+    )
 
 @app.route("/about")
 def about():
@@ -340,9 +575,8 @@ def load_stream_ip():
 #load_stream_ip()
 @app.route("/capture", methods=["POST"])
 def capture():
-    global stream_response, userName  # Keep track of the stream connection
-    print(f"🔍 Debug: Capturing from {stream_ip}")
-
+    global userName  # Keep track of the user
+    print(f"🔍 Debug: Capturing from cached stream frame")
 
     load_stream_ip()
     if not stream_ip or stream_ip.lower() == "none":
@@ -355,35 +589,13 @@ def capture():
         return jsonify({"message": "Name and date required.","status":"error"}), 400
 
     try:
-        # 🛑 Stop the existing stream
-        if stream_response:
-            stream_response.close()
-            stream_response = None  # Clear the response to release connection
-
-        # ✅ Capture the last frame before stopping
-        stream_url = f"http://{stream_ip}:80"
-        print(f"🔍 Debug: Stream IP before request = {stream_ip}")
-
-        response = requests.get(stream_url, stream=True)
-        
-        bytes_data = bytes()
-        frame = None  # Define frame
-
-        for chunk in response.iter_content(chunk_size=1024):
-            bytes_data += chunk
-            a = bytes_data.find(b'\xff\xd8')  # Start of JPEG
-            b = bytes_data.find(b'\xff\xd9')  # End of JPEG
-            if a != -1 and b != -1:
-                jpg = bytes_data[a:b+2]
-                image_np = np.frombuffer(jpg, np.uint8)
-                frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-                break
+        frame = None
+        with latest_frame_lock:
+            if latest_frame is not None:
+                frame = latest_frame.copy()
 
         if frame is None:
-            return jsonify({"message": "Could not decode image.","status":"error"}), 500
-
-    
-        print(f"🔍 Debug: Stream IP before request = {stream_ip}")
+            return jsonify({"message": "Could not capture image from stream buffer yet. Please make sure the stream is open.","status":"error"}), 500
 
         # 📝 Overlay name & date on image
         text = f"{name} - {date}"
@@ -414,8 +626,14 @@ def capture():
 #load_stream_ip()
 @app.route("/preliminary")
 def preliminary_test():
-    global stream_ip
-    return render_template("preliminary.html", stream_ip=stream_ip)
+    global stream_ip, userName, personDetails, connected_device
+    return render_template(
+        "preliminary.html",
+        stream_ip=stream_ip,
+        userName=userName,
+        personDetails=personDetails,
+        connected=connected_device
+    )
 
 # Create a folder for preliminary captures
 PRELIMINARY_FOLDER = "preliminary"
@@ -423,8 +641,7 @@ os.makedirs(PRELIMINARY_FOLDER, exist_ok=True)  # Ensure the folder exists
 
 @app.route("/preliminaryroute", methods=["POST"])
 def preliminary_capture():
-    global stream_response  
-    print(f"🔍 Debug: Capturing from {stream_ip}")
+    print(f"🔍 Debug: Capturing preliminary from cached frame")
 
     load_stream_ip()
     if not stream_ip or stream_ip.lower() == "none":
@@ -440,30 +657,13 @@ def preliminary_capture():
         date = datetime.today().strftime('%Y-%m-%d')  # Auto-fill date
 
     try:
-        # 🛑 Stop the existing stream
-        if stream_response:
-            stream_response.close()
-            stream_response = None  
-
-        # ✅ Capture last frame
-        stream_url = f"http://{stream_ip}:80"
-        response = requests.get(stream_url, stream=True)
-
-        bytes_data = bytes()
-        frame = None  
-
-        for chunk in response.iter_content(chunk_size=1024):
-            bytes_data += chunk
-            a = bytes_data.find(b'\xff\xd8')  
-            b = bytes_data.find(b'\xff\xd9')  
-            if a != -1 and b != -1:
-                jpg = bytes_data[a:b+2]
-                image_np = np.frombuffer(jpg, np.uint8)
-                frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-                break
+        frame = None
+        with latest_frame_lock:
+            if latest_frame is not None:
+                frame = latest_frame.copy()
 
         if frame is None:
-            return jsonify({"message": "❌ Could not decode image.","status":"error"}), 500
+            return jsonify({"message": "❌ Could not capture image from stream buffer yet. Please make sure the stream is open.","status":"error"}), 500
 
         # 📝 Overlay name & date
         text = f"{name} - {date}"
@@ -594,7 +794,8 @@ def show_results():
 
 @app.route("/results")
 def results_page():
-    return show_results()
+    global userName, personDetails, connected_device
+    return show_results(userName=userName, personDetails=personDetails, connected_device=connected_device)
 
 '''
 
@@ -696,14 +897,20 @@ import time
 @app.route("/hirschberg", methods=["GET"])
 def hirschberg_test():
     """Render the Hirschberg test page."""
-    
+    global stream_ip, userName, personDetails, connected_device
     # Ensure stream IP is loaded
     load_stream_ip()
     
     if not stream_ip or stream_ip.lower() == "none":
         return jsonify({"message": "❌ No stream available.","status":"error"}), 400
 
-    return render_template("hirschbergTest.html", stream_ip=stream_ip)
+    return render_template(
+        "hirschbergTest.html",
+        stream_ip=stream_ip,
+        userName=userName,
+        personDetails=personDetails,
+        connected=connected_device
+    )
 
 async def send_ble_command(command, expected_response, timeout=100000):
     """Send BLE command and wait for the expected response."""
@@ -728,7 +935,7 @@ async def send_ble_command(command, expected_response, timeout=100000):
     print("send_ble_command: 3")
     await client.start_notify(CHARACTERISTIC_UUID_TX, global_notification_handler)
     print("send_ble_command: 4")
-    await client.write_gatt_char(CHARACTERISTIC_UUID_RX, command.encode())
+    await client.write_gatt_char(CHARACTERISTIC_UUID_RX, (command + "\n").encode())
     # if command == "LightOn":
     #     await client.write_gatt_char(CHARACTERISTIC_UUID_RX, bytearray([0x01]))
     # elif command == "LightOff":
@@ -753,9 +960,9 @@ async def send_ble_command(command, expected_response, timeout=100000):
 @app.route("/hirschberg_capture", methods=["POST"])
 def capture_hirschberg_image():
     """Handles capturing an image for the Hirschberg test."""
-    global stream_response, stream_ip, userName
+    global stream_ip, userName
 
-    print(f"🔍 Debug: Capturing Hirschberg test from {stream_ip}")
+    print(f"🔍 Debug: Capturing Hirschberg test from cached stream frame")
 
     if not stream_ip or stream_ip.lower() == "none":
         return jsonify({"message": "No stream available.","status":"error"}), 400
@@ -767,41 +974,30 @@ def capture_hirschberg_image():
         return jsonify({"message": "Name and date required.","status":"error"}), 400
 
     # Step 1: Send LightOn command via BLE and wait for confirmation
-    #success = asyncio.run(send_ble_command("LightOn", "LightOn"))
-
-    #testing
-    future = asyncio.run_coroutine_threadsafe(send_ble_command("LightOn", "LightOn",timeout=60), ble_loop)
+    future = asyncio.run_coroutine_threadsafe(send_ble_command("LightOn", "LightOn", timeout=60), ble_loop)
     success = future.result()  # Optional timeout to avoid hanging
-    print("success",success)
+    print("success", success)
 
     if not success:
         return jsonify({"message": "Failed to turn on light.","status":"error"}), 500
 
+    # Wait briefly for the LED light to be captured in the video stream frames
+    time.sleep(0.3)
+
     try:
-        # Step 2: Capture the last frame from the stream
-        stream_url = f"http://{stream_ip}:80"
-        response = requests.get(stream_url, stream=True)
-        print("hirschberg test 1")
-        bytes_data = bytes()
-        frame = None  
-        print("hirschberg test 2")
-        for chunk in response.iter_content(chunk_size=1024):
-            bytes_data += chunk
-            a = bytes_data.find(b'\xff\xd8')  # Start of JPEG
-            b = bytes_data.find(b'\xff\xd9')  # End of JPEG
-            if a != -1 and b != -1:
-                jpg = bytes_data[a:b+2]
-                image_np = np.frombuffer(jpg, np.uint8)
-                frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-                break
-        print("hirschberg test 3")
+        # Step 2: Capture the last frame from the stream proxy buffer
+        frame = None
+        with latest_frame_lock:
+            if latest_frame is not None:
+                frame = latest_frame.copy()
+
         if frame is None:
             return jsonify({"message": "Could not decode image.","status":"error"}), 500
-        print("hirschberg test 4")
+
         # Step 3: Overlay name & date on image
         text = f"{name} - {date}"
         cv2.putText(frame, text, (20, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-        print("hirschberg test 5")
+
         # Step 4: Save image
         filename = os.path.join(HIRSCHBERG_RESULTS_FOLDER, f"hirschberg_{name}_{date}.jpg")
         cv2.imwrite(filename, frame)
@@ -856,7 +1052,8 @@ def capture_hirschberg_image():
 
 @app.route("/hirschberg_results")
 def hirschberg_results():
-    return HirschbergShowResult()
+    global userName, personDetails, connected_device
+    return HirschbergShowResult(userName=userName, personDetails=personDetails, connected_device=connected_device)
 
 
 
@@ -871,7 +1068,14 @@ if not os.path.exists(GAZE_TEST_FOLDER):
 
 @app.route("/9gaze")
 def nine_gaze_test():
-    return render_template("9gaze.html", stream_ip=stream_ip)
+    global stream_ip, userName, personDetails, connected_device
+    return render_template(
+        "9gaze.html",
+        stream_ip=stream_ip,
+        userName=userName,
+        personDetails=personDetails,
+        connected=connected_device
+    )
 
 '''
 @app.route("/capture_9gaze", methods=["POST"])
@@ -929,7 +1133,7 @@ def capture_9gaze():
 @app.route("/capture_9gaze", methods=["POST"])
 def capture_9gaze():
     global stream_ip, userName
-    print(f"🔍 Debug: Capturing 9 Gaze Test from {stream_ip}")
+    print(f"🔍 Debug: Capturing 9 Gaze Test from cached stream frame")
 
     if not stream_ip or stream_ip.lower() == "none":
         return jsonify({"message": "No stream available.","status":"error"}), 400
@@ -946,22 +1150,11 @@ def capture_9gaze():
         return jsonify({"message": "Name and gaze position required.","status":"error"}), 400
 
     try:
-        # Capture the last frame from the stream
-        stream_url = f"http://{stream_ip}:80"
-        response = requests.get(stream_url, stream=True)
-
-        bytes_data = bytes()
-        frame = None  
-
-        for chunk in response.iter_content(chunk_size=1024):
-            bytes_data += chunk
-            a = bytes_data.find(b'\xff\xd8')  # Start of JPEG
-            b = bytes_data.find(b'\xff\xd9')  # End of JPEG
-            if a != -1 and b != -1:
-                jpg = bytes_data[a:b+2]
-                image_np = np.frombuffer(jpg, np.uint8)
-                frame = cv2.imdecode(image_np, cv2.IMREAD_COLOR)
-                break
+        # Capture the last frame from the stream proxy buffer
+        frame = None
+        with latest_frame_lock:
+            if latest_frame is not None:
+                frame = latest_frame.copy()
 
         if frame is None:
             return jsonify({"message": "Could not decode image.","status":"error"}), 500
@@ -1067,7 +1260,17 @@ def view_9gaze_results():
     processed_images = [f for f in os.listdir(processed_folder) if f.endswith(".jpg") and f != "combined_9gaze.jpg"]
     text_file = "areal_ratios.txt" if os.path.exists(os.path.join(processed_folder, "areal_ratios.txt")) else None
 
-    return render_template("9gaze_results.html", name=name, images=processed_images, text_file=text_file, combined_image=combined_image_filename)
+    global userName, personDetails, connected_device
+    return render_template(
+        "9gaze_results.html",
+        name=name,
+        images=processed_images,
+        text_file=text_file,
+        combined_image=combined_image_filename,
+        userName=userName,
+        personDetails=personDetails,
+        connected=connected_device
+    )
 
 
 
@@ -1092,8 +1295,8 @@ def serve_9gaze_file(name, filename):
 def generate_overall_report():
     global personDetails
     try:
-        pdf_path = overallreport.generate_pdf_report(personDetails=personDetails)
-        return jsonify({"status": "success"})
+        pdf_path, pattern_result = overallreport.generate_pdf_report(personDetails=personDetails)
+        return jsonify({"status": "success", "pattern": pattern_result})
     except Exception as e:
         return jsonify({"status": "error", "error": str(e)})
 

@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_vijay_6263_15_01_2000_2026-07-02.jpg
+lv: 5.10px 
+lh: 7.07px 
+rv: 6.08px 
+rh: 7.07px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

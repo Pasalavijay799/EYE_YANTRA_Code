@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_re_2774_22_01_2000_2026-07-02.jpg
+lv: 5.10px 
+lh: 7.00px 
+rv: 5.10px 
+rh: 8.06px
+Left Iris White Spot from center: 3.16 px
+Right Iris White Spot: 2.83 px
+No Strabismus Detected
+ 
+rvd: 5.883 deg 
+rhd: 3.721 deg
+ 
+ 
+lvd: 8.825 deg 
+lhd: 2.143 deg 
+ 

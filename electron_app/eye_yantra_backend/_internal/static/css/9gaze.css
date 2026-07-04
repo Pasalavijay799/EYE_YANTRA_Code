@@ -1,0 +1,237 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	min-height: 100vh;
+	padding: 20px;
+	color: #333;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+	padding: 40px;
+	backdrop-filter: blur(10px);
+}
+
+h1 {
+	text-align: center;
+	color: #2c3e50;
+	font-size: 2.5rem;
+	margin-bottom: 30px;
+	font-weight: 700;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+	color: #34495e;
+	font-size: 1.5rem;
+	margin: 25px 0 15px 0;
+	font-weight: 600;
+}
+
+h3 {
+	color: #2980b9;
+	font-size: 1.3rem;
+	margin: 20px 0 10px 0;
+	font-weight: 600;
+}
+
+h4 {
+	color: #27ae60;
+	font-size: 1.2rem;
+	margin: 20px 0 10px 0;
+	font-weight: 600;
+}
+
+.media-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 30px;
+	margin: 30px 0;
+	align-items: start;
+}
+
+.gaze-section {
+	text-align: center;
+}
+
+.stream-section {
+	text-align: center;
+}
+
+#gaze-image {
+	width: 300px;
+	height: 300px;
+	border: 3px solid #3498db;
+	border-radius: 15px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#gaze-image:hover {
+	transform: scale(1.05);
+	box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+#video-stream {
+	width: 100%;
+	max-width: 640px;
+	height: auto;
+	border: 3px solid #2c3e50;
+	border-radius: 15px;
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.status-container {
+	background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+	padding: 25px;
+	border-radius: 15px;
+	margin: 25px 0;
+	border-left: 5px solid #3498db;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+#captured-status {
+	font-size: 1.1rem;
+	color: #495057;
+	font-weight: 500;
+	margin-top: 5px;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+	gap: 15px;
+	margin: 30px 0;
+	flex-wrap: wrap;
+}
+
+button {
+	background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+	color: white;
+	border: none;
+	padding: 12px 24px;
+	font-size: 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 600;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+	min-width: 120px;
+}
+
+button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(52, 152, 219, 0.4);
+	background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+}
+
+button:active {
+	transform: translateY(0);
+}
+
+button:disabled {
+	background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+	cursor: not-allowed;
+	transform: none;
+	box-shadow: 0 2px 6px rgba(149, 165, 166, 0.3);
+}
+
+button:disabled:hover {
+	transform: none;
+	box-shadow: 0 2px 6px rgba(149, 165, 166, 0.3);
+}
+
+#view-results {
+	background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+	box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+	font-size: 1.1rem;
+	padding: 15px 30px;
+	margin: 20px 0;
+}
+
+#view-results:hover:not(:disabled) {
+	box-shadow: 0 6px 16px rgba(39, 174, 96, 0.4);
+	background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.back-link {
+	display: inline-block;
+	background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+	color: white;
+	text-decoration: none;
+	padding: 12px 24px;
+	border-radius: 8px;
+	font-weight: 600;
+	transition: all 0.3s ease;
+	box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+	margin-top: 20px;
+}
+
+.back-link:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(231, 76, 60, 0.4);
+	background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+}
+
+.divider {
+	height: 2px;
+	background: linear-gradient(90deg, transparent 0%, #3498db 50%, transparent 100%);
+	margin: 30px 0;
+	border-radius: 1px;
+}
+
+@media (max-width: 768px) {
+	.container {
+		padding: 20px;
+		margin: 10px;
+	}
+
+	.media-container {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+
+	#gaze-image {
+		width: 250px;
+		height: 250px;
+	}
+
+	h1 {
+		font-size: 2rem;
+	}
+
+	.controls {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	button {
+		width: 100%;
+		max-width: 200px;
+	}
+}
+
+.progress-indicator {
+	background: #ecf0f1;
+	height: 8px;
+	border-radius: 4px;
+	margin: 20px 0;
+	overflow: hidden;
+}
+
+.progress-bar {
+	height: 100%;
+	background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+	border-radius: 4px;
+	transition: width 0.3s ease;
+}

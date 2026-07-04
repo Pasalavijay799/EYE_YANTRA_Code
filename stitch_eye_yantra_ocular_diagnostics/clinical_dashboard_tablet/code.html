@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clinical Dashboard - Tablet</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@450&amp;family=Inter:wght@400;600&amp;family=Sora:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-primary-fixed-variant": "#344283",
+                        "surface-variant": "#e4e1e8",
+                        "tertiary-fixed-dim": "#c3c6ce",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#181c21",
+                        "inverse-primary": "#b9c3ff",
+                        "primary-fixed": "#dde1ff",
+                        "surface-container": "#efedf3",
+                        "on-primary-fixed": "#001257",
+                        "on-error-container": "#93000a",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed-dim": "#4fdbcc",
+                        "primary": "#001256",
+                        "surface-dim": "#dbd9df",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "inverse-surface": "#303035",
+                        "on-secondary-fixed": "#00201d",
+                        "background": "#fbf8ff",
+                        "on-primary-container": "#8694db",
+                        "inverse-on-surface": "#f2f0f6",
+                        "surface-container-high": "#e9e7ed",
+                        "on-tertiary-container": "#94989f",
+                        "on-surface": "#1b1b20",
+                        "surface-tint": "#4c5a9d",
+                        "surface-bright": "#fbf8ff",
+                        "surface-container-highest": "#e4e1e8",
+                        "primary-container": "#1b2a6b",
+                        "on-secondary-container": "#007168",
+                        "tertiary-container": "#2c3036",
+                        "tertiary-fixed": "#dfe2ea",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#71f8e8",
+                        "error-container": "#ffdad6",
+                        "surface": "#fbf8ff",
+                        "surface-container-low": "#f5f2f9",
+                        "secondary": "#006a62",
+                        "outline": "#767681",
+                        "outline-variant": "#c6c5d2",
+                        "on-surface-variant": "#454650",
+                        "on-background": "#1b1b20",
+                        "secondary-container": "#71f8e8",
+                        "tertiary": "#171b21"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "64px",
+                        "sm": "16px",
+                        "xs": "8px",
+                        "lg": "40px",
+                        "base": "4px",
+                        "container-max": "1440px",
+                        "md": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Sora"],
+                        "body-lg": ["Inter"],
+                        "headline-md": ["Sora"],
+                        "body-sm": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Sora"],
+                        "headline-sm": ["Sora"],
+                        "code-diagnostic": ["Fira Code"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "code-diagnostic": ["13px", { "lineHeight": "20px", "fontWeight": "450" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glass-dark {
+            background-color: rgba(0, 18, 86, 0.05); /* very light primary tint */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(0, 106, 98, 0.3); /* Teal subtle glow */
+            border-color: rgba(0, 106, 98, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md overflow-hidden antialiased">
+<!-- Ambient Background Gradient for Medical Vibe -->
+<div class="fixed inset-0 pointer-events-none -z-10" style="background: radial-gradient(circle at 80% 20%, rgba(113, 248, 232, 0.1) 0%, transparent 40%), radial-gradient(circle at 20% 80%, rgba(27, 42, 107, 0.05) 0%, transparent 40%);"></div>
+<!-- Side Navigation Shell (Tablet width standard ~8 cols, but side nav still present just smaller) -->
+<nav class="bg-white/60 backdrop-blur-xl docked left-0 h-full w-64 border-r border-white/40 shadow-md flex flex-col h-screen py-md px-sm sticky left-0 z-40 transition-all duration-200 ease-in-out shrink-0">
+<!-- Header -->
+<div class="flex items-center gap-xs mb-xl px-xs">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+<img alt="Eye Yantra Logo" class="w-6 h-6 object-contain" data-alt="A highly detailed, ultra-crisp minimalist abstract logo for a medical application, resembling a stylized eye or lens in deep indigo and white. Soft, precise studio lighting, vector style, white background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNumDV0ffpMV0D4qLoUPfJhvGxiyKJvLIC21YAjTG4E96ODxszcN1pUuOJnFZQ01NrFoxn-1YaVGE4MPL2TjvnSxVD38gRJOU4HL52CePdtAOtuzWBHeUCU0SYGXLXixq3BZVERNGbqYpffw-Cq8XZYtAIvwNYgHZTt8vWg7Saov_GqS3azVp3y9v61FBA8aiVp9XKNMZ7cksEKJ5NT5LeOjs7Jpidb4qSIWNDqa7RaQiDz54T0YWG"/>
+</div>
+<div>
+<h1 class="font-headline-sm text-headline-sm text-primary m-0 p-0 leading-none">Ocular Suite</h1>
+<p class="font-label-caps text-label-caps text-on-surface-variant m-0 p-0 mt-1">V1.0.4 Diagnostic</p>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full bg-secondary text-on-secondary rounded-lg py-xs px-sm flex items-center justify-center gap-xs mb-lg hover:shadow-[0_0_15px_rgba(0,106,98,0.3)] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md font-semibold">New Scan</span>
+</button>
+<!-- Main Tabs -->
+<div class="flex-1 flex flex-col gap-xs">
+<!-- Active Tab -->
+<a class="bg-secondary-container text-on-secondary-container rounded-lg font-semibold flex items-center gap-sm py-xs px-sm transition-colors cursor-pointer" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md">Dashboard</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 flex items-center gap-sm py-xs px-sm rounded-lg transition-colors cursor-pointer" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md">Patients</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 flex items-center gap-sm py-xs px-sm rounded-lg transition-colors cursor-pointer" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span class="font-body-md">Diagnostics</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 flex items-center gap-sm py-xs px-sm rounded-lg transition-colors cursor-pointer" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md">Analytics</span>
+</a>
+<a class="text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 flex items-center gap-sm py-xs px-sm rounded-lg transition-colors cursor-pointer" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="font-body-md">Archive</span>
+</a>
+</div>
+<!-- Footer Tab -->
+<div class="mt-auto pt-sm border-t border-white/40">
+<a class="text-on-surface-variant hover:text-error hover:bg-error-container/50 flex items-center gap-sm py-xs px-sm rounded-lg transition-colors cursor-pointer" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-body-md">Logout</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas (Tablet Grid: 8 columns) -->
+<main class="flex-1 h-screen overflow-y-auto px-gutter py-lg">
+<div class="max-w-[800px] mx-auto w-full flex flex-col gap-gutter">
+<!-- Top App Bar / Active Patient Header (Inline for this dashboard view) -->
+<header class="glass-panel rounded-xl p-md flex justify-between items-center shadow-sm">
+<div class="flex items-center gap-md">
+<div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white/50 shrink-0 shadow-sm relative group cursor-pointer">
+<img alt="Patient Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a young South Asian male patient in a modern clinical setting, bright lighting, high resolution, clean white background aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2Y3ZY6ITNGimTj88PMHfJX9Gl3ZijVfoOAyrDygOJoQ4Zk-vSksEGQk7PTegOpNDG0G5qDN3lMJSOVx-rcZz4ytiiFB3QO2R6m4B-H3JGJ2tkFCsisE9ViLHzV4SrL-Vfrt83NV_b8d4nwL-WjPj2c07DBw3QV0Y6KjhFxOjJ3p01TjPZ4rngjx_pADfxADycv6QcwZrYyc7vMDCoRj9njRovnZKtcnTWiySDKJhwKAelIur5iwVH"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div>
+<div class="flex items-center gap-xs mb-1">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(0,106,98,0.6)]"></span>
+<span class="font-label-caps text-label-caps text-secondary uppercase tracking-widest">Active Patient</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-primary m-0 leading-tight">Akshay</h2>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="glass-dark rounded-lg px-sm py-1 flex items-center gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">ID</span>
+<span class="font-code-diagnostic text-code-diagnostic text-primary">18239</span>
+</div>
+<div class="glass-dark rounded-lg px-sm py-1 flex items-center gap-xs">
+<span class="font-label-caps text-label-caps text-on-surface-variant">DOB</span>
+<span class="font-code-diagnostic text-code-diagnostic text-primary">18_10_2001</span>
+</div>
+</div>
+</header>
+<!-- Assessment Grid (Bento Style) -->
+<div class="grid grid-cols-8 gap-gutter">
+<!-- Card 1: Preliminary (Done) - spanning 4 cols -->
+<div class="col-span-8 md:col-span-4 glass-panel rounded-xl p-md flex flex-col justify-between h-[200px] relative overflow-hidden group">
+<div class="absolute top-0 right-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+<div class="flex justify-between items-start z-10 border-b border-white/40 pb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface m-0">Preliminary</h3>
+<div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-on-secondary" style="font-size: 20px;">check</span>
+</div>
+</div>
+<div class="z-10 mt-auto">
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-xs">Basic acuity and structural scan completed.</p>
+<div class="flex gap-xs">
+<span class="inline-flex px-2 py-1 rounded bg-surface-container-highest font-code-diagnostic text-code-diagnostic text-on-surface-variant text-[11px]">OD: 20/20</span>
+<span class="inline-flex px-2 py-1 rounded bg-surface-container-highest font-code-diagnostic text-code-diagnostic text-on-surface-variant text-[11px]">OS: 20/20</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Hirschberg (In Progress) - spanning 4 cols -->
+<div class="col-span-8 md:col-span-4 glass-panel glow-active rounded-xl p-md flex flex-col justify-between h-[200px] relative overflow-hidden group cursor-pointer transition-all">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
+<div class="flex justify-between items-start z-10 border-b border-white/40 pb-sm">
+<h3 class="font-headline-sm text-headline-sm text-primary m-0">Hirschberg Test</h3>
+<div class="flex items-center gap-1 bg-secondary-container px-2 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-on-secondary-container text-[10px]">IN PROGRESS</span>
+</div>
+</div>
+<div class="z-10 mt-auto flex items-end justify-between">
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-1">Analyzing corneal light reflex...</p>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 mt-2 overflow-hidden w-32">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full border border-primary text-primary flex items-center justify-center hover:bg-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Card 3: 9-Gaze Grid (Pending) - spanning 8 cols (Full width on tablet) -->
+<div class="col-span-8 glass-panel rounded-xl p-md flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-center z-10 border-b border-white/40 pb-sm mb-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface m-0">9-Gaze Ocular Motility</h3>
+<div class="flex items-center gap-1 bg-surface-container-highest px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 14px;">pending</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant text-[10px]">PENDING</span>
+</div>
+</div>
+<!-- Abstract visual representation of a 9-gaze grid -->
+<div class="grid grid-cols-3 gap-2 w-full max-w-[300px] mx-auto opacity-50 py-sm">
+<!-- Top Row -->
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">north_west</span></div>
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">arrow_upward</span></div>
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">north_east</span></div>
+<!-- Middle Row -->
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">arrow_back</span></div>
+<div class="h-10 border-2 border-primary/30 rounded flex items-center justify-center"><span class="material-symbols-outlined text-primary/50 text-[16px]">visibility</span></div>
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">arrow_forward</span></div>
+<!-- Bottom Row -->
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">south_west</span></div>
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">arrow_downward</span></div>
+<div class="h-10 border border-outline-variant rounded flex items-center justify-center"><span class="material-symbols-outlined text-outline text-[16px]">south_east</span></div>
+</div>
+<div class="flex justify-center mt-sm">
+<button class="bg-primary/5 border border-primary/20 text-primary rounded-lg py-1.5 px-sm flex items-center gap-xs hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+<span class="font-body-sm font-semibold">Initiate Sequence</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Comprehensive Report Section -->
+<div class="glass-dark rounded-xl p-md mt-sm border-t border-white/30 flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-primary m-0 flex items-center gap-2">
+<span class="material-symbols-outlined">summarize</span>
+                        Comprehensive Report
+                    </h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Export current diagnostic findings and clinical notes.</p>
+</div>
+<button class="bg-primary text-on-primary rounded-lg py-2 px-md flex items-center gap-xs hover:bg-primary-container hover:shadow-lg transition-all active:scale-95 group">
+<span class="material-symbols-outlined group-hover:animate-bounce" style="font-size: 20px;">picture_as_pdf</span>
+<span class="font-body-md font-semibold tracking-wide">Generate PDF</span>
+</button>
+</div>
+</div>
+</main>
+</body></html>

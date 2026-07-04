@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_vigensh_1263_08_01_2000_2026-07-02.jpg
+lv: 4.12px 
+lh: 5.39px 
+rv: 4.12px 
+rh: 6.32px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 13.93 px
+No Strabismus Detected
+ 
+rvd: 18.190 deg 
+rhd: 30.832 deg
+ 
+ 
+lvd: 0.000 deg 
+lhd: 0.000 deg 
+ 

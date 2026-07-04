@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>9-Gaze Motility Grid - Eye Yantra</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;family=Sora:wght@600;700&amp;family=Fira+Code:wght@450&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#4fdbcc",
+                        "primary-container": "#1b2a6b",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "surface-container-highest": "#e4e1e8",
+                        "on-primary-container": "#8694db",
+                        "inverse-primary": "#b9c3ff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dde1ff",
+                        "on-surface": "#1b1b20",
+                        "surface-container-low": "#f5f2f9",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1b1b20",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-fixed-dim": "#c3c6ce",
+                        "surface-tint": "#4c5a9d",
+                        "inverse-on-surface": "#f2f0f6",
+                        "surface-bright": "#fbf8ff",
+                        "surface-container": "#efedf3",
+                        "on-error": "#ffffff",
+                        "secondary": "#006a62",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#94989f",
+                        "surface": "#fbf8ff",
+                        "inverse-surface": "#303035",
+                        "surface-variant": "#e4e1e8",
+                        "on-tertiary-fixed": "#181c21",
+                        "secondary-container": "#71f8e8",
+                        "tertiary-fixed": "#dfe2ea",
+                        "tertiary-container": "#2c3036",
+                        "surface-dim": "#dbd9df",
+                        "outline": "#767681",
+                        "tertiary": "#171b21",
+                        "outline-variant": "#c6c5d2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#344283",
+                        "primary": "#001256",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e9e7ed",
+                        "background": "#fbf8ff",
+                        "on-surface-variant": "#454650",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-secondary-container": "#007168",
+                        "on-primary-fixed": "#001257",
+                        "secondary-fixed": "#71f8e8"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    spacing: {
+                        xs: "8px",
+                        lg: "40px",
+                        xl: "64px",
+                        base: "4px",
+                        "container-max": "1440px",
+                        sm: "16px",
+                        md: "24px",
+                        gutter: "24px"
+                    },
+                    fontFamily: {
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "code-diagnostic": ["Fira Code"],
+                        "label-caps": ["Inter"]
+                    },
+                    fontSize: {
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "headline-sm": ["20px", { lineHeight: "28px", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", fontWeight: "600" }],
+                        "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "700" }],
+                        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+                        "body-sm": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+                        "code-diagnostic": ["13px", { lineHeight: "20px", fontWeight: "450" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.05em", fontWeight: "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glow-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.4); transform: scale(1); }
+            70% { box-shadow: 0 0 0 10px rgba(186, 26, 26, 0); transform: scale(1.05); }
+            100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); transform: scale(1); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-white/60 dark:bg-surface-container/60 backdrop-blur-xl w-full top-0 border-b border-white/40 dark:border-white/10 shadow-sm backdrop-blur-[20px] z-40 fixed">
+<div class="flex items-center justify-between px-md py-xs w-full max-w-container-max mx-auto h-[64px]">
+<div class="flex items-center gap-sm cursor-pointer active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim" style="font-variation-settings: 'FILL' 1;">visibility</span>
+<span class="text-headline-lg font-headline-lg text-primary dark:text-primary-fixed-dim tracking-tight">Eye Yantra</span>
+</div>
+<nav class="hidden md:flex gap-lg">
+<!-- Navigation Items - Highlight 9-Gaze based on intent -->
+<a class="text-on-surface-variant font-headline-sm text-headline-sm hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Preliminary</a>
+<a class="text-on-surface-variant font-headline-sm text-headline-sm hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Hirschberg</a>
+<a class="text-secondary font-bold font-headline-sm text-headline-sm hover:text-secondary-fixed-dim transition-colors duration-300" href="#">9-Gaze</a>
+</nav>
+<div class="flex items-center gap-sm cursor-pointer active:scale-95">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A small, circular avatar portrait of a medical professional. Light mode environment, professional and clean aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuChBzuo3-ckF6QlzA7faFLJEBlUbyxyojVy5oh1UmahmTNRpY-s3G_irYTMxLs31uGH3sFhuD3-HiRH9JHk2qu8mu4qADW75T6r9w7vJNPPufzFTx-tkl_AKB89mj0seGM6zQO9DcEb2FCtTyth0zQLoKJjgn7UGpbzbgwCsLW9uAKd1TBwgeJBEQemF4Dc9ZmKZ5K4cxomtOtnCjJGwxE13gQU_ywMB6FQ8BGn9K0Zpycnenb8bdAj"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<div class="flex flex-1 pt-[64px] pb-[64px] h-screen overflow-hidden">
+<!-- NavigationDrawer -->
+<aside class="bg-surface/60 dark:bg-surface-container-low/60 backdrop-blur-xl h-full w-xl rounded-r-xl border-r border-white/40 shadow-md backdrop-blur-[20px] flex-shrink-0 z-30 hidden md:block w-72">
+<div class="flex flex-col gap-sm p-md h-full">
+<div class="flex items-center gap-md pb-md mb-sm border-b border-white/40">
+<img class="w-12 h-12 rounded-full object-cover border-2 border-primary-fixed" data-alt="Avatar portrait of the active patient, an adult male, taken with clinical lighting, clear and well-lit." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqB8wKj-sm8ifSNZKvvgzO6946qiCRQOsR-_xC2VA8xquZHIJEw5-WE6gtL8X6opTIA-YIrQFgn-LZRnHNWe1Yg6G4icw4x_2er1bkyzXg5EoiSSjTENAFLvgTHwAFMDrxphATBa70s-6kZC3Aea-wHtt5M5hMpXe_weNTVaqEkQpaSh-jzE3h6L2_AIdRuOZKfj46YCPhkUYlNYIeVA5nWapS2TsKddYNRTanAVBbRt6nfT2nS5bp"/>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">John Doe</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ID: #AX-78210</p>
+</div>
+</div>
+<nav class="flex flex-col gap-xs flex-1">
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:bg-surface-container-high hover:bg-secondary-fixed/20 transition-all duration-200 hover:shadow-[0_0_15px_rgba(79,219,204,0.4)] rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">analytics</span>
+                        Preliminary
+                    </a>
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:bg-surface-container-high hover:bg-secondary-fixed/20 transition-all duration-200 hover:shadow-[0_0_15px_rgba(79,219,204,0.4)] rounded-lg font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">view_in_ar</span>
+                        Hirschberg
+                    </a>
+<a class="flex items-center gap-sm px-sm py-xs bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg font-bold hover:bg-secondary-fixed/20 transition-all duration-200 hover:shadow-[0_0_15px_rgba(79,219,204,0.4)] font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">grid_view</span>
+                        9-Gaze
+                    </a>
+</nav>
+<div class="mt-auto pt-md border-t border-white/40">
+<p class="font-label-caps text-label-caps text-on-surface-variant">Source: RetinalCam X1</p>
+</div>
+</div>
+</aside>
+<!-- Canvas -->
+<main class="flex-1 p-md md:p-lg overflow-y-auto w-full max-w-container-max mx-auto relative flex flex-col">
+<div class="flex justify-between items-end mb-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-primary tracking-tight">Motility Assessment</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Guide patient through 9 cardinal positions of gaze.</p>
+</div>
+<!-- Status Message -->
+<div class="glass-panel px-sm py-xs rounded-full flex items-center gap-2 border-secondary/30 bg-secondary-container/20">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(0,106,98,0.6)]"></span>
+<span class="font-label-caps text-label-caps text-secondary font-semibold">Successfully captured UP!</span>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter flex-1 min-h-0">
+<!-- Left Panel: Controls & Progress -->
+<div class="lg:col-span-4 flex flex-col gap-md h-full">
+<!-- Progress Card -->
+<div class="glass-panel rounded-xl p-md flex flex-col gap-sm shadow-sm relative overflow-hidden">
+<!-- Decorative background subtle gradient -->
+<div class="absolute inset-0 bg-gradient-to-br from-surface to-primary-container/5 opacity-50 z-0"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-center mb-xs">
+<span class="font-headline-sm text-headline-sm text-primary">Capture Progress</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container-high px-2 py-1 rounded">3 / 9</span>
+</div>
+<!-- Custom Progress Steps -->
+<div class="w-full h-1 bg-surface-variant rounded-full mt-2 mb-md relative">
+<div class="absolute left-0 top-0 h-full bg-secondary rounded-full shadow-[0_0_8px_rgba(0,106,98,0.5)] transition-all duration-500" style="width: 33%;"></div>
+</div>
+<!-- Motility Bubble Nav -->
+<div class="grid grid-cols-3 gap-2 mt-4 aspect-square max-w-[200px] mx-auto">
+<!-- Captured -->
+<div class="rounded-lg border-2 border-secondary bg-secondary-container/30 flex items-center justify-center font-headline-sm text-headline-sm text-on-secondary-container transition-all">1</div>
+<div class="rounded-lg border-2 border-secondary bg-secondary-container/30 flex items-center justify-center font-headline-sm text-headline-sm text-on-secondary-container transition-all">2</div>
+<!-- Active/Pending -->
+<div class="rounded-lg border-2 border-primary bg-primary text-on-primary flex items-center justify-center font-headline-sm text-headline-sm shadow-[0_0_12px_rgba(0,18,86,0.3)] transition-all scale-105">3</div>
+<!-- Future -->
+<div class="rounded-lg border border-outline-variant bg-surface/50 flex items-center justify-center font-headline-sm text-headline-sm text-outline transition-all">4</div>
+<div class="rounded-lg border border-outline-variant bg-surface/50 flex items-center justify-center font-headline-sm text-headline-sm text-outline transition-all">5</div>
+<div class="rounded-lg border border-outline-variant bg-surface/50 flex items-center justify-center font-headline-sm text-headline-sm text-outline transition-all">6</div>
+<div class="rounded-lg border border-outline-variant bg-surface/50 flex items-center justify-center font-headline-sm text-headline-sm text-outline transition-all">7</div>
+<div class="rounded-lg border border-outline-variant bg-surface/50 flex items-center justify-center font-headline-sm text-headline-sm text-outline transition-all">8</div>
+<div class="rounded-lg border border-outline-variant bg-surface/50 flex items-center justify-center font-headline-sm text-headline-sm text-outline transition-all">9</div>
+</div>
+</div>
+</div>
+<!-- Diagnostic Log -->
+<div class="glass-panel rounded-xl p-md flex-1 flex flex-col bg-inverse-surface/5 dark:bg-inverse-surface/20 border-white/20">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant mb-xs">System Log</h3>
+<div class="flex-1 bg-surface-container-highest/50 rounded-lg p-sm overflow-y-auto font-code-diagnostic text-code-diagnostic text-on-surface-variant">
+<div>[10:42:01] SYS: Calibrating camera... OK</div>
+<div>[10:42:03] INF: Pos 1 (Primary) saved.</div>
+<div>[10:42:15] INF: Pos 2 (Right) saved.</div>
+<div class="text-secondary font-medium">[10:42:28] INF: Pos 3 (Up) saved.</div>
+<div class="animate-pulse opacity-50 mt-1">_ waiting for next position...</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: Target Grid & Preview -->
+<div class="lg:col-span-8 flex flex-col gap-sm h-full relative">
+<!-- Main Dark Grid Area -->
+<div class="bg-tertiary rounded-xl flex-1 relative overflow-hidden border border-outline-variant shadow-lg flex items-center justify-center">
+<!-- 3x3 Grid Lines -->
+<div class="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none opacity-20">
+<div class="border-b border-r border-tertiary-fixed"></div>
+<div class="border-b border-r border-tertiary-fixed"></div>
+<div class="border-b border-tertiary-fixed"></div>
+<div class="border-b border-r border-tertiary-fixed"></div>
+<div class="border-b border-r border-tertiary-fixed"></div>
+<div class="border-b border-tertiary-fixed"></div>
+<div class="border-r border-tertiary-fixed"></div>
+<div class="border-r border-tertiary-fixed"></div>
+<div></div>
+</div>
+<!-- Instruction Text Overlay -->
+<div class="absolute top-sm left-0 w-full text-center pointer-events-none">
+<span class="font-body-md text-body-md text-on-tertiary/70 uppercase tracking-widest text-sm">Target: Up Right</span>
+</div>
+<!-- Pulsating Target (Currently in position 3 - Up Right) -->
+<div class="absolute top-[16.6%] right-[16.6%] transform translate-x-1/2 -translate-y-1/2">
+<div class="w-6 h-6 bg-error rounded-full glow-pulse flex items-center justify-center">
+<div class="w-2 h-2 bg-on-error rounded-full"></div>
+</div>
+</div>
+<!-- Camera Preview Overlay -->
+<div class="absolute bottom-md right-md w-48 h-36 bg-surface border border-outline-variant rounded-lg overflow-hidden shadow-xl z-20">
+<!-- Simulated live feed placeholder -->
+<div class="w-full h-full relative">
+<img class="w-full h-full object-cover filter grayscale sepia-[.2] contrast-125" data-alt="A tightly cropped, high-resolution live camera feed showing a patient's eyes looking up and to the right. Clinical, clear lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGOlqh8ryX_D1eol_7M1yV727cLOCy46ohC-SNibJiQVPsexUzcaufGLnien8nfG0UlwLwEQJiA6n3pPr5EWmeaWiNNRPFShztB-JQThA_BWccfo0EDhJGB3odx9OYkWitxkxnNyR9nlsHxeKSWowNlpaHiNmUSP4BATarR5MdO1rpqEZtwccxYpRINbE10XEUVUYX7wUp-D-g-WAdXwDSIyPK_Y57z7ZUN6hWDrB9xAOjv5L0RXhs"/>
+<div class="absolute inset-0 border border-secondary/50 pointer-events-none rounded-lg m-1"></div>
+<!-- Crosshairs overlay -->
+<div class="absolute top-1/2 left-0 w-full h-px bg-secondary/30"></div>
+<div class="absolute top-0 left-1/2 w-px h-full bg-secondary/30"></div>
+<div class="absolute top-1 left-1 bg-surface-container/80 px-1 rounded text-[10px] font-code-diagnostic text-secondary">LIVE</div>
+</div>
+</div>
+</div>
+<!-- Action Controls -->
+<div class="glass-panel p-sm rounded-xl flex justify-between items-center h-20">
+<button class="flex items-center gap-xs px-md py-xs rounded-lg border border-outline-variant bg-surface/50 text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm h-12">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                            Previous
+                        </button>
+<button class="flex items-center gap-xs px-xl py-sm rounded-lg bg-secondary text-on-secondary hover:shadow-[0_0_15px_rgba(0,106,98,0.5)] transition-all duration-300 font-headline-md text-headline-md h-12 shadow-sm transform hover:-translate-y-0.5">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">camera</span>
+                            Capture Gaze
+                        </button>
+<button class="flex items-center gap-xs px-md py-xs rounded-lg border border-outline-variant bg-surface/50 text-on-surface hover:bg-surface-container-high transition-colors font-headline-sm text-headline-sm h-12">
+                            Next
+                            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-dim/80 dark:bg-tertiary-container/80 backdrop-blur-lg fixed bottom-0 w-full border-t border-white/20 z-50">
+<div class="flex justify-between items-center px-lg py-xs w-full">
+<p class="font-label-caps text-label-caps text-on-surface-variant cursor-default">© 2024 Eye Yantra Ocular Diagnostics</p>
+<div class="flex gap-sm">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Server: Online</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors cursor-pointer" href="#">Admin Settings</a>
+</div>
+</div>
+</footer>
+</body></html>

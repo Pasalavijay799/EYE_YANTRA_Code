@@ -19,64 +19,85 @@ RIGHT_EYE = [362, 263, 386, 374, 380, 381, 382, 398]
 def crop_eyes_from_image(image_path, padding=40):
     image = cv2.imread(image_path)
     if image is None:
-        raise ValueError("Image not found or unreadable.")
+        print(f"⚠️ Image not found or unreadable: {image_path}")
+        return False
 
     img_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_height, img_width = image.shape[:2]
     results = face_mesh.process(img_rgb)
 
-    if not results.multi_face_landmarks:
-        raise ValueError("No face detected in the image.")
-
-    for face_landmarks in results.multi_face_landmarks:
-        # Get coordinates of both eyes
-        eye_indices = LEFT_EYE + RIGHT_EYE
-        eye_coords = [
-            (
-                int(face_landmarks.landmark[idx].x * img_width),
-                int(face_landmarks.landmark[idx].y * img_height)
-            )
-            for idx in eye_indices
-            if idx < len(face_landmarks.landmark)
+    landmarks = None
+    if results.multi_face_landmarks:
+        landmarks = results.multi_face_landmarks[0]
+    else:
+        # Fallback 1: Search for the clean unannotated original image in input folders
+        filename = os.path.basename(image_path)
+        
+        # Strip prefixes
+        clean_filename = filename
+        if filename.startswith("processed_hirschberg_"):
+            clean_filename = filename.replace("processed_hirschberg_", "")
+        elif filename.startswith("processed_"):
+            clean_filename = filename.replace("processed_", "")
+        elif filename.startswith("hirschberg_"):
+            clean_filename = filename.replace("hirschberg_", "")
+            
+        possible_paths = [
+            os.path.join("Preliminary", clean_filename),
+            os.path.join("Hirschberg", clean_filename),
+            os.path.join("Preliminary_Results", clean_filename),
+            os.path.join("Hirschberg_Results", clean_filename),
+            os.path.abspath(os.path.join("Preliminary", clean_filename)),
+            os.path.abspath(os.path.join("Hirschberg", clean_filename)),
         ]
-
-        eye_coords = np.array(eye_coords)
-
-        # Bounding box for both eyes
-        x, y, w, h = cv2.boundingRect(eye_coords)
-
-        # Add padding
-        x1 = max(x - padding, 0)
-        y1 = max(y - padding, 0)
-        x2 = min(x + w + padding, img_width)
-        y2 = min(y + h + padding, img_height)
-
-        # Match original aspect ratio
-        original_ratio = img_width / img_height
-        crop_w = x2 - x1
-        crop_h = y2 - y1
-        current_ratio = crop_w / crop_h
-
-        if current_ratio > original_ratio:
-            # Too wide, increase height
-            new_h = crop_w / original_ratio
-            center_y = (y1 + y2) // 2
-            y1 = int(center_y - new_h / 2)
-            y2 = int(center_y + new_h / 2)
-        else:
-            # Too tall, increase width
-            new_w = crop_h * original_ratio
-            center_x = (x1 + x2) // 2
-            x1 = int(center_x - new_w / 2)
-            x2 = int(center_x + new_w / 2)
-
-        # Clamp to bounds
-        x1, y1 = max(0, x1), max(0, y1)
-        x2, y2 = min(img_width, x2), min(img_height, y2)
-
-        # Crop and overwrite the original image
+        
+        for clean_path in possible_paths:
+            if os.path.exists(clean_path):
+                clean_img = cv2.imread(clean_path)
+                if clean_img is not None:
+                    clean_rgb = cv2.cvtColor(clean_img, cv2.COLOR_BGR2RGB)
+                    clean_results = face_mesh.process(clean_rgb)
+                    if clean_results.multi_face_landmarks:
+                        landmarks = clean_results.multi_face_landmarks[0]
+                        img_height, img_width = clean_img.shape[:2]
+                        print(f"✅ Found face landmarks in clean source image: {clean_path}")
+                        break
+        
+    if landmarks is None:
+        # Fallback 2: Center horizontal crop if no landmarks can be detected
+        print(f"⚠️ No face landmarks detected for {image_path}, falling back to center-strip crop.")
+        y1 = int(img_height * 0.35)
+        y2 = int(img_height * 0.65)
+        x1 = int(img_width * 0.1)
+        x2 = int(img_width * 0.9)
         cropped = image[y1:y2, x1:x2]
         cv2.imwrite(image_path, cropped)
         return True
 
-    raise RuntimeError("Unexpected error: no face landmarks processed.")
+    # Get coordinates of both eyes
+    eye_indices = LEFT_EYE + RIGHT_EYE
+    eye_coords = [
+        (
+            int(landmarks.landmark[idx].x * img_width),
+            int(landmarks.landmark[idx].y * img_height)
+        )
+        for idx in eye_indices
+        if idx < len(landmarks.landmark)
+    ]
+
+    eye_coords = np.array(eye_coords)
+    x, y, w, h = cv2.boundingRect(eye_coords)
+
+    # Add padding to cover brow and outer cheek areas
+    x_pad = int(w * 0.2) + padding
+    y_pad = int(h * 0.4) + padding
+
+    x1 = max(x - x_pad, 0)
+    y1 = max(y - y_pad, 0)
+    x2 = min(x + w + x_pad, img_width)
+    y2 = min(y + h + y_pad, img_height)
+
+    # Crop and overwrite the original image
+    cropped = image[y1:y2, x1:x2]
+    cv2.imwrite(image_path, cropped)
+    return True

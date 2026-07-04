@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>9-Gaze Motility Grid - Tablet</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=Fira+Code:wght@450&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed-variant": "#005049",
+                    "on-primary-fixed-variant": "#344283",
+                    "surface-variant": "#e4e1e8",
+                    "tertiary-fixed-dim": "#c3c6ce",
+                    "on-error": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-fixed-dim": "#b9c3ff",
+                    "on-primary": "#ffffff",
+                    "on-tertiary-fixed": "#181c21",
+                    "inverse-primary": "#b9c3ff",
+                    "primary-fixed": "#dde1ff",
+                    "surface-container": "#efedf3",
+                    "on-primary-fixed": "#001257",
+                    "on-error-container": "#93000a",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#4fdbcc",
+                    "primary": "#001256",
+                    "surface-dim": "#dbd9df",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#43474d",
+                    "inverse-surface": "#303035",
+                    "on-secondary-fixed": "#00201d",
+                    "background": "#fbf8ff",
+                    "on-primary-container": "#8694db",
+                    "inverse-on-surface": "#f2f0f6",
+                    "surface-container-high": "#e9e7ed",
+                    "on-tertiary-container": "#94989f",
+                    "on-surface": "#1b1b20",
+                    "surface-tint": "#4c5a9d",
+                    "surface-bright": "#fbf8ff",
+                    "surface-container-highest": "#e4e1e8",
+                    "primary-container": "#1b2a6b",
+                    "on-secondary-container": "#007168",
+                    "tertiary-container": "#2c3036",
+                    "tertiary-fixed": "#dfe2ea",
+                    "on-tertiary": "#ffffff",
+                    "secondary-fixed": "#71f8e8",
+                    "error-container": "#ffdad6",
+                    "surface": "#fbf8ff",
+                    "surface-container-low": "#f5f2f9",
+                    "secondary": "#006a62",
+                    "outline": "#767681",
+                    "outline-variant": "#c6c5d2",
+                    "on-surface-variant": "#454650",
+                    "on-background": "#1b1b20",
+                    "secondary-container": "#71f8e8",
+                    "tertiary": "#171b21"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "64px",
+                    "sm": "16px",
+                    "xs": "8px",
+                    "lg": "40px",
+                    "base": "4px",
+                    "container-max": "1440px",
+                    "md": "24px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "headline-lg": [
+                            "Sora"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "headline-md": [
+                            "Sora"
+                    ],
+                    "body-sm": [
+                            "Inter"
+                    ],
+                    "label-caps": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Sora"
+                    ],
+                    "headline-sm": [
+                            "Sora"
+                    ],
+                    "code-diagnostic": [
+                            "Fira Code"
+                    ]
+            },
+            "fontSize": {
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-sm": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "headline-sm": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "code-diagnostic": [
+                            "13px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "450"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(186, 26, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+        .target-dot.active {
+            animation: pulse-red 2s infinite;
+            background-color: #ba1a1a; /* error color */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background h-full flex flex-col overflow-hidden font-body-md">
+<!-- Top Navigation Shell (Hidden for this specific task-focused view, but included as per JSON requirement if it was a destination, suppressing based on instruction to prioritize canvas for linear/task-focused views) -->
+<!-- Instruction: "Suppress navigation to prioritize the content canvas if the user is in a focused journey or a "dead end"" - A live 9-Gaze scan is highly task-focused. -->
+<main class="flex-1 flex flex-col p-gutter gap-md h-full max-h-screen overflow-hidden">
+<!-- Header & Progress -->
+<header class="flex-shrink-0 flex flex-col gap-sm">
+<div class="flex justify-between items-center">
+<div>
+<h1 class="font-headline-md text-headline-md text-primary">9-Gaze Motility Exam</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Patient: Doe, John • ID: OCU-8924</p>
+</div>
+<button class="glass-panel text-on-surface-variant px-sm py-xs rounded-lg hover:text-error transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">close</span>
+<span class="font-label-caps text-label-caps">ABORT SCAN</span>
+</button>
+</div>
+<!-- Progress Track -->
+<div class="flex items-center gap-sm">
+<span class="font-label-caps text-label-caps text-on-surface-variant w-16">GAZE 4/9</span>
+<div class="flex-1 h-2 bg-surface-container-high rounded-full overflow-hidden flex">
+<!-- Progress segments -->
+<div class="h-full bg-secondary w-[11.11%] border-r border-background"></div>
+<div class="h-full bg-secondary w-[11.11%] border-r border-background"></div>
+<div class="h-full bg-secondary w-[11.11%] border-r border-background"></div>
+<div class="h-full bg-secondary-container w-[11.11%] border-r border-background relative shadow-[0_0_8px_rgba(113,248,232,0.8)]"></div>
+<div class="h-full bg-transparent w-[11.11%]"></div>
+<div class="h-full bg-transparent w-[11.11%]"></div>
+<div class="h-full bg-transparent w-[11.11%]"></div>
+<div class="h-full bg-transparent w-[11.11%]"></div>
+<div class="h-full bg-transparent w-[11.11%]"></div>
+</div>
+</div>
+</header>
+<!-- Dual Panel Layout (Grid) -->
+<div class="flex-1 grid grid-cols-8 gap-gutter min-h-0">
+<!-- LEFT PANEL: 3x3 Target Grid -->
+<div class="col-span-4 glass-panel rounded-xl p-md flex flex-col">
+<h2 class="font-headline-sm text-headline-sm text-primary mb-sm">Patient Stimulus View</h2>
+<div class="flex-1 grid grid-cols-3 grid-rows-3 gap-4 bg-surface-container-lowest rounded-lg p-lg border border-surface-container-high relative">
+<!-- Grid Lines overlay -->
+<div class="absolute inset-0 pointer-events-none flex flex-col justify-evenly">
+<div class="w-full h-px bg-surface-variant"></div>
+<div class="w-full h-px bg-surface-variant"></div>
+</div>
+<div class="absolute inset-0 pointer-events-none flex justify-evenly">
+<div class="h-full w-px bg-surface-variant"></div>
+<div class="h-full w-px bg-surface-variant"></div>
+</div>
+<!-- Targets -->
+<!-- Top Left (Completed) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Top Center (Completed) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Top Right (Completed) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Center Left (Active) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-6 h-6 rounded-full target-dot active"></div>
+</div>
+<!-- Center Center (Pending) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Center Right (Pending) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Bottom Left (Pending) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Bottom Center (Pending) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+<!-- Bottom Right (Pending) -->
+<div class="flex items-center justify-center relative z-10">
+<div class="w-4 h-4 rounded-full bg-surface-variant"></div>
+</div>
+</div>
+</div>
+<!-- RIGHT PANEL: Live Feed & Logs -->
+<div class="col-span-4 flex flex-col gap-sm min-h-0">
+<!-- Live Camera Feed -->
+<div class="glass-panel rounded-xl flex-shrink-0 relative overflow-hidden h-2/3 border-b-0 rounded-b-none">
+<!-- Camera Feed Image Placeholder -->
+<img class="w-full h-full object-cover" data-alt="A high-resolution, clinical close-up of a human eye in a well-lit medical setting. The lighting is bright and even, typical of a professional medical imaging device. The overall aesthetic is clean, sterile, and technologically advanced, fitting a light-mode clinical application interface. The colors are natural but slightly muted to emphasize medical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAar2GjE0ft-yOEdD4cf9hn6tHCoeZcwHjM-gZEDoEnSserLdcxVxik9Mi4HvSA7AvHWv5NxgjbnLgRC2Xs9YUOvvTnAH8a9paffUSXp1Oz9m_fnJbIXaDlg3GTc0Ov1iR_Yo4b8zlsxMuNGiKWHWOFG7YnUNEmto5mfQReTDQCuQU4_jtZ-zfAvcVPSHjQSECrFGz2odbbN9YEs4XdOtgIviY1GhKhCSaOq1eoT0KbFsuhbxtVap-F"/>
+<!-- Overlays -->
+<div class="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none"></div>
+<div class="absolute top-sm left-sm flex items-center gap-xs bg-surface-container/80 backdrop-blur-md px-2 py-1 rounded-md">
+<div class="w-2 h-2 rounded-full bg-error animate-pulse"></div>
+<span class="font-label-caps text-label-caps text-on-surface">LIVE FEED</span>
+</div>
+<!-- Simulated Eye Tracking Overlay -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<div class="w-32 h-32 border-2 border-secondary rounded-full opacity-60 flex items-center justify-center">
+<div class="w-16 h-16 border border-secondary border-dashed rounded-full animate-spin-slow"></div>
+</div>
+<!-- Tracking coordinates -->
+<div class="absolute top-[40%] right-[30%] bg-tertiary-container/80 text-on-tertiary px-1 py-0.5 rounded font-code-diagnostic text-code-diagnostic">
+                            X: -14.2, Y: 5.1
+                        </div>
+</div>
+<!-- Capture Action -->
+<div class="absolute bottom-md left-0 right-0 flex justify-center">
+<button class="bg-secondary text-on-secondary px-lg py-sm rounded-full font-label-caps text-label-caps shadow-[0_0_15px_rgba(0,106,98,0.5)] hover:bg-on-secondary-container transition-all flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">camera</span>
+                            CAPTURE FRAME
+                        </button>
+</div>
+</div>
+<!-- Live System Log -->
+<div class="bg-tertiary-container text-on-tertiary rounded-xl rounded-t-none p-sm flex-1 overflow-y-auto font-code-diagnostic text-code-diagnostic flex flex-col gap-1 border-t border-surface-variant/20 shadow-inner">
+<div class="flex justify-between items-center mb-2 border-b border-on-tertiary/20 pb-1">
+<span class="text-tertiary-fixed-dim text-[10px] uppercase">System Telemetry</span>
+<span class="material-symbols-outlined text-[14px] text-secondary">wifi_tethering</span>
+</div>
+<div class="text-on-tertiary-container">[14:02:45] Init sequence complete.</div>
+<div class="text-on-tertiary-container">[14:02:46] Calibration successful. Est error &lt; 0.5deg.</div>
+<div>[14:02:50] Commencing Gaze 1 (Top-Left).</div>
+<div class="text-secondary">[14:02:53] Gaze 1 captured. Fixation stability: 94%.</div>
+<div>[14:02:54] Commencing Gaze 2 (Top-Center).</div>
+<div class="text-secondary">[14:02:57] Gaze 2 captured. Fixation stability: 98%.</div>
+<div>[14:02:58] Commencing Gaze 3 (Top-Right).</div>
+<div class="text-secondary">[14:03:01] Gaze 3 captured. Fixation stability: 92%.</div>
+<div class="text-inverse-primary">[14:03:02] Commencing Gaze 4 (Center-Left).</div>
+<div class="text-inverse-primary">[14:03:03] Tracking active... calculating velocity.</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

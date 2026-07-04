@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Help & Support - Strabismus Detection Suite</title>
+	<link rel="stylesheet" href="/static/css/help.css">
+</head>
+
+<body>
+	<div class="container">
+		<!-- Hero Section -->
+		<div class="hero-section">
+			<div class="hero-content">
+				<div class="sos-icon">🆘</div>
+				<h1 class="main-title">Need Help? We're Here!</h1>
+				<p class="subtitle">Your complete guide to using the Strabismus Detection Suite</p>
+			</div>
+		</div>
+
+		<!-- General Instructions -->
+		<div class="content-section">
+			<h2 class="section-title">General Instructions</h2>
+			<div class="instructions-text">
+				This platform guides you through every step of strabismus testing. Make sure you follow on-screen
+				instructions carefully. Most actions are fully automated but may need manual confirmations in certain
+				stages.
+			</div>
+
+			<div class="quick-links">
+				<a href="/static/help/eyeyantra_manual.pdf" class="quick-link" download>📋 User Manual</a>
+				<!---<a href="#" class="quick-link">🎥 Video Tutorials</a>---->
+				<a href="/static/help/sample_reports/Overall_Report.pdf" class="quick-link" download>📊 Sample
+					Reports</a>
+				<!----<a href="#" class="quick-link">⚙️ Device Setup</a>---->
+			</div>
+		</div>
+
+		<!-- Common Issues -->
+		<div class="content-section">
+			<h2 class="section-title">Common Issues & Solutions</h2>
+			<div class="issues-grid">
+				<div class="issue-card">
+					<h3 class="issue-title">
+						<span class="warning-icon">⚠️</span>
+						Can't connect to device?
+					</h3>
+					<ul class="solutions-list">
+						<li>Make sure Bluetooth or Wi-Fi is enabled.</li>
+						<li>Keep the diagnostic device powered on and in range.</li>
+						<li>Try refreshing the device list or restarting the connection.</li>
+					</ul>
+				</div>
+
+				<div class="issue-card">
+					<h3 class="issue-title">
+						<span class="warning-icon">🎥</span>
+						Camera not showing preview?
+					</h3>
+					<ul class="solutions-list">
+						<li>Grant browser camera permissions.</li>
+						<li>Ensure no other app is using the webcam.</li>
+						<li>Reload the page and retry.</li>
+					</ul>
+				</div>
+
+				<div class="issue-card">
+					<h3 class="issue-title">
+						<span class="warning-icon">📄</span>
+						Reports not generating?
+					</h3>
+					<ul class="solutions-list">
+						<li>Make sure all test stages are completed.</li>
+						<!---<li>Check internet connectivity for cloud-based report sync.</li>--->
+						<li>Try refreshing the report page.</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<!-- FAQs -->
+		<div class="content-section">
+			<h2 class="section-title">Frequently Asked Questions</h2>
+			<div class="faq-section">
+				<div class="faq-item" onclick="toggleFAQ(this)">
+					<div class="faq-question">
+						<span>Q1. Who is this system for?</span>
+						<span class="toggle-icon">▼</span>
+					</div>
+					<div class="faq-answer">
+						Designed primarily for ophthalmologists, optometrists, and vision researchers, but can also be
+						used in remote screening centers.
+					</div>
+				</div>
+
+				<div class="faq-item" onclick="toggleFAQ(this)">
+					<div class="faq-question">
+						<span>Q2. Is this a medical-grade diagnostic tool?</span>
+						<span class="toggle-icon">▼</span>
+					</div>
+					<div class="faq-answer">
+						It is a research-based tool intended to aid clinical judgment. Final diagnosis should be
+						confirmed by certified professionals.
+					</div>
+				</div>
+
+				<div class="faq-item" onclick="toggleFAQ(this)">
+					<div class="faq-question">
+						<span>Q3. What patient data is stored?</span>
+						<span class="toggle-icon">▼</span>
+					</div>
+					<div class="faq-answer">
+						Only the patient's name and test data are temporarily held for report generation. No sensitive
+						data is stored permanently unless enabled by the clinician.
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Contact Support -->
+		<!-- <div class="contact-section">
+			<h2 class="contact-title">Contact Support</h2>
+			<p class="contact-text">
+				If you're facing technical difficulties or want to contribute to this project, we're here to help!
+			</p>
+			<a href="mailto:support@strabismus-ai.in" class="email-link">
+				📧 support@strabismus-ai.in
+			</a>
+		</div> -->
+	</div>
+
+	<!-- Back Button -->
+	<a href="/" class="back-button">
+		⬅️ Back to Home
+	</a>
+
+	<script>
+		function toggleFAQ(element) {
+			element.classList.toggle('active');
+		}
+	</script>
+</body>
+
+</html>

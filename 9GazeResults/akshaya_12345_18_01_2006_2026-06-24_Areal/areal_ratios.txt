@@ -1,0 +1,9 @@
+gaze_1.jpg: 1.275
+gaze_2.jpg: 1.140
+gaze_3.jpg: 1.043
+gaze_4.jpg: 1.534
+gaze_5.jpg: 1.157
+gaze_6.jpg: 1.284
+gaze_7.jpg: 1.168
+gaze_8.jpg: 1.232
+gaze_9.jpg: 1.091

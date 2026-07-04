@@ -1,20 +1,21 @@
 import os
 import glob
+import json
 from fpdf import FPDF
 from datetime import datetime
 import re
-import matplotlib.pyplot as plt
+import cv2
 
 def safe_text(text):
     return text.encode('latin-1', 'replace').decode('latin-1')
 
 RESULTS_PATHS = {
-    "preliminary": "Preliminary_Results",
-    "hirschberg": "Hirschberg_Results",
-    "gaze": "9GazeResults"
+    "preliminary": os.path.abspath("Preliminary_Results"),
+    "hirschberg": os.path.abspath("Hirschberg_Results"),
+    "gaze": os.path.abspath("9GazeResults")
 }
 
-OUTPUT_PDF_PATH = "Overall_Report.pdf"
+OUTPUT_PDF_PATH = os.path.abspath("Overall_Report.pdf")
 
 def get_latest_file(folder, pattern):
     files = glob.glob(os.path.join(folder, pattern))
@@ -27,7 +28,7 @@ def find_latest_person_data(userName=None):
     # Otherwise, fallback to the latest modified file.
     def get_latest_match(folder, pattern, user_prefix=None):
         if user_prefix:
-            files = glob.glob(os.path.join(folder, f"{user_prefix}*{pattern}"))
+            files = glob.glob(os.path.join(folder, f"*{user_prefix}*{pattern}"))
             if files:
                 return max(files, key=os.path.getctime)
         files = glob.glob(os.path.join(folder, f"*{pattern}"))
@@ -115,28 +116,48 @@ def calculate_av_pattern(blocks):
     return avg_up, avg_down, primary_dev, diff, result
 
 def generate_pdf_report(personDetails):
-    userName = f"{personDetails.get('userName', '')}_{personDetails.get('id', '')}_{personDetails.get('dob', '')}"
+    raw_user_name = f"{personDetails.get('userName', '')}_{personDetails.get('id', '')}_{personDetails.get('dob', '')}"
+    userName = re.sub(r'[\\/*?:"<>|]', '_', raw_user_name)
     person_data = find_latest_person_data(userName=userName)
+
+    # Load admin configuration with defaults
+    admin_config = {
+        "clinic_name": "Comprehensive Ocular Alignment Report",
+        "doctor_name": "Dr. A. Narayana, MBBS, DOMS",
+        "doctor_title": "Reviewing Ophthalmologist",
+        "tech_name": "T. Kumar",
+        "tech_title": "Examining Technician",
+        "device_name": "EyeYantra v1.0",
+        "contact_email": "reports@eyeyantra.health",
+        "contact_phone": "+91 00000 00000"
+    }
+    if os.path.exists("admin_config.json"):
+        try:
+            with open("admin_config.json", "r", encoding="utf-8") as f:
+                user_config = json.load(f)
+                admin_config.update(user_config)
+        except Exception as e:
+            print(f"⚠️ Error loading admin_config.json: {e}")
 
     # 1. Initialize FPDF document (A4 size default: 210mm x 297mm)
     pdf = FPDF(orientation='P', unit='mm', format='A4')
     pdf.set_auto_page_break(auto=False, margin=0) # Tightly managed page breaks
 
     # Brand Palette
-    C_NAVY = (27, 42, 107)
-    C_TEAL = (20, 184, 170)
-    C_DARK = (11, 16, 35)
-    C_MUTED = (107, 114, 128)
+    C_NAVY = (15, 23, 42)      # Slate-900 (Sleek dark navy/slate)
+    C_TEAL = (56, 189, 248)    # Sky-400 (Vibrant sky accent)
+    C_DARK = (15, 23, 42)      # Slate-900
+    C_MUTED = (100, 116, 139)  # Slate-500
     
-    C_SUCCESS = (31, 157, 92)
-    C_SUCCESS_BG = (228, 248, 238)
-    C_WARN = (201, 122, 27)
-    C_WARN_BG = (253, 239, 226)
-    C_DANGER = (225, 79, 61)
-    C_DANGER_BG = (252, 233, 230)
+    C_SUCCESS = (16, 185, 129)    # Emerald-500
+    C_SUCCESS_BG = (240, 253, 250) # Emerald-50
+    C_WARN = (245, 158, 11)       # Amber-500
+    C_WARN_BG = (254, 243, 199)    # Amber-50
+    C_DANGER = (239, 68, 68)      # Red-500
+    C_DANGER_BG = (254, 242, 242)  # Red-50
     
-    C_LIGHT_BG = (248, 249, 250)
-    C_BORDER = (230, 232, 240)
+    C_LIGHT_BG = (248, 250, 252)  # Slate-50
+    C_BORDER = (226, 232, 240)    # Slate-200
 
     # Helper function to draw section titles
     def draw_section_header(pdf, number, title, status_text, status_type, y):
@@ -170,10 +191,15 @@ def generate_pdf_report(personDetails):
     # Header Banner
     pdf.set_fill_color(*C_NAVY)
     pdf.rect(10, 8, 190, 16, style="F")
+    
+    # Left colored accent line inside header banner
+    pdf.set_fill_color(14, 165, 233) # sky blue
+    pdf.rect(10, 8, 1.5, 16, style="F")
+    
     pdf.set_xy(15, 10)
     pdf.set_font("Helvetica", "B", 16)
     pdf.set_text_color(255, 255, 255)
-    pdf.cell(100, 8, "Comprehensive Ocular Alignment Report", ln=0)
+    pdf.cell(100, 8, safe_text(admin_config.get("clinic_name", "Comprehensive Ocular Alignment Report")), ln=0)
     
     # Subtitle
     pdf.set_xy(15, 17)
@@ -196,6 +222,10 @@ def generate_pdf_report(personDetails):
     pdf.set_draw_color(*C_BORDER)
     pdf.rect(10, 27, 190, 20, style="FD")
     
+    # Left colored accent line inside patient info box
+    pdf.set_fill_color(14, 165, 233)
+    pdf.rect(10, 27, 1.5, 20, style="F")
+    
     # Patient details content
     pdf.set_text_color(*C_NAVY)
     
@@ -204,19 +234,20 @@ def generate_pdf_report(personDetails):
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(25, 4, "PATIENT NAME", ln=0)
     pdf.set_font("Helvetica", "", 9)
-    pdf.cell(40, 4, personDetails.get('userName', 'N/A'), ln=0)
+    pdf.cell(40, 4, str(personDetails.get('userName', 'N/A')), ln=0)
     
+    # ... (Wait, let's keep all details unmodified)
     pdf.set_xy(14, 33)
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(25, 4, "PATIENT ID", ln=0)
     pdf.set_font("Helvetica", "B", 9)
-    pdf.cell(40, 4, personDetails.get('id', 'N/A'), ln=0)
+    pdf.cell(40, 4, str(personDetails.get('id', 'N/A')), ln=0)
     
     pdf.set_xy(14, 37)
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(25, 4, "DATE OF BIRTH", ln=0)
     pdf.set_font("Helvetica", "", 9)
-    pdf.cell(40, 4, personDetails.get('dob', 'N/A'), ln=0)
+    pdf.cell(40, 4, str(personDetails.get('dob', 'N/A')), ln=0)
     
     pdf.set_xy(14, 41)
     pdf.set_font("Helvetica", "B", 8)
@@ -229,19 +260,22 @@ def generate_pdf_report(personDetails):
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(32, 4, "REFERRING PHYSICIAN", ln=0)
     pdf.set_font("Helvetica", "", 9)
-    pdf.cell(45, 4, "Dr. A. Narayana, MBBS", ln=0)
+    # Use config doctor name (strip DOMS degree if present for shorter space)
+    raw_doc = admin_config.get("doctor_name", "Dr. A. Narayana, MBBS, DOMS")
+    doc_short = raw_doc.split(", DOMS")[0]
+    pdf.cell(45, 4, safe_text(doc_short), ln=0)
     
     pdf.set_xy(100, 33)
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(32, 4, "EXAMINING TECH.", ln=0)
     pdf.set_font("Helvetica", "", 9)
-    pdf.cell(45, 4, "T. Kumar", ln=0)
+    pdf.cell(45, 4, safe_text(admin_config.get("tech_name", "T. Kumar")), ln=0)
     
     pdf.set_xy(100, 37)
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(32, 4, "DEVICE", ln=0)
     pdf.set_font("Helvetica", "", 9)
-    pdf.cell(45, 4, "EyeYantra v1.0", ln=0)
+    pdf.cell(45, 4, safe_text(admin_config.get("device_name", "EyeYantra v1.0")), ln=0)
     
     pdf.set_xy(100, 41)
     pdf.set_font("Helvetica", "B", 8)
@@ -336,7 +370,27 @@ def generate_pdf_report(personDetails):
         img_x, img_y, img_w, img_h = 112, y_sec1 + 7, 88, 48
         pdf.set_draw_color(*C_NAVY)
         pdf.rect(img_x - 0.5, img_y - 0.5, img_w + 1, img_h + 1, style="D")
-        pdf.image(prelim_img, x=img_x, y=img_y, w=img_w, h=img_h)
+        try:
+            im_cv = cv2.imread(prelim_img)
+            if im_cv is not None:
+                h_orig, w_orig = im_cv.shape[:2]
+                aspect = w_orig / h_orig
+                target_aspect = img_w / img_h
+                if aspect > target_aspect:
+                    draw_w = img_w
+                    draw_h = img_w / aspect
+                    offset_x = 0
+                    offset_y = (img_h - draw_h) / 2
+                else:
+                    draw_h = img_h
+                    draw_w = img_h * aspect
+                    offset_y = 0
+                    offset_x = (img_w - draw_w) / 2
+                pdf.image(prelim_img, x=img_x + offset_x, y=img_y + offset_y, w=draw_w, h=draw_h)
+            else:
+                pdf.image(prelim_img, x=img_x, y=img_y, w=img_w, h=img_h)
+        except Exception as e:
+            pdf.image(prelim_img, x=img_x, y=img_y, w=img_w, h=img_h)
 
     # ---------------- SECTION 2: HIRSCHBERG CORNEAL REFLEX TEST ----------------
     hirsch_img, hirsch_txt = person_data["hirschberg"]
@@ -434,7 +488,27 @@ def generate_pdf_report(personDetails):
         img_x, img_y, img_w, img_h = 112, y_sec2 + 7, 88, 48
         pdf.set_draw_color(*C_NAVY)
         pdf.rect(img_x - 0.5, img_y - 0.5, img_w + 1, img_h + 1, style="D")
-        pdf.image(img_path, x=img_x, y=img_y, w=img_w, h=img_h)
+        try:
+            im_cv = cv2.imread(img_path)
+            if im_cv is not None:
+                h_orig, w_orig = im_cv.shape[:2]
+                aspect = w_orig / h_orig
+                target_aspect = img_w / img_h
+                if aspect > target_aspect:
+                    draw_w = img_w
+                    draw_h = img_w / aspect
+                    offset_x = 0
+                    offset_y = (img_h - draw_h) / 2
+                else:
+                    draw_h = img_h
+                    draw_w = img_h * aspect
+                    offset_y = 0
+                    offset_x = (img_w - draw_w) / 2
+                pdf.image(img_path, x=img_x + offset_x, y=img_y + offset_y, w=draw_w, h=draw_h)
+            else:
+                pdf.image(img_path, x=img_x, y=img_y, w=img_w, h=img_h)
+        except Exception as e:
+            pdf.image(img_path, x=img_x, y=img_y, w=img_w, h=img_h)
 
     # Footer Page 1
     pdf.set_xy(10, 275)
@@ -560,7 +634,27 @@ def generate_pdf_report(personDetails):
         img_x, img_y, img_w, img_h = 112, y_sec3 + 7, 88, 52
         pdf.set_draw_color(*C_NAVY)
         pdf.rect(img_x - 0.5, img_y - 0.5, img_w + 1, img_h + 1, style="D")
-        pdf.image(gaze_img, x=img_x, y=img_y, w=img_w, h=img_h)
+        try:
+            im_cv = cv2.imread(gaze_img)
+            if im_cv is not None:
+                h_orig, w_orig = im_cv.shape[:2]
+                aspect = w_orig / h_orig
+                target_aspect = img_w / img_h
+                if aspect > target_aspect:
+                    draw_w = img_w
+                    draw_h = img_w / aspect
+                    offset_x = 0
+                    offset_y = (img_h - draw_h) / 2
+                else:
+                    draw_h = img_h
+                    draw_w = img_h * aspect
+                    offset_y = 0
+                    offset_x = (img_w - draw_w) / 2
+                pdf.image(gaze_img, x=img_x + offset_x, y=img_y + offset_y, w=draw_w, h=draw_h)
+            else:
+                pdf.image(gaze_img, x=img_x, y=img_y, w=img_w, h=img_h)
+        except Exception as e:
+            pdf.image(gaze_img, x=img_x, y=img_y, w=img_w, h=img_h)
 
     # ---------------- SECTION 4: STRABISMUS PATTERN ANALYSIS ----------------
     pattern_status = "PENDING"
@@ -583,19 +677,8 @@ def generate_pdf_report(personDetails):
     pdf.set_text_color(*C_MUTED)
     pdf.cell(90, 4, "Horizontal deviation compared across upgaze and downgaze positions", ln=1)
     
-    # Render deviation graph locally
-    plt.figure(figsize=(4, 2.5))
-    gazes = ["Upgaze", "Primary", "Downgaze"]
-    values = [avg_up, primary_dev, avg_down]
-    plt.bar(gazes, values, color=['#3498db', '#2ecc71', '#e74c3c'], width=0.5)
-    plt.axhline(0, color='black', linewidth=0.8)
-    plt.title("Horizontal Deviation Across Gazes", fontsize=9, fontweight="bold")
-    plt.ylabel("Deviation Value", fontsize=8)
-    plt.tick_params(axis='both', which='major', labelsize=8)
-    graph_path = "deviation_chart.png"
-    plt.tight_layout()
-    plt.savefig(graph_path, dpi=150)
-    plt.close()
+    # Render deviation graph locally (drawn as vector graphics natively in FPDF below)
+    pass
     
     # Pattern metrics box
     box_y = y_sec4 + 13
@@ -652,13 +735,63 @@ def generate_pdf_report(personDetails):
         desc_text = "No significant horizontal pattern deviation detected across vertical gaze shifts."
     pdf.multi_cell(95, 3.5, desc_text, border=0)
 
-    # Right Column (Deviation Graph)
-    if os.path.exists(graph_path):
-        img_x, img_y, img_w, img_h = 112, y_sec4 + 7, 88, 48
-        pdf.set_draw_color(*C_NAVY)
-        pdf.rect(img_x - 0.5, img_y - 0.5, img_w + 1, img_h + 1, style="D")
-        pdf.image(graph_path, x=img_x, y=img_y, w=img_w, h=img_h)
-        os.remove(graph_path)
+    # Right Column (Deviation Graph - drawn natively with vector elements)
+    chart_x = 115
+    chart_y = y_sec4 + 13
+    chart_w = 85
+    chart_h = 32
+    
+    # Background Box for Chart
+    pdf.set_fill_color(*C_LIGHT_BG)
+    pdf.set_draw_color(*C_BORDER)
+    pdf.rect(chart_x, chart_y, chart_w, chart_h, style="FD")
+    
+    # Left colored accent line inside chart box
+    pdf.set_fill_color(14, 165, 233)
+    pdf.rect(chart_x, chart_y, 1.5, chart_h, style="F")
+    
+    # Chart Title
+    pdf.set_xy(chart_x + 3, chart_y + 2)
+    pdf.set_font("Helvetica", "B", 8)
+    pdf.set_text_color(*C_NAVY)
+    pdf.cell(chart_w - 6, 4, "Horizontal Deviation Across Gazes", ln=1, align="L")
+    
+    # Draw Axis line
+    axis_y = chart_y + chart_h - 6
+    pdf.set_draw_color(148, 163, 184) # Slate-400
+    pdf.line(chart_x + 8, axis_y, chart_x + chart_w - 8, axis_y)
+    
+    # Values and Heights
+    max_val = max(avg_up, primary_dev, avg_down)
+    if max_val <= 0:
+        max_val = 10.0
+    scale = (chart_h - 15) / max_val
+    
+    bar_width = 12
+    # X offsets for three bars
+    bar_positions = [
+        (chart_x + 12, "Upgaze", avg_up, (14, 165, 233)),
+        (chart_x + 36, "Primary", primary_dev, (16, 185, 129)),
+        (chart_x + 60, "Downgaze", avg_down, (245, 158, 11))
+    ]
+    
+    for bx, label, val, color in bar_positions:
+        h = val * scale
+        # Draw bar rectangle
+        pdf.set_fill_color(*color)
+        pdf.rect(bx, axis_y - h, bar_width, h, style="F")
+        
+        # Draw value text above the bar
+        pdf.set_xy(bx, axis_y - h - 3.5)
+        pdf.set_font("Helvetica", "B", 7)
+        pdf.set_text_color(51, 65, 85) # Slate-700
+        pdf.cell(bar_width, 3, f"{val:.1f}", ln=0, align="C")
+        
+        # Draw label below the axis
+        pdf.set_xy(bx - 3, axis_y + 1)
+        pdf.set_font("Helvetica", "", 7)
+        pdf.set_text_color(*C_MUTED)
+        pdf.cell(bar_width + 6, 3, label, ln=0, align="C")
 
     # ---------------- SECTION 5: CLINICAL IMPRESSION & SIGNATURES ----------------
     y_sec5 = 158
@@ -694,22 +827,22 @@ def generate_pdf_report(personDetails):
     pdf.line(20, sig_y + 14, 80, sig_y + 14)
     pdf.set_xy(20, sig_y + 15)
     pdf.set_font("Helvetica", "B", 8)
-    pdf.cell(60, 4, "T. Kumar", ln=1, align="C")
+    pdf.cell(60, 4, safe_text(admin_config.get("tech_name", "T. Kumar")), ln=1, align="C")
     pdf.set_font("Helvetica", "", 7.5)
     pdf.set_text_color(*C_MUTED)
     pdf.set_xy(20, sig_y + 19)
-    pdf.cell(60, 4, "Examining Technician", ln=0, align="C")
+    pdf.cell(60, 4, safe_text(admin_config.get("tech_title", "Examining Technician")), ln=0, align="C")
     
     # Doctor
     pdf.set_text_color(*C_NAVY)
     pdf.line(130, sig_y + 14, 190, sig_y + 14)
     pdf.set_xy(130, sig_y + 15)
     pdf.set_font("Helvetica", "B", 8)
-    pdf.cell(60, 4, "Dr. A. Narayana, MBBS, DOMS", ln=1, align="C")
+    pdf.cell(60, 4, safe_text(admin_config.get("doctor_name", "Dr. A. Narayana, MBBS, DOMS")), ln=1, align="C")
     pdf.set_font("Helvetica", "", 7.5)
     pdf.set_text_color(*C_MUTED)
     pdf.set_xy(130, sig_y + 19)
-    pdf.cell(60, 4, "Reviewing Ophthalmologist", ln=0, align="C")
+    pdf.cell(60, 4, safe_text(admin_config.get("doctor_title", "Reviewing Ophthalmologist")), ln=0, align="C")
 
     # Disclaimer Disclaimer Box
     pdf.set_xy(10, 262)
@@ -731,7 +864,9 @@ def generate_pdf_report(personDetails):
     pdf.cell(50, 4, "EyeYantra Diagnostics", ln=0)
     pdf.set_font("Helvetica", "", 7.5)
     pdf.set_text_color(*C_MUTED)
-    pdf.cell(90, 4, "Reports: reports@eyeyantra.health  |  Support: +91 00000 00000", ln=0, align="C")
+    contact_email = admin_config.get("contact_email", "reports@eyeyantra.health")
+    contact_phone = admin_config.get("contact_phone", "+91 00000 00000")
+    pdf.cell(90, 4, safe_text(f"Reports: {contact_email}  |  Support: {contact_phone}"), ln=0, align="C")
     pdf.cell(50, 4, "Page 2 of 2", ln=0, align="R")
 
     pdf.output(OUTPUT_PDF_PATH)

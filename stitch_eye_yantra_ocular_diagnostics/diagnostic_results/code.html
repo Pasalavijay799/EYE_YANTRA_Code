@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Diagnostic Results - Eye Yantra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sora:wght@400;600;700&family=Fira+Code:wght@450&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Sora:wght@100..900&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#4fdbcc",
+                        "primary-container": "#1b2a6b",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "surface-container-highest": "#e4e1e8",
+                        "on-primary-container": "#8694db",
+                        "inverse-primary": "#b9c3ff",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#dde1ff",
+                        "on-surface": "#1b1b20",
+                        "surface-container-low": "#f5f2f9",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#1b1b20",
+                        "on-secondary-fixed": "#00201d",
+                        "tertiary-fixed-dim": "#c3c6ce",
+                        "surface-tint": "#4c5a9d",
+                        "inverse-on-surface": "#f2f0f6",
+                        "surface-bright": "#fbf8ff",
+                        "surface-container": "#efedf3",
+                        "on-error": "#ffffff",
+                        "secondary": "#006a62",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-container": "#94989f",
+                        "surface": "#fbf8ff",
+                        "inverse-surface": "#303035",
+                        "surface-variant": "#e4e1e8",
+                        "on-tertiary-fixed": "#181c21",
+                        "secondary-container": "#71f8e8",
+                        "tertiary-fixed": "#dfe2ea",
+                        "tertiary-container": "#2c3036",
+                        "surface-dim": "#dbd9df",
+                        "outline": "#767681",
+                        "tertiary": "#171b21",
+                        "outline-variant": "#c6c5d2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#344283",
+                        "primary": "#001256",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e9e7ed",
+                        "background": "#fbf8ff",
+                        "on-surface-variant": "#454650",
+                        "on-secondary-fixed-variant": "#005049",
+                        "on-tertiary-fixed-variant": "#43474d",
+                        "on-secondary-container": "#007168",
+                        "on-primary-fixed": "#001257",
+                        "secondary-fixed": "#71f8e8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "lg": "40px",
+                        "xl": "64px",
+                        "base": "4px",
+                        "container-max": "1440px",
+                        "sm": "16px",
+                        "md": "24px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Inter"],
+                        "headline-sm": ["Sora"],
+                        "headline-md": ["Sora"],
+                        "headline-lg": ["Sora"],
+                        "display-lg": ["Sora"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "code-diagnostic": ["Fira Code"],
+                        "label-caps": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "code-diagnostic": ["13px", {"lineHeight": "20px", "fontWeight": "450"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(79, 219, 204, 0.4);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-white/60 dark:bg-surface-container/60 backdrop-blur-xl w-full top-0 border-b border-white/40 dark:border-white/10 shadow-sm backdrop-blur-[20px] z-40 fixed">
+<div class="flex items-center justify-between px-md py-xs w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-headline-md text-primary cursor-pointer active:scale-95 transition-transform">visibility</span>
+<span class="text-headline-lg font-headline-lg text-primary tracking-tight">Eye Yantra</span>
+</div>
+<!-- Desktop Navigation -->
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-on-surface-variant font-body-md hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Dashboard</a>
+<a class="text-secondary font-bold font-body-md" href="#">Diagnostics</a>
+<a class="text-on-surface-variant font-body-md hover:text-secondary-fixed-dim transition-colors duration-300" href="#">Patients</a>
+</nav>
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline-sm">
+                    JD
+                 </div>
+</div>
+</div>
+</header>
+<div class="flex-1 flex mt-[72px] relative overflow-hidden">
+<!-- NavigationDrawer (SideNav Desktop) -->
+<aside class="hidden md:flex bg-surface/60 backdrop-blur-xl h-full w-[280px] rounded-r-xl border-r border-white/40 shadow-md backdrop-blur-[20px] flex-col gap-sm p-md fixed z-30">
+<!-- Patient Header Info -->
+<div class="mb-lg pb-md border-b border-surface-variant">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm">
+                        AX
+                    </div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-primary">John Doe</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">ID: #AX-78210</p>
+</div>
+</div>
+<p class="font-label-caps text-label-caps text-outline">Source: RetinalCam X1</p>
+</div>
+<!-- Tabs -->
+<nav class="flex flex-col gap-xs">
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-secondary-fixed/20 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-body-md text-body-md">Preliminary</span>
+</a>
+<a class="flex items-center gap-sm p-sm bg-secondary-container text-on-secondary-container rounded-lg font-bold hover:shadow-[0_0_15px_rgba(79,219,204,0.4)] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">view_in_ar</span>
+<span class="font-body-md text-body-md">Hirschberg</span>
+</a>
+<a class="flex items-center gap-sm p-sm text-on-surface-variant hover:bg-surface-container-high rounded-lg hover:bg-secondary-fixed/20 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-body-md text-body-md">9-Gaze</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-0 md:ml-[280px] p-sm md:p-lg pb-24 overflow-y-auto">
+<div class="max-w-5xl mx-auto space-y-md">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-sm mb-lg">
+<div>
+<h1 class="font-display-lg text-display-lg text-primary mb-xs">Hirschberg Analysis</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Corneal light reflex evaluation for strabismus detection.</p>
+</div>
+<div class="flex items-center gap-xs">
+<span class="w-3 h-3 rounded-full bg-secondary glow-active"></span>
+<span class="font-label-caps text-label-caps text-secondary uppercase">Analysis Complete</span>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+<!-- Left Column: Image Viewport (Span 8) -->
+<div class="lg:col-span-8 space-y-md">
+<!-- Primary Image Card -->
+<div class="glass-panel rounded-xl overflow-hidden relative group">
+<!-- Image Container -->
+<div class="relative w-full aspect-video bg-black flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover opacity-90" data-alt="A high-resolution clinical macro photograph of a patient's eyes illuminated by a penlight, showing clear corneal light reflexes. The image is set within a clean, modern medical software interface with a light-mode aesthetic, emphasizing precise diagnostic clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBW1fvhSmxgkYNKdSCvpDiy-1-Iuvvq2ygLejdFPh6NVSnqilD51LsLFGAAdkEmby_pea_x6bxDf-mivy-1g22Nbhw5YFQdkXq14p81ZrdOKNPYW7y-usq3c3O4gFRMu_xSGxxBhp9iK_-5wSs8Mt6hKvL3vXxlA5KnbhSOtz3_p3kExLrU9xzNkWN34CdrdKwxXC71tnq_l-Ktx4OCzb_p-49A13VmbAX1DPdYaWr6y5SOTTdSokU6"/>
+<!-- Overlay Graphics (Simulated) -->
+<!-- Right Eye (Patient's Right) -->
+<div class="absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-secondary/50 rounded-full flex items-center justify-center">
+<div class="absolute w-12 h-12 border border-secondary rounded-full"></div>
+<div class="absolute w-2 h-2 bg-[#ffeb3b] rounded-full shadow-[0_0_8px_#ffeb3b]"></div> <!-- Center dot -->
+<div class="absolute w-2 h-2 bg-[#ff5252] rounded-full shadow-[0_0_8px_#ff5252] ml-4 mt-2"></div> <!-- Reflex dot -->
+<svg class="absolute w-full h-full" style="pointer-events: none;">
+<line stroke="#4fdbcc" stroke-dasharray="2,2" stroke-width="1.5" x1="50%" x2="56%" y1="50%" y2="54%"></line>
+</svg>
+</div>
+<!-- Left Eye -->
+<div class="absolute right-1/3 top-1/2 translate-x-1/2 -translate-y-1/2 w-32 h-32 border border-secondary/50 rounded-full flex items-center justify-center">
+<div class="absolute w-12 h-12 border border-secondary rounded-full"></div>
+<div class="absolute w-2 h-2 bg-[#ffeb3b] rounded-full shadow-[0_0_8px_#ffeb3b]"></div>
+<div class="absolute w-2 h-2 bg-[#ffeb3b] rounded-full shadow-[0_0_8px_#ffeb3b] ml-1 mt-1"></div>
+</div>
+</div>
+<!-- Overlay Controls -->
+<div class="absolute bottom-4 left-4 right-4 flex justify-between items-center z-10">
+<div class="glass-panel rounded-lg px-3 py-1.5 flex gap-2">
+<button class="material-symbols-outlined text-on-surface hover:text-secondary transition-colors">zoom_in</button>
+<button class="material-symbols-outlined text-on-surface hover:text-secondary transition-colors">zoom_out</button>
+</div>
+<div class="glass-panel rounded-lg px-3 py-1.5 flex items-center gap-2 font-label-caps text-label-caps text-on-surface">
+<span class="material-symbols-outlined text-[16px]">visibility</span> Flash: On
+                                </div>
+</div>
+</div>
+<!-- Data Readout Cards -->
+<div class="grid grid-cols-2 gap-md">
+<!-- OD (Right Eye) -->
+<div class="glass-panel rounded-xl p-md border-l-4 border-l-surface-tint">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">OD (Right Eye)</h3>
+<div class="bg-surface-container-low rounded-lg p-sm border border-outline-variant font-code-diagnostic text-code-diagnostic text-on-surface">
+<div class="flex justify-between mb-1"><span>Deviation X:</span> <span class="text-error">+2.1 mm</span></div>
+<div class="flex justify-between mb-1"><span>Deviation Y:</span> <span class="text-secondary">-1.4 mm</span></div>
+<div class="flex justify-between pt-2 border-t border-outline-variant mt-2">
+<span>Est. Prism:</span> <span>~15 PD</span>
+</div>
+</div>
+<div class="mt-xs text-right">
+<span class="inline-block px-2 py-1 bg-error-container text-on-error-container rounded text-xs font-semibold">Exotropia detected</span>
+</div>
+</div>
+<!-- OS (Left Eye) -->
+<div class="glass-panel rounded-xl p-md border-l-4 border-l-secondary">
+<h3 class="font-headline-sm text-headline-sm text-primary mb-sm">OS (Left Eye)</h3>
+<div class="bg-surface-container-low rounded-lg p-sm border border-outline-variant font-code-diagnostic text-code-diagnostic text-on-surface">
+<div class="flex justify-between mb-1"><span>Deviation X:</span> <span class="text-secondary">+0.2 mm</span></div>
+<div class="flex justify-between mb-1"><span>Deviation Y:</span> <span class="text-secondary">+0.1 mm</span></div>
+<div class="flex justify-between pt-2 border-t border-outline-variant mt-2">
+<span>Est. Prism:</span> <span>< 2 PD</span>
+</div>
+</div>
+<div class="mt-xs text-right">
+<span class="inline-block px-2 py-1 bg-secondary-fixed text-on-secondary-fixed rounded text-xs font-semibold">Normal limits</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Summary & Actions (Span 4) -->
+<div class="lg:col-span-4 space-y-md">
+<!-- Diagnostic Summary Card -->
+<div class="glass-panel rounded-xl p-md relative">
+<div class="flex justify-between items-start mb-sm">
+<h2 class="font-headline-md text-headline-md text-primary">Diagnostic Summary</h2>
+<button class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-variant flex items-center justify-center text-on-surface-variant transition-colors group">
+<span class="material-symbols-outlined text-[20px] group-hover:text-primary">edit</span>
+</button>
+</div>
+<div class="space-y-sm">
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">Primary Finding</label>
+<p class="font-body-md text-body-md text-on-surface font-semibold">Right Exotropia (approx 15 PD)</p>
+</div>
+<div class="h-[1px] bg-outline-variant w-full my-2"></div>
+<div>
+<label class="font-label-caps text-label-caps text-outline block mb-1">Clinical Notes</label>
+<div class="bg-surface-bright rounded-lg p-3 border border-outline-variant min-h-[120px]">
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                            Corneal light reflex displaced nasally on the right eye, indicating an outward deviation. Left eye reflex appears central. Recommend full sensorimotor exam for confirmation.
+                                        </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-xs mt-lg">
+<button class="w-full bg-secondary text-on-secondary py-3 px-4 rounded-lg font-headline-sm text-body-md hover:bg-secondary-container hover:text-on-secondary-container transition-all shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">save</span> Save Report
+                            </button>
+<button class="w-full bg-surface text-primary border border-outline-variant py-3 px-4 rounded-lg font-headline-sm text-body-md hover:bg-surface-variant transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">print</span> Print PDF
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-dim/80 dark:bg-tertiary-container/80 backdrop-blur-lg w-full border-t border-white/20 fixed bottom-0 z-50">
+<div class="flex justify-between items-center px-lg py-xs w-full max-w-container-max mx-auto">
+<span class="font-label-caps text-label-caps text-on-surface-variant">© 2024 Eye Yantra Ocular Diagnostics</span>
+<div class="flex gap-md font-label-caps text-label-caps">
+<span class="text-on-surface-variant flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-secondary"></span> Server: Online</span>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Admin Settings</a>
+</div>
+</div>
+</footer>
+</body></html>

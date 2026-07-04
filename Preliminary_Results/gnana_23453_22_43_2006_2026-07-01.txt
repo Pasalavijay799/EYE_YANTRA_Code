@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: gnana_23453_22_43_2006_2026-07-01.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.213
+VER: 1.002

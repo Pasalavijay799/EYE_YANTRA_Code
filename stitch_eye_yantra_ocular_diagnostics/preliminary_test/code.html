@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eye Yantra - Preliminary Test</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&amp;family=Inter:wght@400;600&amp;family=Sora:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-fixed-dim": "#4fdbcc",
+                      "primary-container": "#1b2a6b",
+                      "primary-fixed-dim": "#b9c3ff",
+                      "surface-container-highest": "#e4e1e8",
+                      "on-primary-container": "#8694db",
+                      "inverse-primary": "#b9c3ff",
+                      "on-error-container": "#93000a",
+                      "primary-fixed": "#dde1ff",
+                      "on-surface": "#1b1b20",
+                      "surface-container-low": "#f5f2f9",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#1b1b20",
+                      "on-secondary-fixed": "#00201d",
+                      "tertiary-fixed-dim": "#c3c6ce",
+                      "surface-tint": "#4c5a9d",
+                      "inverse-on-surface": "#f2f0f6",
+                      "surface-bright": "#fbf8ff",
+                      "surface-container": "#efedf3",
+                      "on-error": "#ffffff",
+                      "secondary": "#006a62",
+                      "error-container": "#ffdad6",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-container": "#94989f",
+                      "surface": "#fbf8ff",
+                      "inverse-surface": "#303035",
+                      "surface-variant": "#e4e1e8",
+                      "on-tertiary-fixed": "#181c21",
+                      "secondary-container": "#71f8e8",
+                      "tertiary-fixed": "#dfe2ea",
+                      "tertiary-container": "#2c3036",
+                      "surface-dim": "#dbd9df",
+                      "outline": "#767681",
+                      "tertiary": "#171b21",
+                      "outline-variant": "#c6c5d2",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-fixed-variant": "#344283",
+                      "primary": "#001256",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e9e7ed",
+                      "background": "#fbf8ff",
+                      "on-surface-variant": "#454650",
+                      "on-secondary-fixed-variant": "#005049",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "on-secondary-container": "#007168",
+                      "on-primary-fixed": "#001257",
+                      "secondary-fixed": "#71f8e8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "8px",
+                      "lg": "40px",
+                      "xl": "64px",
+                      "base": "4px",
+                      "container-max": "1440px",
+                      "sm": "16px",
+                      "md": "24px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-sm": [
+                              "Sora"
+                      ],
+                      "headline-md": [
+                              "Sora"
+                      ],
+                      "headline-lg": [
+                              "Sora"
+                      ],
+                      "display-lg": [
+                              "Sora"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "code-diagnostic": [
+                              "Fira Code"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "code-diagnostic": [
+                              "13px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "450"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glow-active {
+            box-shadow: 0 0 15px rgba(0, 106, 98, 0.4);
+        }
+        .log-container {
+            background-color: rgba(44, 48, 54, 0.85);
+            backdrop-filter: blur(10px);
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md relative overflow-hidden">
+<!-- Subtle environmental background -->
+<div class="absolute inset-0 z-[-1] bg-gradient-to-br from-surface-container-lowest via-surface to-primary-container/10"></div>
+<!-- Main Content Area - Taking full height as this is a focused task screen -->
+<main class="flex-1 flex flex-col w-full max-w-container-max mx-auto h-screen p-md gap-md">
+<!-- Header / Back Action -->
+<header class="flex items-center justify-between w-full py-xs shrink-0">
+<button class="flex items-center gap-xs text-on-surface-variant hover:text-primary transition-colors cursor-pointer group glass-panel px-sm py-xs rounded-full">
+<span class="material-symbols-outlined text-headline-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
+<span class="font-body-md">Dashboard</span>
+</button>
+<div class="flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_rgba(0,106,98,0.8)] animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Calibration Mode</span>
+</div>
+</header>
+<!-- Viewport & Instructions Grid -->
+<div class="flex-1 grid grid-cols-1 md:grid-cols-12 gap-gutter min-h-0">
+<!-- Camera Feed Area (Left/Top) -->
+<div class="md:col-span-8 flex flex-col h-full rounded-xl overflow-hidden glass-panel relative shadow-sm border border-white/40">
+<!-- Top Toolbar within viewport -->
+<div class="absolute top-0 w-full z-10 flex justify-between items-center p-sm bg-white/30 backdrop-blur-md border-b border-white/20">
+<span class="font-label-caps text-label-caps text-on-surface-variant tracking-wider">OD_CAM_FEED_01</span>
+<div class="flex gap-base">
+<span class="material-symbols-outlined text-on-surface-variant">tune</span>
+<span class="material-symbols-outlined text-on-surface-variant">fullscreen</span>
+</div>
+</div>
+<!-- Main Visuals Container -->
+<div class="flex-1 relative bg-surface-container-low flex items-center justify-center overflow-hidden group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-80 mix-blend-multiply" data-alt="A highly detailed close-up of a human eye being scanned by an advanced medical device. The iris is a vivid blue, illuminated by thin, precise cyan laser lines mapping the surface topography. The aesthetic is futuristic yet clinically sterile, featuring a high-key light mode palette with crisp whites and deep contrasting blacks. Soft, glowing holographic overlays suggest real-time diagnostic data processing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeClPLAcmUC7hMpUQN1GJyUzNsslzk-OhtnxezrmZ_stozk9YbLwQRCDoZ7iw-wYexmNoUF3TcK_Ib32eIsAOGwX-0KBjKm_Dd5Mr4HshhXaLNt0Pmj_Kx_mJaickPX0EUjl0StMlcF1QS0dLhwKQGeJnRDXluFYAjm3uSrHoEwS9w8C64EkZg_HLQXVQkY79fVViEf_0YUmj0pqL5IcmH7_8yr60C4jGnQFTXaIhfl67SHREJsOc5"/>
+<!-- Calibration Crosshairs & UI Overlays -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center">
+<div class="w-64 h-64 border border-secondary/50 rounded-full relative animate-[spin_60s_linear_infinite]">
+<div class="absolute top-0 left-1/2 w-0.5 h-4 bg-secondary -translate-x-1/2"></div>
+<div class="absolute bottom-0 left-1/2 w-0.5 h-4 bg-secondary -translate-x-1/2"></div>
+<div class="absolute left-0 top-1/2 h-0.5 w-4 bg-secondary -translate-y-1/2"></div>
+<div class="absolute right-0 top-1/2 h-0.5 w-4 bg-secondary -translate-y-1/2"></div>
+</div>
+<div class="absolute w-12 h-12 border-2 border-secondary rounded-full flex items-center justify-center">
+<div class="w-1 h-1 bg-secondary rounded-full"></div>
+</div>
+<!-- Tracking nodes -->
+<div class="absolute top-1/4 left-1/4 w-2 h-2 bg-secondary rounded-full shadow-[0_0_8px_rgba(0,106,98,0.8)]"></div>
+<div class="absolute top-1/3 right-1/4 w-2 h-2 bg-secondary rounded-full shadow-[0_0_8px_rgba(0,106,98,0.8)]"></div>
+</div>
+<!-- Scan Line Animation -->
+<div class="absolute top-0 w-full h-0.5 bg-secondary shadow-[0_0_10px_rgba(0,106,98,0.6)] animate-[bounce_4s_infinite]"></div>
+</div>
+</div>
+<!-- Instruction & Action Area (Right/Bottom) -->
+<div class="md:col-span-4 flex flex-col gap-md h-full">
+<!-- Instruction Card -->
+<div class="glass-panel p-md rounded-xl flex flex-col gap-sm shadow-sm flex-1">
+<h2 class="font-headline-md text-headline-md text-primary tracking-tight">Baseline Setup</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Ensure the patient is seated comfortably. Align the tracking nodes with the center of the pupil. This will establish the foundational Interpupillary Distance (IPD) required for accurate subsequent gaze tracking.
+                    </p>
+<div class="mt-4 flex flex-col gap-xs">
+<div class="flex items-center justify-between text-sm border-b border-white/20 pb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Estimated IPD</span>
+<span class="font-code-diagnostic text-code-diagnostic text-secondary font-medium">62.4 mm</span>
+</div>
+<div class="flex items-center justify-between text-sm border-b border-white/20 pb-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Lighting Variance</span>
+<span class="font-code-diagnostic text-code-diagnostic text-on-surface-variant">0.02 lux</span>
+</div>
+</div>
+</div>
+<!-- Primary Action Button -->
+<button class="w-full bg-secondary text-on-secondary font-headline-sm text-headline-sm py-sm rounded-lg hover:shadow-[0_0_20px_rgba(0,106,98,0.5)] transition-all duration-300 active:scale-95 flex justify-center items-center gap-xs">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">camera</span>
+                    CAPTURE BASELINE
+                </button>
+</div>
+</div>
+<!-- Real-time Log Console -->
+<div class="w-full h-32 shrink-0 log-container rounded-xl p-sm overflow-hidden flex flex-col border border-white/10 shadow-inner">
+<div class="flex items-center gap-xs mb-2 border-b border-white/10 pb-1 shrink-0">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">terminal</span>
+<span class="font-label-caps text-label-caps text-tertiary-fixed-dim tracking-widest">SYSTEM LOG</span>
+</div>
+<div class="flex-1 overflow-y-auto font-code-diagnostic text-code-diagnostic text-tertiary-fixed-dim leading-tight flex flex-col gap-1">
+<div><span class="text-on-surface-variant">[10:42:01]</span> System initialized. Awaiting baseline input...</div>
+<div><span class="text-on-surface-variant">[10:42:03]</span> Connecting to optical sensors... <span class="text-secondary">OK</span></div>
+<div><span class="text-on-surface-variant">[10:42:04]</span> Calibrating depth field. Calculating variance...</div>
+<div><span class="text-on-surface-variant">[10:42:05]</span> Subject detected. Aligning reticle...</div>
+<div class="animate-pulse">_</div>
+</div>
+</div>
+</main>
+</body></html>

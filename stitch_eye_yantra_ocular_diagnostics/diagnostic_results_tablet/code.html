@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Eye Yantra - Diagnostic Results</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&amp;family=Inter:wght@400;600&amp;family=Fira+Code:wght@450&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed-variant": "#005049",
+                      "on-primary-fixed-variant": "#344283",
+                      "surface-variant": "#e4e1e8",
+                      "tertiary-fixed-dim": "#c3c6ce",
+                      "on-error": "#ffffff",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#b9c3ff",
+                      "on-primary": "#ffffff",
+                      "on-tertiary-fixed": "#181c21",
+                      "inverse-primary": "#b9c3ff",
+                      "primary-fixed": "#dde1ff",
+                      "surface-container": "#efedf3",
+                      "on-primary-fixed": "#001257",
+                      "on-error-container": "#93000a",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#4fdbcc",
+                      "primary": "#001256",
+                      "surface-dim": "#dbd9df",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed-variant": "#43474d",
+                      "inverse-surface": "#303035",
+                      "on-secondary-fixed": "#00201d",
+                      "background": "#fbf8ff",
+                      "on-primary-container": "#8694db",
+                      "inverse-on-surface": "#f2f0f6",
+                      "surface-container-high": "#e9e7ed",
+                      "on-tertiary-container": "#94989f",
+                      "on-surface": "#1b1b20",
+                      "surface-tint": "#4c5a9d",
+                      "surface-bright": "#fbf8ff",
+                      "surface-container-highest": "#e4e1e8",
+                      "primary-container": "#1b2a6b",
+                      "on-secondary-container": "#007168",
+                      "tertiary-container": "#2c3036",
+                      "tertiary-fixed": "#dfe2ea",
+                      "on-tertiary": "#ffffff",
+                      "secondary-fixed": "#71f8e8",
+                      "error-container": "#ffdad6",
+                      "surface": "#fbf8ff",
+                      "surface-container-low": "#f5f2f9",
+                      "secondary": "#006a62",
+                      "outline": "#767681",
+                      "outline-variant": "#c6c5d2",
+                      "on-surface-variant": "#454650",
+                      "on-background": "#1b1b20",
+                      "secondary-container": "#71f8e8",
+                      "tertiary": "#171b21"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "64px",
+                      "sm": "16px",
+                      "xs": "8px",
+                      "lg": "40px",
+                      "base": "4px",
+                      "container-max": "1440px",
+                      "md": "24px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Sora"],
+                      "body-lg": ["Inter"],
+                      "headline-md": ["Sora"],
+                      "body-sm": ["Inter"],
+                      "label-caps": ["Inter"],
+                      "body-md": ["Inter"],
+                      "display-lg": ["Sora"],
+                      "headline-sm": ["Sora"],
+                      "code-diagnostic": ["Fira Code"]
+              },
+              "fontSize": {
+                      "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "code-diagnostic": ["13px", { "lineHeight": "20px", "fontWeight": "450" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background-color: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        .glass-panel-active {
+            box-shadow: 0 0 15px -3px rgba(0, 106, 98, 0.3), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 106, 98, 0.4);
+        }
+        .code-panel {
+            background-color: rgba(239, 237, 243, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        .overlay-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #eab308; /* yellow-500 */
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 8px rgba(234, 179, 8, 0.8);
+            transform: translate(-50%, -50%);
+        }
+        .overlay-crosshair {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            transform: translate(-50%, -50%);
+        }
+        .overlay-crosshair::before, .overlay-crosshair::after {
+            content: '';
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+        .overlay-crosshair::before {
+            top: 50%; left: 0; right: 0; height: 1px; transform: translateY(-50%);
+        }
+        .overlay-crosshair::after {
+            left: 50%; top: 0; bottom: 0; width: 1px; transform: translateX(-50%);
+        }
+        
+        /* Custom scrollbar for diagnostic notes */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(118, 118, 129, 0.3);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(118, 118, 129, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-x-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- TopAppBar -->
+<header class="bg-white/60 dark:bg-surface-container/60 backdrop-blur-xl border-b border-white/40 dark:border-white/10 shadow-sm flex justify-between items-center px-gutter w-full sticky top-0 z-50 h-16">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="visibility">visibility</span>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">Eye Yantra</span>
+</div>
+<div class="hidden md:flex gap-md items-center">
+<nav class="flex gap-md">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:bg-secondary-container/50 transition-colors px-sm py-xs rounded-full" href="#">Dashboard</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:bg-secondary-container/50 transition-colors px-sm py-xs rounded-full" href="#">Patients</a>
+<a class="text-secondary dark:text-secondary-fixed font-bold hover:bg-secondary-container/50 transition-colors px-sm py-xs rounded-full bg-secondary-container/20" href="#">Diagnostics</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:bg-secondary-container/50 transition-colors px-sm py-xs rounded-full" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-sm">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-secondary-container/50 transition-colors p-xs rounded-full cursor-pointer active:scale-95 transition-transform" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-secondary-container/50 transition-colors p-xs rounded-full cursor-pointer active:scale-95 transition-transform" data-icon="settings">settings</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-secondary-container/50 transition-colors p-xs rounded-full cursor-pointer active:scale-95 transition-transform" data-icon="help">help</button>
+<div class="w-8 h-8 rounded-full overflow-hidden ml-xs border border-outline-variant">
+<img alt="Clinician Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a clinical ophthalmologist in a bright, modern medical setting. The doctor is wearing a clean white coat with subtle futuristic design elements. High key lighting, crisp details, conveying trust and medical expertise in a sophisticated healthcare environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCDPs7r3FRpE1chrnzmf7yFZ55gFi1AdBD1oMFw9rXG0cClviJXcOaIJSn2WzKQiBvTxB952nxKtSwqEhwHHQ-dNPjQY3dcvR6Bki-k-fLY80wsncGtQoJM0Yf-1n4_RK0H9aNzX4ZUU9t_ubF47orizEob0uuCc-bF9Mug7fFQyyaMdJxpDDoGh4RKiBdwbp7s_X3eomf4k1PGyJgRiyrPeTyna8baRlHJKuN-r-Ep9ByqUCoOpHrV"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 w-full max-w-container-max mx-auto relative">
+<!-- Subtle Animated Background Decor -->
+<div class="fixed inset-0 pointer-events-none z-[-1] overflow-hidden">
+<div class="absolute top-[-10%] right-[-5%] w-[40%] h-[50%] bg-primary-container/20 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[50%] h-[60%] bg-secondary-container/10 rounded-full blur-[120px]"></div>
+</div>
+<!-- SideNavBar (Hidden on Mobile, Visible on Tablet+) -->
+<aside class="hidden md:flex flex-col h-[calc(100vh-4rem)] py-md px-sm sticky left-0 z-40 bg-white/60 dark:bg-surface-container/60 backdrop-blur-xl border-r border-white/40 dark:border-white/10 shadow-md w-64 flex-shrink-0 transition-all duration-200 ease-in-out">
+<div class="mb-lg px-sm">
+<h2 class="font-headline-sm text-headline-sm text-primary">Ocular Suite</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">V1.0.4 Diagnostic</p>
+<button class="mt-md w-full bg-secondary text-on-secondary font-label-caps text-label-caps py-sm px-md rounded-lg flex items-center justify-center gap-xs hover:shadow-[0_0_15px_rgba(0,106,98,0.4)] transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                    New Scan
+                </button>
+</div>
+<nav class="flex-1 flex flex-col gap-xs font-body-md text-body-md">
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                    Patients
+                </a>
+<a class="flex items-center gap-sm px-sm py-xs bg-secondary-container text-on-secondary-container rounded-lg font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+                    Diagnostics
+                </a>
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+                    Analytics
+                </a>
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-primary hover:bg-surface-container-high/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="inventory_2">inventory_2</span>
+                    Archive
+                </a>
+</nav>
+<div class="mt-auto pt-md border-t border-outline-variant/30">
+<a class="flex items-center gap-sm px-sm py-xs text-on-surface-variant hover:text-error hover:bg-error-container/50 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                    Logout
+                </a>
+</div>
+</aside>
+<!-- Main Content Canvas (Tablet Optimized 8-column grid conceptually) -->
+<main class="flex-1 p-md md:p-gutter overflow-y-auto">
+<!-- Patient Header Summary -->
+<div class="glass-panel rounded-xl p-md mb-md flex flex-col md:flex-row justify-between items-start md:items-center gap-sm border-l-4 border-l-secondary">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface">DOE, Jane</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">ID: #EYE-8472-A • DOB: 14/05/1982 • Female</p>
+</div>
+<div class="flex gap-sm">
+<div class="bg-error-container text-on-error-container px-sm py-1 rounded-full font-label-caps text-label-caps flex items-center gap-1 border border-error/20">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                        Pathology Detected
+                    </div>
+<button class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+</button>
+<button class="p-2 border border-outline-variant rounded-lg text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+</div>
+<!-- Tabs Navigation -->
+<div class="flex border-b border-outline-variant/50 mb-md overflow-x-auto no-scrollbar">
+<button class="px-md py-sm font-body-md text-body-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors whitespace-nowrap">Preliminary</button>
+<button class="px-md py-sm font-body-md text-body-md text-primary border-b-2 border-secondary font-semibold bg-primary/5 transition-colors whitespace-nowrap">Hirschberg Test</button>
+<button class="px-md py-sm font-body-md text-body-md text-on-surface-variant hover:bg-surface-variant/30 transition-colors whitespace-nowrap">9-Gaze Analysis</button>
+</div>
+<!-- Bento Grid Layout for Results -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-md">
+<!-- Main Image Viewport (Takes up majority space on tablet) -->
+<div class="lg:col-span-8 flex flex-col gap-md">
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col h-full glass-panel-active">
+<div class="p-sm border-b border-outline-variant/30 flex justify-between items-center bg-surface/50">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-xs">
+<span class="material-symbols-outlined text-secondary" data-icon="center_focus_strong">center_focus_strong</span>
+                                Corneal Reflex Scan
+                            </h3>
+<div class="flex gap-2">
+<button class="text-xs font-label-caps text-label-caps bg-secondary text-on-secondary px-2 py-1 rounded">OD</button>
+<button class="text-xs font-label-caps text-label-caps border border-outline-variant text-on-surface-variant px-2 py-1 rounded">OS</button>
+<button class="text-xs font-label-caps text-label-caps border border-outline-variant text-on-surface-variant px-2 py-1 rounded">OU</button>
+</div>
+</div>
+<div class="relative bg-black flex-1 min-h-[400px] flex items-center justify-center p-md overflow-hidden">
+<!-- Simulated High-Res Eye Image -->
+<div class="relative max-w-full max-h-full">
+<img alt="Right Eye Scan" class="rounded-lg object-contain w-full h-auto border border-outline/50 shadow-2xl" data-alt="A high-resolution, ultra-detailed medical photograph of a human eye (OD - right eye) captured under clinical lighting. The iris is sharply focused with visible crypts and collarette. The pupil is dilated. There is a distinct, sharp corneal light reflex visible near the pupil margin. The sclera shows fine vascularization. The image has a scientific, diagnostic aesthetic with precise lighting to eliminate unwanted glare. High contrast, clinical accuracy, deep blacks in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr0orA59gG_4bfbTZ2AKmSehXA_DWBIq4BpFwRYWHlgRwy9t4ya5Q8jkgrs95qTuFjhAAJ1CyoinVk0Iwhgae6mQ7e0bprETaWxAN4VHUKT1hYAIj_T97D92uFEJwO9cq32mgCKz8jsk5fmWKhhU7VCxOgsYxuinOZ674vrcU4QYSY_odrOVU_LCtaRcDIW2khXvRxTtb91s6R3BFmzIl_dZ6HIz35un8e_eWdg0W2zX-8bp6h0G8l"/>
+<!-- Overlays -->
+<div class="overlay-crosshair" style="top: 50%; left: 50%;"></div>
+<!-- Corneal Reflex Dot (Simulating slight deviation) -->
+<div class="overlay-dot" style="top: 48%; left: 54%;"></div>
+<!-- Measurement Line -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" style="z-index: 10;">
+<line stroke="#eab308" stroke-dasharray="4" stroke-width="1.5" x1="50%" x2="54%" y1="50%" y2="48%"></line>
+</svg>
+<!-- Overlay Data Labels -->
+<div class="absolute bottom-4 left-4 bg-black/60 text-white p-2 rounded backdrop-blur-sm border border-white/20 font-code-diagnostic text-code-diagnostic text-xs">
+                                    Pupil C: (x:500, y:400)<br/>
+                                    Reflex: (x:540, y:380)
+                                </div>
+</div>
+<!-- Image Controls Overlay -->
+<div class="absolute right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-2 bg-black/50 p-1 rounded-lg backdrop-blur-md border border-white/10">
+<button class="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded transition-colors"><span class="material-symbols-outlined" data-icon="zoom_in">zoom_in</span></button>
+<button class="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded transition-colors"><span class="material-symbols-outlined" data-icon="zoom_out">zoom_out</span></button>
+<div class="h-px bg-white/20 my-1 w-full"></div>
+<button class="p-2 text-secondary hover:text-secondary-fixed hover:bg-white/20 rounded transition-colors"><span class="material-symbols-outlined" data-icon="contrast">contrast</span></button>
+<button class="p-2 text-white/80 hover:text-white hover:bg-white/20 rounded transition-colors"><span class="material-symbols-outlined" data-icon="layers">layers</span></button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Metrics & Notes -->
+<div class="lg:col-span-4 flex flex-col gap-md">
+<!-- Metrics Card -->
+<div class="glass-panel rounded-xl flex flex-col">
+<div class="p-sm border-b border-outline-variant/30 bg-surface/50">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Deviation Metrics</h3>
+</div>
+<div class="p-sm flex flex-col gap-sm">
+<div class="code-panel p-sm rounded-lg flex flex-col gap-xs">
+<div class="flex justify-between items-center text-on-surface-variant font-label-caps text-label-caps">
+<span>Horizontal Deviation (Δx)</span>
+<span class="text-error font-bold">+1.2 mm</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full" style="width: 75%; margin-left: 25%;"></div>
+</div>
+<p class="font-code-diagnostic text-code-diagnostic text-[11px] text-on-surface-variant">Suggests Exotropia (~18 PD)</p>
+</div>
+<div class="code-panel p-sm rounded-lg flex flex-col gap-xs">
+<div class="flex justify-between items-center text-on-surface-variant font-label-caps text-label-caps">
+<span>Vertical Deviation (Δy)</span>
+<span class="text-secondary font-bold">-0.1 mm</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full" style="width: 10%; margin-left: 45%;"></div>
+</div>
+<p class="font-code-diagnostic text-code-diagnostic text-[11px] text-on-surface-variant">WNL (Within Normal Limits)</p>
+</div>
+<div class="grid grid-cols-2 gap-sm mt-xs">
+<div class="border border-outline-variant/50 rounded-lg p-xs text-center bg-surface/30">
+<div class="text-[10px] uppercase text-on-surface-variant tracking-wider">OD Quality</div>
+<div class="font-headline-md text-secondary mt-1">98%</div>
+</div>
+<div class="border border-outline-variant/50 rounded-lg p-xs text-center bg-surface/30">
+<div class="text-[10px] uppercase text-on-surface-variant tracking-wider">OS Quality</div>
+<div class="font-headline-md text-secondary mt-1">95%</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Clinical Notes Card -->
+<div class="glass-panel rounded-xl flex flex-col flex-1 min-h-[250px]">
+<div class="p-sm border-b border-outline-variant/30 bg-surface/50 flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-xs">
+<span class="material-symbols-outlined text-primary" data-icon="edit_note">edit_note</span>
+                                Clinical Notes
+                            </h3>
+<button class="text-xs text-secondary font-semibold hover:underline">Templates</button>
+</div>
+<div class="p-sm flex-1 flex flex-col">
+<textarea class="w-full flex-1 bg-surface-container-lowest/50 border border-outline-variant/50 rounded-lg p-sm font-body-sm text-body-sm text-on-surface focus:ring-2 focus:ring-secondary/50 focus:border-secondary resize-none outline-none transition-all" placeholder="Enter findings here...">Hirschberg test reveals positive angle kappa OD. Reflex is displaced nasally approximately 1.2mm, indicating a small angle exotropia. 
+OS reflex is central.
+
+Recommend cover test to confirm and measure magnitude. Patient reports occasional diplopia when fatigued.</textarea>
+<div class="mt-sm flex justify-end gap-sm">
+<button class="px-md py-xs border border-outline-variant text-on-surface-variant rounded-lg hover:bg-surface-variant transition-colors font-body-sm text-body-sm">Save Draft</button>
+<button class="px-md py-xs bg-primary text-on-primary rounded-lg hover:shadow-[0_0_10px_rgba(27,42,107,0.4)] transition-all font-body-sm text-body-sm">Sign &amp; Finalize</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
