@@ -1,15 +1,65 @@
 {
   "name": "eyeyantra-desktop",
   "version": "1.0.0",
-  "description": "EyeYantra Ocular Alignment Desktop Application wrapper",
+  "description": "EyeYantra Ocular Alignment Desktop Application",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "package-linux": "electron-packager . EyeYantra --platform=linux --arch=x64 --out=dist --overwrite"
+    "package-linux": "electron-packager . EyeYantra --platform=linux --arch=x64 --out=dist --overwrite",
+    "package-win": "electron-packager . EyeYantra --platform=win32 --arch=x64 --out=dist --overwrite --icon=icon.ico",
+    "build-win": "electron-builder --win --x64",
+    "build-linux": "electron-builder --linux --x64",
+    "build-all": "electron-builder --win --linux --x64"
+  },
+  "build": {
+    "appId": "com.eyeyantra.desktop",
+    "productName": "EyeYantra",
+    "copyright": "Copyright © 2024 EyeYantra",
+    "directories": {
+      "output": "dist_installer"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "loading.html",
+      "icon.ico",
+      "icon.png",
+      "eye_yantra_backend/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "icon.ico",
+      "requestedExecutionLevel": "requireAdministrator"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "EyeYantra"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "icon.png",
+      "category": "MedicalSoftware"
+    }
   },
   "dependencies": {},
   "devDependencies": {
     "electron": "^28.2.0",
-    "electron-packager": "^17.1.2"
+    "electron-packager": "^17.1.2",
+    "electron-builder": "^24.13.3"
   }
 }

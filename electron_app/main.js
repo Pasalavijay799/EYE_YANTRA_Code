@@ -8,32 +8,40 @@ let pyProcess = null;
 
 function startBackend() {
   console.log('Locating backend process...');
-  const devBackendPath = path.join(__dirname, '../dist/eye_yantra_backend/eye_yantra_backend');
-  const packagedBackendPath = path.join(__dirname, 'eye_yantra_backend/eye_yantra_backend');
   const fs = require('fs');
+  const isWin = process.platform === 'win32';
+  const exeSuffix = isWin ? '.exe' : '';
 
-  let backendExe = devBackendPath;
+  // Paths: dev build output or packaged alongside the Electron app
+  const devBackendPath = path.join(__dirname, `../dist/eye_yantra_backend/eye_yantra_backend${exeSuffix}`);
+  const packagedBackendPath = path.join(__dirname, `eye_yantra_backend/eye_yantra_backend${exeSuffix}`);
 
-  if (!fs.existsSync(devBackendPath)) {
-    if (fs.existsSync(packagedBackendPath)) {
-      backendExe = packagedBackendPath;
-    } else {
-      console.log('Compiled backend binary not found, falling back to python script...');
-      const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
-      const backendScript = path.join(__dirname, '../app_api.py');
-      pyProcess = spawn(pythonCmd, [backendScript], {
-        cwd: path.join(__dirname, '..'),
-        env: { ...process.env, PYTHONUNBUFFERED: '1' }
-      });
-      return;
-    }
+  let backendExe = null;
+
+  if (fs.existsSync(devBackendPath)) {
+    backendExe = devBackendPath;
+  } else if (fs.existsSync(packagedBackendPath)) {
+    backendExe = packagedBackendPath;
   }
 
-  console.log(`Starting compiled backend executable: ${backendExe}`);
-  pyProcess = spawn(backendExe, [], {
-    cwd: path.dirname(backendExe),
-    env: { ...process.env }
-  });
+  if (!backendExe) {
+    console.log('Compiled backend binary not found, falling back to python script...');
+    const pythonCmd = isWin ? 'python' : 'python3';
+    const backendScript = path.join(__dirname, '../app_api.py');
+    pyProcess = spawn(pythonCmd, [backendScript], {
+      cwd: path.join(__dirname, '..'),
+      env: { ...process.env, PYTHONUNBUFFERED: '1' },
+      // On Windows, open a hidden console window for the Python process
+      windowsHide: true
+    });
+  } else {
+    console.log(`Starting compiled backend executable: ${backendExe}`);
+    pyProcess = spawn(backendExe, [], {
+      cwd: path.dirname(backendExe),
+      env: { ...process.env },
+      windowsHide: true
+    });
+  }
 
   pyProcess.stdout.on('data', (data) => {
     console.log(`Backend stdout: ${data}`);
@@ -111,51 +119,108 @@ function createWindow() {
   });
 }
 
-// IPC Handlers for Wi-Fi management on Ubuntu (via nmcli)
+// IPC Handlers for Wi-Fi management (cross-platform: nmcli on Linux, netsh on Windows)
 ipcMain.handle('scan-wifi', async () => {
   return new Promise((resolve) => {
     const { exec } = require('child_process');
-    exec("nmcli -t -f SSID,SIGNAL dev wifi list", (error, stdout) => {
-      if (error) {
-        console.error('Scan WiFi error:', error);
-        return resolve([
-          { ssid: 'EyeYantra_AP', signal: 99 },
-          { ssid: 'Hospital_Staff_5G', signal: 85 }
-        ]);
-      }
-      
-      const networks = [];
-      const lines = stdout.split('\n');
-      const seen = new Set();
-      
-      for (const line of lines) {
-        if (!line.trim()) continue;
-        const parts = line.split(':');
-        if (parts.length >= 2) {
-          const ssid = parts.slice(0, -1).join(':').trim();
-          const signal = parseInt(parts[parts.length - 1], 10);
+    const isWin = process.platform === 'win32';
+
+    if (isWin) {
+      // Windows: use netsh to list Wi-Fi networks
+      exec('netsh wlan show networks mode=Bssid', { encoding: 'utf8' }, (error, stdout) => {
+        if (error) {
+          console.error('Scan WiFi error (Windows):', error);
+          return resolve([{ ssid: 'EyeYantra_AP', signal: 99 }]);
+        }
+        const networks = [];
+        const seen = new Set();
+        const ssidMatches = stdout.match(/SSID\s+\d+\s*:\s*(.+)/g) || [];
+        const signalMatches = stdout.match(/Signal\s*:\s*(\d+)%/g) || [];
+        ssidMatches.forEach((line, i) => {
+          const ssid = line.replace(/SSID\s+\d+\s*:\s*/, '').trim();
+          const signalStr = signalMatches[i] ? signalMatches[i].match(/(\d+)/)[1] : '50';
           if (ssid && !seen.has(ssid)) {
             seen.add(ssid);
-            networks.push({ ssid, signal });
+            networks.push({ ssid, signal: parseInt(signalStr, 10) });
+          }
+        });
+        resolve(networks);
+      });
+    } else {
+      // Linux: use nmcli
+      exec('nmcli -t -f SSID,SIGNAL dev wifi list', (error, stdout) => {
+        if (error) {
+          console.error('Scan WiFi error (Linux):', error);
+          return resolve([
+            { ssid: 'EyeYantra_AP', signal: 99 },
+            { ssid: 'Hospital_Staff_5G', signal: 85 }
+          ]);
+        }
+        const networks = [];
+        const lines = stdout.split('\n');
+        const seen = new Set();
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          const parts = line.split(':');
+          if (parts.length >= 2) {
+            const ssid = parts.slice(0, -1).join(':').trim();
+            const signal = parseInt(parts[parts.length - 1], 10);
+            if (ssid && !seen.has(ssid)) {
+              seen.add(ssid);
+              networks.push({ ssid, signal });
+            }
           }
         }
-      }
-      resolve(networks);
-    });
+        resolve(networks);
+      });
+    }
   });
 });
 
 ipcMain.handle('connect-wifi', async (event, { ssid, password }) => {
   return new Promise((resolve) => {
     const { exec } = require('child_process');
-    const cmd = `nmcli dev wifi connect "${ssid.replace(/"/g, '\\"')}" password "${password.replace(/"/g, '\\"')}"`;
-    exec(cmd, (error, stdout, stderr) => {
-      if (error) {
-        console.error('Connect WiFi error:', error);
-        return resolve({ success: false, message: stderr || error.message });
+    const isWin = process.platform === 'win32';
+
+    if (isWin) {
+      // Windows: create a WLAN profile XML and connect via netsh
+      const profileXml = `<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+  <name>${ssid}</name>
+  <SSIDConfig><SSID><name>${ssid}</name></SSID></SSIDConfig>
+  <connectionType>ESS</connectionType>
+  <connectionMode>auto</connectionMode>
+  <MSM><security>
+    <authEncryption><authentication>WPA2PSK</authentication><encryption>AES</encryption></authEncryption>
+    <sharedKey><keyType>passPhrase</keyType><protected>false</protected><keyMaterial>${password}</keyMaterial></sharedKey>
+  </security></MSM>
+</WLANProfile>`;
+      const { writeFileSync, unlinkSync } = require('fs');
+      const profilePath = path.join(require('os').tmpdir(), `eyeyantra_wifi_${Date.now()}.xml`);
+      try {
+        writeFileSync(profilePath, profileXml);
+        exec(`netsh wlan add profile filename="${profilePath}" & netsh wlan connect name="${ssid}"`, (error, stdout, stderr) => {
+          try { unlinkSync(profilePath); } catch (_) {}
+          if (error) {
+            console.error('Connect WiFi error (Windows):', error);
+            return resolve({ success: false, message: stderr || error.message });
+          }
+          resolve({ success: true, message: `Connected to ${ssid}` });
+        });
+      } catch (e) {
+        resolve({ success: false, message: e.message });
       }
-      resolve({ success: true, message: stdout });
-    });
+    } else {
+      // Linux: use nmcli
+      const cmd = `nmcli dev wifi connect "${ssid.replace(/"/g, '\\"')}" password "${password.replace(/"/g, '\\"')}"`;
+      exec(cmd, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Connect WiFi error (Linux):', error);
+          return resolve({ success: false, message: stderr || error.message });
+        }
+        resolve({ success: true, message: stdout });
+      });
+    }
   });
 });
 
@@ -177,19 +242,31 @@ app.whenReady().then(() => {
 });
 
 // Clean up processes on exit
-app.on('window-all-closed', () => {
+function killBackend() {
   if (pyProcess) {
     console.log('Killing Python backend process...');
-    pyProcess.kill();
+    try {
+      if (process.platform === 'win32') {
+        // On Windows, use taskkill to ensure all child processes are terminated
+        const { execSync } = require('child_process');
+        execSync(`taskkill /PID ${pyProcess.pid} /T /F`, { stdio: 'ignore' });
+      } else {
+        pyProcess.kill('SIGTERM');
+      }
+    } catch (e) {
+      console.error('Error killing backend:', e.message);
+    }
+    pyProcess = null;
   }
+}
+
+app.on('window-all-closed', () => {
+  killBackend();
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
 app.on('will-quit', () => {
-  if (pyProcess) {
-    console.log('Killing Python backend process...');
-    pyProcess.kill();
-  }
+  killBackend();
 });
