@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_priya_1002_28_01_2000_2026-07-08.jpg
+lv: 9.00px 
+lh: 11.00px 
+rv: 9.00px 
+rh: 10.05px
+Left Iris White Spot from center: 5.83 px
+Right Iris White Spot: 3.61 px
+No Strabismus Detected
+ 
+rvd: 5.000 deg 
+rhd: 2.985 deg
+ 
+ 
+lvd: 5.000 deg 
+lhd: 6.818 deg 
+ 

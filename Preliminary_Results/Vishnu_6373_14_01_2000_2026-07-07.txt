@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Vishnu_6373_14_01_2000_2026-07-07.jpg
+ 
+right Exotropia:right_extro_degree:38.05
+No Vertical Squint
+HER: 1.302
+VER: 1.226

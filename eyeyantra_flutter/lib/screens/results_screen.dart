@@ -39,6 +39,8 @@ class _ResultsScreenState extends State<ResultsScreen> with SingleTickerProvider
           indicatorColor: AppTheme.primary,
           labelColor: AppTheme.primary,
           unselectedLabelColor: AppTheme.textSecondary,
+          isScrollable: true,
+          tabAlignment: TabAlignment.center,
           tabs: const [
             Tab(text: 'Preliminary', icon: Icon(Icons.auto_awesome_rounded, size: 18)),
             Tab(text: 'Hirschberg', icon: Icon(Icons.lightbulb_rounded, size: 18)),

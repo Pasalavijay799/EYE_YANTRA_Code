@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_vijay_1002_10_01_2005_2026-07-08.jpg
+lv: 8.00px 
+lh: 11.00px 
+rv: 8.06px 
+rh: 11.05px
+Left Iris White Spot from center: 3.61 px
+Right Iris White Spot: 3.61 px
+No Strabismus Detected
+ 
+rvd: 3.721 deg 
+rhd: 4.074 deg
+ 
+ 
+lvd: 5.625 deg 
+lhd: 2.727 deg 
+ 

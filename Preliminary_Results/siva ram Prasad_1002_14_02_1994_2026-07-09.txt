@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: siva ram Prasad_1002_14_02_1994_2026-07-09.jpg
+ 
+right Exotropia:right_extro_degree:55.78
+No Vertical Squint
+HER: 1.672
+VER: 1.16

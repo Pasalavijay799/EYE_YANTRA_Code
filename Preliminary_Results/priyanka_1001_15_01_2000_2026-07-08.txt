@@ -1,0 +1,11 @@
+Preliminary test  Analysis Report
+
+Input Image Path: priyanka_1001_15_01_2000_2026-07-08.jpg
+ 
+left Exotropia
+left extro degree wrt to LTP degree:25.20112364547506
+ 
+
+No Vertical Squint
+HER: 1.241
+VER: 1.266

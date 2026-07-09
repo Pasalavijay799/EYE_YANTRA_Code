@@ -72,6 +72,15 @@ venv/
 .venv/
 Python-3.10.20/
 __pycache__/
+
+# Electron build output (installer/unpacked binaries exceed GitHub's 100MB file limit)
+electron_app/dist_installer/
+electron_app/eye_yantra_backend/_internal/
+electron_app/eye_yantra_backend/*.exe
+electron_app/node_modules/
+
+# Python virtual environment
+my_env/
 venv/
 .venv/
 Python-3.10.20/

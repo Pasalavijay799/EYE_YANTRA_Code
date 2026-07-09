@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_prianka_5382_01_01_2000_2026-07-06.jpg
+lv: 12.04px 
+lh: 14.04px 
+rv: 13.04px 
+rh: 15.03px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

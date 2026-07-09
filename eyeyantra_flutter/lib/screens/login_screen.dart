@@ -48,6 +48,14 @@ class _LoginScreenState extends State<LoginScreen> {
           _serverController.text = apiService.baseUrl;
         }
       }
+      try {
+        final nextId = await apiService.getNextPatientId();
+        if (mounted) {
+          _idController.text = nextId;
+        }
+      } catch (e) {
+        debugPrint("Error fetching next patient ID: $e");
+      }
     });
   }
 
@@ -266,17 +274,23 @@ class _LoginScreenState extends State<LoginScreen> {
                               children: [
                                 Switch(
                                   value: apiService.isDemoMode,
-                                  onChanged: (val) {
-                                    apiService.setDemoMode(val);
+                                  onChanged: (val) async {
+                                    await apiService.setDemoMode(val);
+                                    final nextId = await apiService.getNextPatientId();
+                                    if (mounted) {
+                                      _idController.text = nextId;
+                                    }
                                   },
                                   activeColor: AppTheme.primary,
                                 ),
-                                const Text(
-                                  'Offline Demo Mode (Tablet standalone)',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 13,
+                                 const Expanded(
+                                  child: Text(
+                                    'Offline Demo Mode (Tablet standalone)',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 13,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -307,16 +321,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 16),
 
-                          TextFormField(
-                            controller: _idController,
-                            decoration: const InputDecoration(
-                              labelText: 'Patient ID / Code',
-                              prefixIcon: Icon(Icons.badge_rounded, color: AppTheme.primary),
-                              hintText: 'e.g. 18239',
-                            ),
-                            validator: (v) => (v == null || v.trim().isEmpty) ? 'Patient ID is required' : null,
-                          ),
-                          const SizedBox(height: 16),
+
 
                           TextFormField(
                             controller: _dobController,
@@ -471,8 +476,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                       ],
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: 12,
+                        runSpacing: 8,
                         children: [
                           TextButton.icon(
                             onPressed: () {

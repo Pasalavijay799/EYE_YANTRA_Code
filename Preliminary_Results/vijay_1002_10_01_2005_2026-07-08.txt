@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: vijay_1002_10_01_2005_2026-07-08.jpg
+ 
+
+No Horizontal Squint
+left_hyper_degree:4.40HER: 1.042
+VER: 1.529

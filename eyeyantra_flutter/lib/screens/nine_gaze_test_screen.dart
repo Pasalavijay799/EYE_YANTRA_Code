@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
@@ -42,7 +43,11 @@ class _NineGazeTestScreenState extends State<NineGazeTestScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ApiService>(context, listen: false).fetchAvailableCameras();
+      // Only probe laptop cameras on desktop platforms
+      final isDesktop = Platform.isLinux || Platform.isWindows || Platform.isMacOS;
+      if (isDesktop) {
+        Provider.of<ApiService>(context, listen: false).fetchAvailableCameras();
+      }
     });
   }
 
@@ -97,9 +102,30 @@ class _NineGazeTestScreenState extends State<NineGazeTestScreen> {
         }
       });
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('${gaze.toUpperCase()} captured successfully!'), backgroundColor: AppTheme.primary),
-      );
+
+      // Check if all 9 gazes are now completed
+      if (_completedGazes.length == _gazeOrder.length) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('✅ All 9 gazes captured! Opening Results...'),
+            backgroundColor: AppTheme.primary,
+            duration: Duration(seconds: 2),
+          ),
+        );
+        // Auto-transition to Results after 2 seconds
+        Future.delayed(const Duration(seconds: 2), () {
+          if (!mounted) return;
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => const ResultsScreen(initialTab: 2),
+            ),
+          );
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${gaze.toUpperCase()} captured successfully!'), backgroundColor: AppTheme.primary),
+        );
+      }
     } else {
       setState(() {
         _statusMessage = '❌ ${result['message'] ?? 'Capture failed.'}';
@@ -161,7 +187,16 @@ class _NineGazeTestScreenState extends State<NineGazeTestScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('9-Gaze Motility Grid'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('9-Gaze Motility Grid'),
+            Text(
+              'Patient: ${apiService.activePatientDetails['name'] ?? 'N/A'} (ID: ${apiService.activePatientDetails['id'] ?? 'N/A'})',
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
+            ),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -284,11 +319,22 @@ class _NineGazeTestScreenState extends State<NineGazeTestScreen> {
                               child: Stack(
                                 children: [
                                   apiService.localCameraSource == 'tablet'
-                                      ? TabletCameraPreview(
-                                          onControllerInitialized: (controller) {
-                                            _localCameraController = controller;
-                                          },
-                                        )
+                                      ? (!allDone
+                                          ? TabletCameraPreview(
+                                              onControllerInitialized: (controller) {
+                                                _localCameraController = controller;
+                                              },
+                                            )
+                                          : Container(
+                                              color: Colors.black87,
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.check_circle_outline_rounded,
+                                                  color: AppTheme.primary,
+                                                  size: 80,
+                                                ),
+                                              ),
+                                            ))
                                       : MjpegViewer(
                                           url: streamUrl,
                                           width: double.infinity,
@@ -353,41 +399,46 @@ class _NineGazeTestScreenState extends State<NineGazeTestScreen> {
                           ),
                           const SizedBox(height: 12),
                           // Chips row
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: List.generate(9, (index) {
-                              final cellGaze = _gazeOrder[index];
-                              final isCompleted = _completedGazes.contains(cellGaze);
-                              final isActive = cellGaze == _currentGaze && !allDone;
-                              return Container(
-                                width: 32,
-                                height: 32,
-                                decoration: BoxDecoration(
-                                  color: isCompleted
-                                      ? Colors.green.withOpacity(0.25)
-                                      : (isActive ? AppTheme.primary : Colors.white.withOpacity(0.04)),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: isActive
-                                        ? Colors.white
-                                        : (isCompleted ? Colors.green : Colors.white10),
-                                    width: isActive ? 2 : 1,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: List.generate(17, (index) {
+                                if (index.isOdd) return const SizedBox(width: 6);
+                                final chipIndex = index ~/ 2;
+                                final cellGaze = _gazeOrder[chipIndex];
+                                final isCompleted = _completedGazes.contains(cellGaze);
+                                final isActive = cellGaze == _currentGaze && !allDone;
+                                return Container(
+                                  width: 32,
+                                  height: 32,
+                                  decoration: BoxDecoration(
+                                    color: isCompleted
+                                        ? Colors.green.withOpacity(0.25)
+                                        : (isActive ? AppTheme.primary : Colors.white.withOpacity(0.04)),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: isActive
+                                          ? Colors.white
+                                          : (isCompleted ? Colors.green : Colors.white10),
+                                      width: isActive ? 2 : 1,
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: isCompleted
-                                      ? const Icon(Icons.check, size: 14, color: Colors.greenAccent)
-                                      : Text(
-                                          '${index + 1}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            color: isActive ? Colors.white : AppTheme.textSecondary,
+                                  child: Center(
+                                    child: isCompleted
+                                        ? const Icon(Icons.check, size: 14, color: Colors.greenAccent)
+                                        : Text(
+                                            '${chipIndex + 1}',
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                              color: isActive ? Colors.white : AppTheme.textSecondary,
+                                            ),
                                           ),
-                                        ),
-                                ),
-                              );
-                            }),
+                                  ),
+                                );
+                              }),
+                            ),
                           ),
                           const SizedBox(height: 16),
                           // Controls
@@ -524,7 +575,7 @@ class _NineGazeTestScreenState extends State<NineGazeTestScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Expanded(child: buildTargetVisualizer()),
+                            Expanded(child: SizedBox(height: 500, child: buildTargetVisualizer())),
                             const SizedBox(width: 24),
                             buildCameraSection(),
                           ],

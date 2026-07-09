@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: priya_74784_27_01_2000_2026-07-07.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.13
+VER: 1.112

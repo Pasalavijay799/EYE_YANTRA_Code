@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: ruthvik_2773_07_01_2000_2026-07-07.jpg
+ 
+right Exotropia:right_extro_degree:33.69
+No Vertical Squint
+HER: 1.343
+VER: 1.026

@@ -1,0 +1,13 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_gagan2_1002_01_01_2023_2026-07-09.jpg
+lv: 9.00px 
+lh: 11.05px 
+rv: 9.06px 
+rh: 11.05px
+Left Iris White Spot from center: 0.00 px
+Right Iris White Spot: 0.00 px
+
+ 
+Reflex Light Not Detected
+ 

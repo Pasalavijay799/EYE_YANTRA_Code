@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Hemanth_73737_14_01_2000_2026-07-05.jpg
+lv: 8.06px 
+lh: 11.00px 
+rv: 8.06px 
+rh: 11.00px
+Left Iris White Spot from center: 5.39 px
+Right Iris White Spot: 6.08 px
+No Strabismus Detected
+ 
+rvd: 11.163 deg 
+rhd: 1.364 deg
+ 
+ 
+lvd: 9.303 deg 
+lhd: 2.727 deg 
+ 

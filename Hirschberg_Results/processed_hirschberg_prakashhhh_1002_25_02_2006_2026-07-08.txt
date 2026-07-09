@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_prakashhhh_1002_25_02_2006_2026-07-08.jpg
+lv: 10.00px 
+lh: 12.00px 
+rv: 10.00px 
+rh: 12.00px
+Left Iris White Spot from center: 3.00 px
+Right Iris White Spot: 7.21 px
+No Strabismus Detected
+ 
+rvd: 6.000 deg 
+rhd: 7.500 deg
+ 
+ 
+lvd: 4.500 deg 
+lhd: 0.000 deg 
+ 

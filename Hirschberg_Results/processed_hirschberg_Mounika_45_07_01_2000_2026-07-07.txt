@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Mounika_45_07_01_2000_2026-07-07.jpg
+lv: 7.00px 
+lh: 10.00px 
+rv: 7.07px 
+rh: 8.06px
+Left Iris White Spot from center: 4.12 px
+Right Iris White Spot: 0.00 px
+No Strabismus Detected
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 8.571 deg 
+lhd: 1.500 deg 
+ 

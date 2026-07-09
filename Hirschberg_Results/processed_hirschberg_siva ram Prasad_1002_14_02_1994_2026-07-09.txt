@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_siva ram Prasad_1002_14_02_1994_2026-07-09.jpg
+lv: 8.06px 
+lh: 11.05px 
+rv: 8.00px 
+rh: 11.05px
+Left Iris White Spot from center: 9.22 px
+Right Iris White Spot: 10.30 px
+No Strabismus Detected
+ 
+rvd: 9.375 deg 
+rhd: 12.222 deg
+ 
+ 
+lvd: 13.024 deg 
+lhd: 8.148 deg 
+ 

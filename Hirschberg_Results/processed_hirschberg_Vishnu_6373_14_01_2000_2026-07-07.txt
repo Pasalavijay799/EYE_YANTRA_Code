@@ -1,0 +1,19 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Vishnu_6373_14_01_2000_2026-07-07.jpg
+lv: 9.06px 
+lh: 12.04px 
+rv: 9.00px 
+rh: 11.00px
+Left Iris White Spot from center: 10.05 px
+Right Iris White Spot: 15.23 px
+Strabismus detected in Right Eye with type: Esotropia (Inward).
+Type: Esotropia (Inward):Right Eye likely Esotropia
+ 
+rvd: 10.000 deg 
+rhd: 19.091 deg
+ 
+ 
+lvd: 16.565 deg 
+lhd: 1.246 deg 
+ 

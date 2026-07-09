@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
@@ -7,6 +8,7 @@ import '../widgets/glass_card.dart';
 import '../widgets/mjpeg_viewer.dart';
 import '../widgets/tablet_camera_preview.dart';
 import 'results_screen.dart';
+import 'hirschberg_test_screen.dart';
 
 class PreliminaryTestScreen extends StatefulWidget {
   const PreliminaryTestScreen({Key? key}) : super(key: key);
@@ -26,9 +28,13 @@ class _PreliminaryTestScreenState extends State<PreliminaryTestScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final apiService = Provider.of<ApiService>(context, listen: false);
-      await apiService.fetchAvailableCameras();
-      if (mounted) {
-        await _showCameraSelectionDialog(apiService);
+      // Only probe laptop cameras on desktop platforms
+      final isDesktop = Platform.isLinux || Platform.isWindows || Platform.isMacOS;
+      if (isDesktop) {
+        await apiService.fetchAvailableCameras();
+        if (mounted) {
+          await _showCameraSelectionDialog(apiService);
+        }
       }
     });
   }
@@ -143,8 +149,19 @@ class _PreliminaryTestScreenState extends State<PreliminaryTestScreen> {
       });
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Baseline captured successfully!'), backgroundColor: AppTheme.primary),
+        const SnackBar(
+          content: Text('✅ Baseline captured! Moving to Hirschberg Test...'),
+          backgroundColor: AppTheme.primary,
+          duration: Duration(seconds: 2),
+        ),
       );
+      // Auto-transition to Hirschberg Test after 2 seconds
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HirschbergTestScreen()),
+        );
+      });
     } else {
       setState(() {
         _isSuccess = false;
@@ -216,7 +233,16 @@ class _PreliminaryTestScreenState extends State<PreliminaryTestScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preliminary Alignment'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Preliminary Alignment'),
+            Text(
+              'Patient: ${apiService.activePatientDetails['name'] ?? 'N/A'} (ID: ${apiService.activePatientDetails['id'] ?? 'N/A'})',
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
+            ),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -234,7 +260,7 @@ class _PreliminaryTestScreenState extends State<PreliminaryTestScreen> {
               padding: const EdgeInsets.all(24),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final isWide = constraints.maxWidth > 900;
+                  final isWide = constraints.maxWidth >= 906;
 
                   Widget buildCameraSection() {
                     return SizedBox(
@@ -250,11 +276,22 @@ class _PreliminaryTestScreenState extends State<PreliminaryTestScreen> {
                               child: Stack(
                                 children: [
                                   apiService.localCameraSource == 'tablet'
-                                      ? TabletCameraPreview(
-                                          onControllerInitialized: (controller) {
-                                            _localCameraController = controller;
-                                          },
-                                        )
+                                      ? (!_isCaptured
+                                          ? TabletCameraPreview(
+                                              onControllerInitialized: (controller) {
+                                                _localCameraController = controller;
+                                              },
+                                            )
+                                          : Container(
+                                              color: Colors.black87,
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.check_circle_outline_rounded,
+                                                  color: AppTheme.primary,
+                                                  size: 80,
+                                                ),
+                                              ),
+                                            ))
                                       : MjpegViewer(
                                           url: streamUrl,
                                           width: double.infinity,

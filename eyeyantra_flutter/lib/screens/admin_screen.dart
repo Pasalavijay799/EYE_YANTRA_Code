@@ -24,6 +24,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
   final _deviceController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _nextPatientIdController = TextEditingController();
 
   List<dynamic> _patients = [];
   bool _loadingPatients = false;
@@ -47,6 +48,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
     _deviceController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _nextPatientIdController.dispose();
     super.dispose();
   }
 
@@ -64,6 +66,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
         _deviceController.text = config['device_name'] ?? '';
         _emailController.text = config['contact_email'] ?? '';
         _phoneController.text = config['contact_phone'] ?? '';
+        _nextPatientIdController.text = config['next_patient_id'] ?? '1001';
       });
     }
   }
@@ -91,6 +94,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
       'device_name': _deviceController.text.trim(),
       'contact_email': _emailController.text.trim(),
       'contact_phone': _phoneController.text.trim(),
+      'next_patient_id': _nextPatientIdController.text.trim(),
     });
 
     if (result['status'] == 'success') {
@@ -136,29 +140,31 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Edit Patient Record'),
-        content: Form(
-          key: editFormKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: editNameController,
-                decoration: const InputDecoration(labelText: 'Name'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'Name required' : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: editIdController,
-                decoration: const InputDecoration(labelText: 'Patient ID'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'ID required' : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: editDobController,
-                decoration: const InputDecoration(labelText: 'Date of Birth'),
-                validator: (v) => (v == null || v.trim().isEmpty) ? 'DOB required' : null,
-              ),
-            ],
+        content: SingleChildScrollView(
+          child: Form(
+            key: editFormKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  controller: editNameController,
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  validator: (v) => (v == null || v.trim().isEmpty) ? 'Name required' : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: editIdController,
+                  decoration: const InputDecoration(labelText: 'Patient ID'),
+                  validator: (v) => (v == null || v.trim().isEmpty) ? 'ID required' : null,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: editDobController,
+                  decoration: const InputDecoration(labelText: 'Date of Birth'),
+                  validator: (v) => (v == null || v.trim().isEmpty) ? 'DOB required' : null,
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
@@ -314,6 +320,20 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
                 controller: _phoneController,
                 decoration: const InputDecoration(labelText: 'Contact Phone'),
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _nextPatientIdController,
+                decoration: const InputDecoration(
+                  labelText: 'Next Auto-Generated Patient ID',
+                  helperText: 'Starting sequence for next new session',
+                ),
+                keyboardType: TextInputType.number,
+                validator: (v) {
+                  if (v == null || v.isEmpty) return 'Required';
+                  if (int.tryParse(v) == null) return 'Must be a valid integer';
+                  return null;
+                },
               ),
               const SizedBox(height: 24),
               ElevatedButton(

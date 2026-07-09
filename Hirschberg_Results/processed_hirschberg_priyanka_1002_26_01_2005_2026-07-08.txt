@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_priyanka_1002_26_01_2005_2026-07-08.jpg
+lv: 8.06px 
+lh: 10.05px 
+rv: 9.06px 
+rh: 10.05px
+Left Iris White Spot from center: 16.55 px
+Right Iris White Spot: 0.00 px
+No Strabismus Detected
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 13.024 deg 
+lhd: 22.388 deg 
+ 

@@ -333,12 +333,14 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                             color: AppTheme.primary,
                           ),
                           const SizedBox(width: 8),
-                          const Text(
-                            'Skip BLE & Configure Stream IP Manually',
-                            style: TextStyle(
-                              color: AppTheme.primary,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                          const Expanded(
+                            child: Text(
+                              'Skip BLE & Configure Stream IP Manually',
+                              style: TextStyle(
+                                color: AppTheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
                         ],

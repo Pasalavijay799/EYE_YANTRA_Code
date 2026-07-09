@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_Niharika_1_1002_18_01_2006_2026-07-08.jpg
+lv: 9.00px 
+lh: 11.00px 
+rv: 8.00px 
+rh: 10.00px
+Left Iris White Spot from center: 8.06 px
+Right Iris White Spot: 0.00 px
+No Strabismus Detected
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 13.333 deg 
+lhd: 1.364 deg 
+ 

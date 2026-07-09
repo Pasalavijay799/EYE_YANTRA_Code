@@ -52,6 +52,7 @@ a = Analysis(
         'NineGazeProcessing',
         'process_nine_gaze_images',
         'overallreport',
+        '_report_appendix',
         'crop_eyes_from_image',
     ],
     hookspath=[],

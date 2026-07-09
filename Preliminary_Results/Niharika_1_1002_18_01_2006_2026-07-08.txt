@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Niharika_1_1002_18_01_2006_2026-07-08.jpg
+ 
+right Exotropia:right_extro_degree:41.19
+No Vertical Squint
+HER: 1.524
+VER: 1.472

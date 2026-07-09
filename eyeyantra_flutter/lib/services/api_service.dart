@@ -49,7 +49,19 @@ class ApiService extends ChangeNotifier {
       _localCameraSource = 'hardware';
     }
     notifyListeners();
-    checkConnection();
+    final connected = await checkConnection();
+    // On mobile devices, tell the backend to NOT use the laptop camera
+    if (!isDesktop && connected && !_isDemoMode) {
+      try {
+        await http.post(
+          Uri.parse('$_baseUrl/set_camera_source'),
+          body: {'source': 'tablet'},
+        );
+        debugPrint('📱 Mobile device connected — backend set to tablet camera mode');
+      } catch (e) {
+        debugPrint('Could not set camera source on backend: $e');
+      }
+    }
   }
 
   Future<void> setLocalCameraSource(String source) async {
@@ -174,10 +186,20 @@ class ApiService extends ChangeNotifier {
   Future<bool> discoverBackend() async {
     if (_isDemoMode || _isScanning) return false;
     _isScanning = true;
-    _scanStatusMessage = 'Searching for local network interfaces...';
+    _scanStatusMessage = 'Checking connection to saved server...';
     notifyListeners();
 
     try {
+      final wasConnected = await checkConnection();
+      if (wasConnected) {
+        _scanStatusMessage = 'Connected to saved server!';
+        _isScanning = false;
+        notifyListeners();
+        return true;
+      }
+
+      _scanStatusMessage = 'Searching for local network interfaces...';
+      notifyListeners();
       final interfaces = await NetworkInterface.list(
         includeLoopback: false,
         type: InternetAddressType.IPv4,
@@ -271,12 +293,20 @@ class ApiService extends ChangeNotifier {
     required String dob,
     required String id,
   }) async {
+    String finalId = id.trim();
+    if (finalId.isEmpty) {
+      final nameClean = name.replaceAll(RegExp(r'[^a-zA-Z]'), '').toUpperCase();
+      final namePrefix = nameClean.length >= 3 ? nameClean.substring(0, 3) : nameClean;
+      final dobDigits = dob.replaceAll(RegExp(r'[^0-9]'), '');
+      finalId = "$namePrefix$dobDigits";
+    }
+
     if (_isDemoMode) {
       _status['userName'] = name;
       _status['personDetails'] = {
         'name': name,
         'dob': dob,
-        'id': id,
+        'id': finalId,
       };
       _status['preliminary_check'] = false;
       _status['hirschberg_check'] = false;
@@ -292,7 +322,7 @@ class ApiService extends ChangeNotifier {
         body: {
           'patient_name': name,
           'patient_dob': dob,
-          'patient_id': id,
+          'patient_id': finalId,
         },
       );
       final data = jsonDecode(response.body);
@@ -622,6 +652,29 @@ class ApiService extends ChangeNotifier {
     } finally {
       _setLoading(false);
     }
+  }
+
+  Future<String> getNextPatientId() async {
+    if (_isDemoMode) {
+      final prefs = await SharedPreferences.getInstance();
+      int lastDemoId = prefs.getInt('last_demo_patient_id') ?? 18239;
+      int nextId = lastDemoId + 1;
+      await prefs.setInt('last_demo_patient_id', nextId);
+      return nextId.toString();
+    }
+
+    try {
+      final response = await http.get(Uri.parse('$_baseUrl/api/next_patient_id')).timeout(const Duration(seconds: 3));
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          return data['next_id']?.toString() ?? '1001';
+        }
+      }
+    } catch (e) {
+      debugPrint('Error getting next patient ID: $e');
+    }
+    return '1001';
   }
 
   Future<List<dynamic>> getPatientsList() async {

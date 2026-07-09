@@ -2021,6 +2021,14 @@ def edit_patient():
 
 @app.route("/save_admin_config", methods=["POST"])
 def save_admin_config():
+    existing_config = {}
+    if os.path.exists("admin_config.json"):
+        try:
+            with open("admin_config.json", "r", encoding="utf-8") as f:
+                existing_config = json.load(f)
+        except Exception:
+            pass
+
     admin_config = {
         "clinic_name": request.form.get("clinic_name"),
         "doctor_name": request.form.get("doctor_name"),
@@ -2035,6 +2043,14 @@ def save_admin_config():
     for k, v in admin_config.items():
         if not v:
             return jsonify({"status": "error", "message": f"{k.replace('_', ' ').capitalize()} is required."}), 400
+
+    next_pid = request.form.get("next_patient_id")
+    if next_pid:
+        admin_config["next_patient_id"] = str(next_pid).strip()
+    elif "next_patient_id" in existing_config:
+        admin_config["next_patient_id"] = existing_config["next_patient_id"]
+    else:
+        admin_config["next_patient_id"] = "1001"
             
     try:
         with open("admin_config.json", "w", encoding="utf-8") as f:
@@ -2054,7 +2070,8 @@ def api_get_admin_config():
         "tech_title": "Examining Technician",
         "device_name": "EyeYantra v1.0",
         "contact_email": "reports@eyeyantra.health",
-        "contact_phone": "+91 00000 00000"
+        "contact_phone": "+91 00000 00000",
+        "next_patient_id": "1001"
     }
     if os.path.exists("admin_config.json"):
         try:
@@ -2063,6 +2080,21 @@ def api_get_admin_config():
         except Exception as e:
             print(f"Error loading config: {e}")
     return jsonify(admin_config)
+
+
+@app.route("/api/next_patient_id", methods=["GET"])
+def api_next_patient_id():
+    config = {
+        "next_patient_id": "1001"
+    }
+    if os.path.exists("admin_config.json"):
+        try:
+            with open("admin_config.json", "r", encoding="utf-8") as f:
+                config.update(json.load(f))
+        except Exception:
+            pass
+    next_id = config.get("next_patient_id", "1001")
+    return jsonify({"status": "success", "next_id": str(next_id)})
 
 
 @app.route("/api/admin/patients", methods=["GET"])
@@ -2328,6 +2360,12 @@ def api_intake():
 
     if not patient_name:
         return jsonify({"status": "error", "message": "UserName Required*"}), 400
+
+    if not patient_id:
+        name_clean = "".join([c for c in patient_name if c.isalpha()]).upper()
+        name_prefix = name_clean[:3] if len(name_clean) >= 3 else name_clean
+        dob_digits = "".join([c for c in patient_dob if c.isdigit()])
+        patient_id = f"{name_prefix}{dob_digits}"
 
     personDetails["userName"] = patient_name
     personDetails["dob"] = patient_dob

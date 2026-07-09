@@ -1,0 +1,19 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_mounika_3663_14_01_2000_2026-07-07.jpg
+lv: 8.00px 
+lh: 9.00px 
+rv: 7.07px 
+rh: 9.06px
+Left Iris White Spot from center: 5.39 px
+Right Iris White Spot: 19.70 px
+Strabismus detected in Right Eye with type: Esotropia (Inward).
+Type: Esotropia (Inward):Right Eye likely Esotropia
+ 
+rvd: 16.971 deg 
+rhd: 29.817 deg
+ 
+ 
+lvd: 9.375 deg 
+lhd: 3.333 deg 
+ 

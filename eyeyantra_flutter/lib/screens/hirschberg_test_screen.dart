@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
@@ -7,6 +8,7 @@ import '../widgets/glass_card.dart';
 import '../widgets/mjpeg_viewer.dart';
 import '../widgets/tablet_camera_preview.dart';
 import 'results_screen.dart';
+import 'nine_gaze_test_screen.dart';
 
 class HirschbergTestScreen extends StatefulWidget {
   const HirschbergTestScreen({Key? key}) : super(key: key);
@@ -26,7 +28,11 @@ class _HirschbergTestScreenState extends State<HirschbergTestScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ApiService>(context, listen: false).fetchAvailableCameras();
+      // Only probe laptop cameras on desktop platforms
+      final isDesktop = Platform.isLinux || Platform.isWindows || Platform.isMacOS;
+      if (isDesktop) {
+        Provider.of<ApiService>(context, listen: false).fetchAvailableCameras();
+      }
     });
   }
 
@@ -111,8 +117,19 @@ class _HirschbergTestScreenState extends State<HirschbergTestScreen> {
       });
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Hirschberg captured successfully!'), backgroundColor: AppTheme.primary),
+        const SnackBar(
+          content: Text('✅ Hirschberg captured! Moving to 9-Gaze Test...'),
+          backgroundColor: AppTheme.primary,
+          duration: Duration(seconds: 2),
+        ),
       );
+      // Auto-transition to 9-Gaze Test after 2 seconds
+      Future.delayed(const Duration(seconds: 2), () {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const NineGazeTestScreen()),
+        );
+      });
     } else {
       setState(() {
         _isSuccess = false;
@@ -183,7 +200,16 @@ class _HirschbergTestScreenState extends State<HirschbergTestScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hirschberg Assessment'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Hirschberg Assessment'),
+            Text(
+              'Patient: ${apiService.activePatientDetails['name'] ?? 'N/A'} (ID: ${apiService.activePatientDetails['id'] ?? 'N/A'})',
+              style: const TextStyle(fontSize: 12, color: Colors.white70),
+            ),
+          ],
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
@@ -201,7 +227,7 @@ class _HirschbergTestScreenState extends State<HirschbergTestScreen> {
               padding: const EdgeInsets.all(24),
               child: LayoutBuilder(
                 builder: (context, constraints) {
-                  final isWide = constraints.maxWidth > 900;
+                  final isWide = constraints.maxWidth >= 906;
 
                   Widget buildCameraSection() {
                     return SizedBox(
@@ -217,12 +243,23 @@ class _HirschbergTestScreenState extends State<HirschbergTestScreen> {
                               child: Stack(
                                 children: [
                                   apiService.localCameraSource == 'tablet'
-                                      ? TabletCameraPreview(
-                                          defaultTorchOn: false,
-                                          onControllerInitialized: (controller) {
-                                            _localCameraController = controller;
-                                          },
-                                        )
+                                      ? (!_isCaptured
+                                          ? TabletCameraPreview(
+                                              defaultTorchOn: false,
+                                              onControllerInitialized: (controller) {
+                                                _localCameraController = controller;
+                                              },
+                                            )
+                                          : Container(
+                                              color: Colors.black87,
+                                              child: const Center(
+                                                child: Icon(
+                                                  Icons.check_circle_outline_rounded,
+                                                  color: AppTheme.primary,
+                                                  size: 80,
+                                                ),
+                                              ),
+                                            ))
                                       : MjpegViewer(
                                           url: streamUrl,
                                           width: double.infinity,

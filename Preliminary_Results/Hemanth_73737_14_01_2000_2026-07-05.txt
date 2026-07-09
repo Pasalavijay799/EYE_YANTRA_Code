@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Hemanth_73737_14_01_2000_2026-07-05.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.031
+VER: 1.033

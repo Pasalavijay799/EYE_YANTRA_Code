@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Mounika_45_07_01_2000_2026-07-07.jpg
+ 
+right Exotropia:right_extro_degree:61.70
+No Vertical Squint
+HER: 2.179
+VER: 1.045

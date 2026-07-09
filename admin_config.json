@@ -1,10 +1,11 @@
 {
-  "clinic_name": "Comprehensive Ocular Alignment Report",
-  "doctor_name": "Dr. A. Narayana, MBBS, DOMS",
-  "doctor_title": "Reviewing Ophthalmologist",
-  "tech_name": "T. Kumar",
-  "tech_title": "Examining Technician",
+  "clinic_name": "Aravind-eye hospital",
+  "doctor_name": "sathya",
+  "doctor_title": "Ophthalmologist",
+  "tech_name": "vijay",
+  "tech_title": "Technician",
   "device_name": "EyeYantra v1.0",
-  "contact_email": "reports@eyeyantra.health",
-  "contact_phone": "+91 00000 00000"
+  "contact_email": "example@gmail.com",
+  "contact_phone": "7993072927",
+  "next_patient_id": "1002"
 }

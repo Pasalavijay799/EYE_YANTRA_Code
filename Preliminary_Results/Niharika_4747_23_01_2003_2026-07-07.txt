@@ -1,0 +1,6 @@
+Preliminary test  Analysis Report
+
+Input Image Path: Niharika_4747_23_01_2003_2026-07-07.jpg
+ 
+right Exotropia:right_extro_degree:45.00right_hyper_degree:right_hyper_degree:4.76HER: 1.687
+VER: 1.54
