@@ -126,7 +126,7 @@ class EyeAnalyzer:
                             grade_medial = -1
                         elif LM - L_iris_rad < 5 * CLMD_seg / 2:
                             grade_medial = -2
-                        elif LM < 7 * CLMD_seg / 2:
+                        elif LM - L_iris_rad < 7 * CLMD_seg / 2:
                             grade_medial = -3
                         else:
                             grade_medial = -4
@@ -146,11 +146,11 @@ class EyeAnalyzer:
                     if LLD > 0.1:
                         if LLD - L_iris_rad < CLLD_seg / 2:
                             grade_l = 0
-                        elif LLD < 3 * CLLD_seg / 2:
+                        elif LLD - L_iris_rad < 3 * CLLD_seg / 2:
                             grade_l = -1
-                        elif LLD < 5 * CLLD_seg / 2:
+                        elif LLD - L_iris_rad < 5 * CLLD_seg / 2:
                             grade_l = -2
-                        elif LLD < 7 * CLLD_seg / 2:
+                        elif LLD - L_iris_rad < 7 * CLLD_seg / 2:
                             grade_l = -3
                         else:
                             grade_l = -4
@@ -172,7 +172,7 @@ class EyeAnalyzer:
                             grade_r_medial = -1
                         elif RM - R_iris_rad < 5 * CRMD_seg / 2:
                             grade_r_medial = -2
-                        elif RM < 7 * CRMD_seg / 2:
+                        elif RM - R_iris_rad < 7 * CRMD_seg / 2:
                             grade_r_medial = -3
                         else:
                             grade_r_medial = -4

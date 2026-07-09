@@ -1767,15 +1767,14 @@ def generate_overall_report():
             latest_raw = max(prelim_raw_files, key=os.path.getctime)
             basename = os.path.basename(latest_raw)
             processed_path = os.path.join("Preliminary_Results", basename)
-            if not os.path.exists(processed_path):
-                print(f"🔄 Fallback processing preliminary image for {basename}...")
-                raw_img = cv2.imread(latest_raw)
-                if raw_img is not None:
-                    from results_processing import analyze_eyes
-                    try:
-                        analyze_eyes(raw_img, processed_path, basename)
-                    except Exception as pe:
-                        print(f"⚠️ Fallback preliminary processing failed for {basename}: {pe}")
+            print(f"🔄 Fallback processing preliminary image for {basename}...")
+            raw_img = cv2.imread(latest_raw)
+            if raw_img is not None:
+                from results_processing import analyze_eyes
+                try:
+                    analyze_eyes(raw_img, processed_path, basename)
+                except Exception as pe:
+                    print(f"⚠️ Fallback preliminary processing failed for {basename}: {pe}")
                     
         # 2. Fallback for Hirschberg:
         if user_str:
@@ -1789,44 +1788,37 @@ def generate_overall_report():
             latest_raw = max(hirsch_raw_files, key=os.path.getctime)
             basename = os.path.basename(latest_raw)
             processed_path = os.path.join("Hirschberg_Results", f"processed_{basename}")
-            if not os.path.exists(processed_path):
-                print(f"🔄 Fallback processing Hirschberg image for {basename}...")
-                raw_img = cv2.imread(latest_raw)
-                if raw_img is not None:
-                    flipped_img = cv2.flip(raw_img, 1)
-                    from hirschberg_analysis import analyze_hirschberg
-                    try:
-                        analyze_hirschberg(flipped_img, "Hirschberg_Results", basename)
-                    except Exception as he:
-                        print(f"⚠️ Fallback Hirschberg processing failed for {basename}: {he}")
+            print(f"🔄 Fallback processing Hirschberg image for {basename}...")
+            raw_img = cv2.imread(latest_raw)
+            if raw_img is not None:
+                flipped_img = cv2.flip(raw_img, 1)
+                from hirschberg_analysis import analyze_hirschberg
+                try:
+                    analyze_hirschberg(flipped_img, "Hirschberg_Results", basename)
+                except Exception as he:
+                    print(f"⚠️ Fallback Hirschberg processing failed for {basename}: {he}")
 
         # 3. Fallback for 9-Gaze:
         gaze_output_folder = "9GazeResults"
         if user_str:
-            gaze_processed_dirs = glob.glob(os.path.join(gaze_output_folder, f"*{user_str}*_Areal"))
+            gaze_raw_dirs = glob.glob(os.path.join("9GazeTestImages", f"*{user_str}*"))
         else:
-            gaze_processed_dirs = glob.glob(os.path.join(gaze_output_folder, "*_Areal"))
+            gaze_raw_dirs = glob.glob(os.path.join("9GazeTestImages", "*"))
+            gaze_raw_dirs = [d for d in gaze_raw_dirs if os.path.isdir(d)]
 
-        if not gaze_processed_dirs:
-            if user_str:
-                gaze_raw_dirs = glob.glob(os.path.join("9GazeTestImages", f"*{user_str}*"))
-            else:
-                gaze_raw_dirs = glob.glob(os.path.join("9GazeTestImages", "*"))
-                gaze_raw_dirs = [d for d in gaze_raw_dirs if os.path.isdir(d)]
-
-            if gaze_raw_dirs:
-                latest_raw_dir = max(gaze_raw_dirs, key=os.path.getctime)
-                folder_name = os.path.basename(latest_raw_dir)
-                raw_imgs = [f for f in os.listdir(latest_raw_dir) if f.startswith("gaze_") and f.endswith(".jpg")]
-                if len(raw_imgs) >= 9:
-                    print(f"🔄 Fallback processing 9-Gaze for {folder_name}...")
-                    from NineGazeProcessing import process_nine_gaze_images
-                    from process_nine_gaze_images import create_combined_image
-                    try:
-                        process_nine_gaze_images(folder_name, "9GazeTestImages", gaze_output_folder)
-                        create_combined_image(folder_name, gaze_output_folder)
-                    except Exception as ge:
-                        print(f"⚠️ Fallback 9-Gaze processing failed for {folder_name}: {ge}")
+        if gaze_raw_dirs:
+            latest_raw_dir = max(gaze_raw_dirs, key=os.path.getctime)
+            folder_name = os.path.basename(latest_raw_dir)
+            raw_imgs = [f for f in os.listdir(latest_raw_dir) if f.startswith("gaze_") and f.endswith(".jpg")]
+            if len(raw_imgs) >= 9:
+                print(f"🔄 Fallback processing 9-Gaze for {folder_name}...")
+                from NineGazeProcessing import process_nine_gaze_images
+                from process_nine_gaze_images import create_combined_image
+                try:
+                    process_nine_gaze_images(folder_name, "9GazeTestImages", gaze_output_folder)
+                    create_combined_image(folder_name, gaze_output_folder)
+                except Exception as ge:
+                    print(f"⚠️ Fallback 9-Gaze processing failed for {folder_name}: {ge}")
 
         pdf_path, pattern_result = overallreport.generate_pdf_report(personDetails=personDetails)
         return jsonify({"status": "success", "pattern": pattern_result})
