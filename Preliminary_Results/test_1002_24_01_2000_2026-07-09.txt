@@ -1,0 +1,12 @@
+Preliminary test  Analysis Report
+
+Input Image Path: test_1002_24_01_2000_2026-07-09.jpg
+ 
+
+left Esotropia
+ 
+
+left_estro_degree:-45.00
+ 
+right_hyper_degree:right_hyper_degree:4.27HER: 2.343
+VER: 1.568

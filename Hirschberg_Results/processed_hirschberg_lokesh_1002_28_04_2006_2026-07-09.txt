@@ -1,0 +1,18 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_lokesh_1002_28_04_2006_2026-07-09.jpg
+lv: 8.25px 
+lh: 10.05px 
+rv: 7.07px 
+rh: 9.06px
+Left Iris White Spot from center: 6.32 px
+Right Iris White Spot: 0.00 px
+No Strabismus Detected
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 10.914 deg 
+lhd: 2.985 deg 
+ 

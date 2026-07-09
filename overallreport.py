@@ -448,12 +448,40 @@ def generate_pdf_report(personDetails):
             rhd_match = re.search(r"rhd:\s*([\d\.-]+)", content)
             rvd_match = re.search(r"rvd:\s*([\d\.-]+)", content)
             
-            if lhd_match and float(lhd_match.group(1)) > 0:
-                hirsch_l_pos = "Slightly nasal"
-                hirsch_l_dev = f"-{float(lhd_match.group(1)):.1f}°"
-            if rhd_match and float(rhd_match.group(1)) > 0:
-                hirsch_r_pos = "Slightly nasal"
-                hirsch_r_dev = f"-{float(rhd_match.group(1)):.1f}°"
+            def classify_eye_deviation(eye_label, h_mag, v_mag):
+                # Sign convention: inward/upward = positive, outward/downward = negative.
+                # Reflex position is the inverse of the eye's deviation direction: an
+                # esotropic (inward-turned) eye shows the reflex displaced temporally,
+                # an exotropic (outward-turned) eye shows it displaced nasally.
+                if re.search(rf"{eye_label} Eye likely Esotropia", content):
+                    return "Slightly temporal", f"+{h_mag:.1f}°"
+                if re.search(rf"{eye_label} Eye likely Exotropia", content):
+                    return "Slightly nasal", f"-{h_mag:.1f}°"
+                if re.search(rf"{eye_label} Eye likely Hypertropia", content):
+                    return "Hypertropia (Upward)", f"+{v_mag:.1f}°"
+                if re.search(rf"{eye_label} Eye likely Hypotropia", content):
+                    return "Hypotropia (Downward)", f"-{v_mag:.1f}°"
+                
+                # Check for measured reflex displacement direction (temporal vs nasal)
+                dir_match = re.search(rf"{eye_label} Reflex Direction:\s*(\w+)", content)
+                if dir_match:
+                    reflex_dir = dir_match.group(1).lower()
+                    if reflex_dir == "temporal":
+                        return "Slightly temporal", f"+{h_mag:.1f}°"
+                    elif reflex_dir == "nasal":
+                        return "Slightly nasal", f"-{h_mag:.1f}°"
+                
+                if h_mag > 0.5:
+                    return "Slightly nasal", f"-{h_mag:.1f}°"
+                return "Within normal limits", "0°"
+
+            lhd_val = float(lhd_match.group(1)) if lhd_match else 0.0
+            lvd_val = float(lvd_match.group(1)) if lvd_match else 0.0
+            rhd_val = float(rhd_match.group(1)) if rhd_match else 0.0
+            rvd_val = float(rvd_match.group(1)) if rvd_match else 0.0
+
+            hirsch_l_pos, hirsch_l_dev = classify_eye_deviation("Left", lhd_val, lvd_val)
+            hirsch_r_pos, hirsch_r_dev = classify_eye_deviation("Right", rhd_val, rvd_val)
             # Parse detailed measurements for appendix
             for _hl in content.split("\n"):
                 _hs = _hl.strip()

@@ -406,6 +406,12 @@ def analyze_hirschberg(image, results_folder, filename):
                 #cv2.putText(frame, f"Right Iris White Spot: {MRD:.2f} px", (10, 370), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
                 text_content += f"Left Iris White Spot from center: {MLD:.2f} px\n"
                 text_content += f"Right Iris White Spot: {MRD:.2f} px\n"
+                if M2 > 0:
+                    l_dir = "temporal" if M2 < left_iris_center[0] else "nasal"
+                    text_content += f"Left Reflex Direction: {l_dir}\n"
+                if M1 > 0:
+                    r_dir = "temporal" if M1 < right_iris_center[0] else "nasal"
+                    text_content += f"Right Reflex Direction: {r_dir}\n"
                 
                 if Flag:
                     result = calculate_strabismus_angle(X1=right_iris_center[0], Y1=right_iris_center[1], M1=M1,N1=N1, X2=left_iris_center[0], Y2=left_iris_center[1],  M2=M2, N2=N2)

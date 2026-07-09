@@ -1,0 +1,19 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_shaik hafeez_1002_28_01_2000_2026-07-09.jpg
+lv: 9.00px 
+lh: 12.04px 
+rv: 9.06px 
+rh: 11.05px
+Left Iris White Spot from center: 19.00 px
+Right Iris White Spot: 0.00 px
+Strabismus detected in Right Eye with type: Esotropia (Inward).
+Type: Esotropia (Inward):Right Eye likely Esotropia
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 31.667 deg 
+lhd: 0.000 deg 
+ 
