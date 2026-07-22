@@ -1,0 +1,21 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_dhamini_1002_02_03_2024_2026-07-10.jpg
+lv: 8.00px 
+lh: 9.00px 
+rv: 7.00px 
+rh: 9.00px
+Left Iris White Spot from center: 7.07 px
+Right Iris White Spot: 7.28 px
+Left Reflex Direction: nasal
+Right Reflex Direction: temporal
+Strabismus detected in Right Eye with type: Esotropia (Inward).
+Type: Esotropia (Inward):Right Eye likely Esotropia
+ 
+rvd: 15.000 deg 
+rhd: 3.333 deg
+ 
+ 
+lvd: 13.125 deg 
+lhd: 1.667 deg 
+ 

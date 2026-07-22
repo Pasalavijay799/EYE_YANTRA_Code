@@ -1,0 +1,20 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_nadhini_1002_03_09_2015_2026-07-10.jpg
+lv: 7.00px 
+lh: 9.00px 
+rv: 7.00px 
+rh: 9.00px
+Left Iris White Spot from center: 3.61 px
+Right Iris White Spot: 4.12 px
+Left Reflex Direction: nasal
+Right Reflex Direction: temporal
+No Strabismus Detected
+ 
+rvd: 2.143 deg 
+rhd: 6.667 deg
+ 
+ 
+lvd: 6.429 deg 
+lhd: 3.333 deg 
+ 

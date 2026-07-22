@@ -1,0 +1,21 @@
+Hirschberg Analysis Report
+
+Input Image Path: test_calibration_check.jpg
+lv: 7.07px 
+lh: 10.05px 
+rv: 7.07px 
+rh: 9.06px
+Left Iris White Spot from center: 5.10 px
+Right Iris White Spot: 0.00 px
+Left Eye Calibrated Deviation: 1.02 mm = 7.53 deg = 13.21 PD
+Right Eye Calibrated Deviation: 0.00 mm = 0.00 deg = 0.00 PD
+Left Reflex Direction: nasal
+No Strabismus Detected
+ 
+rvd: 0.000 deg 
+rhd: 0.000 deg
+ 
+ 
+lvd: 10.607 deg 
+lhd: 1.493 deg 
+ 

@@ -1,0 +1,8 @@
+Preliminary test  Analysis Report
+
+Input Image Path: shanuja_1000_27_11_2005_2026-07-10.jpg
+ 
+right Exotropia:right_extro_degree:38.29
+No Vertical Squint
+HER: 1.793
+VER: 1.09

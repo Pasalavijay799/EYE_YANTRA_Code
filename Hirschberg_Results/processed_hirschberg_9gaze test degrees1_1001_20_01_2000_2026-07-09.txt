@@ -1,0 +1,21 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_9gaze test degrees1_1001_20_01_2000_2026-07-09.jpg
+lv: 4.00px 
+lh: 7.00px 
+rv: 4.00px 
+rh: 7.07px
+Left Iris White Spot from center: 18.03 px
+Right Iris White Spot: 18.11 px
+Left Reflex Direction: nasal
+Right Reflex Direction: nasal
+Strabismus detected in Right Eye with type: Hypertropia (Upward).
+Type: Hypertropia (Upward):Right Eye likely Hypertropia
+ 
+rvd: 7.500 deg 
+rhd: 38.184 deg
+ 
+ 
+lvd: 3.750 deg 
+lhd: 38.571 deg 
+ 

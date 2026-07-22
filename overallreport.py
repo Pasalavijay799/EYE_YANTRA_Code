@@ -70,51 +70,54 @@ def find_latest_person_data(userName=None):
         "grade_summary": (None, grades_summary_file)
     }
 
-def calculate_av_pattern(blocks):
-    up_imgs = ["gaze_1.jpg", "gaze_2.jpg", "gaze_3.jpg"]
-    down_imgs = ["gaze_7.jpg", "gaze_8.jpg", "gaze_9.jpg"]
-    primary_img = "gaze_5.jpg"
+def calculate_av_pattern(gaze_chart):
+    """Classify A/V-pattern horizontal strabismus from the calibrated prism-diopter
+    values in gaze_chart (see nine_gaze_deviation_chart.py's build_cross_chart) -
+    real mm/degree/PD-calibrated numbers, not raw uncalibrated pixels.
 
-    def get_dev(dist):
-        try:
-            rlat = float(dist.get("R_Lateral", 0))
-            rmed = float(dist.get("R_Medial", 0))
-            llat = float(dist.get("L_Lateral", 0))
-            lmed = float(dist.get("L_Medial", 0))
-            return (rlat - rmed) + (llat - lmed)
-        except:
-            return 0
+    Uses standard clinical thresholds: V-pattern requires >=15 PD more exodeviation
+    in upgaze than downgaze; A-pattern requires >=10 PD more exodeviation in
+    downgaze than upgaze (A-pattern's lower bar is conventional - A-patterns are
+    typically smaller in true magnitude than V-patterns). Below the formal
+    threshold but still directionally consistent above a noise floor, this reports
+    a "trend" rather than silently folding it into "no significant pattern" - a
+    near-threshold finding is not the same as no finding.
 
-    up_dev, down_dev, primary_dev = [], [], 0
+    Sign convention matches nine_gaze_deviation_chart.py: positive PD = eso/inward,
+    negative PD = exo/outward.
 
-    for b in blocks:
-        if b['image'] in up_imgs:
-            up_dev.append(abs(get_dev(b['distances'])))
-        elif b['image'] in down_imgs:
-            down_dev.append(abs(get_dev(b['distances'])))
-        elif b['image'] == primary_img:
-            primary_dev = abs(get_dev(b['distances']))
+    Known gap: X-pattern/Y-pattern/Reverse-Y-pattern classification is not
+    implemented here (would need the left/right values too, on top of up/down/
+    primary) - left for future work.
+    """
+    up = gaze_chart.get("up") if gaze_chart else None
+    down = gaze_chart.get("down") if gaze_chart else None
+    primary = gaze_chart.get("primary") if gaze_chart else None
 
-    avg_up = sum(up_dev)/len(up_dev) if up_dev else 0
-    avg_down = sum(down_dev)/len(down_dev) if down_dev else 0
+    if not up or not down:
+        return 0, 0, 0, 0, "No significant pattern", "warn"
+
+    avg_up = up["pd"]
+    avg_down = down["pd"]
+    primary_dev = primary["pd"] if primary else 0
     diff = avg_up - avg_down
 
-    if diff >= 5 or diff <= -5:
-        if avg_up > avg_down:
-            result = "V-pattern detected"
-        elif avg_up < avg_down:
-            result = "A-pattern detected" 
-        elif avg_up > primary_dev and avg_down < primary_dev:
-            result = "X-pattern detected"
-        elif avg_up > primary_dev and primary_dev >= avg_down:
-            result = "Y-pattern detected"
-        elif avg_down > primary_dev and primary_dev >= avg_up:       
-            result = "Reverse Y-pattern detected"
-        else:
-            result = "No significant pattern"
-    else: 
-        result = "No significant pattern"
-    return avg_up, avg_down, primary_dev, diff, result
+    V_THRESHOLD = 15   # PD: up must be at least this much MORE exo than down
+    A_THRESHOLD = 10   # PD: down must be at least this much MORE exo than up
+    TREND_FLOOR = 5    # PD: below this, treat as noise / comitant
+
+    if diff <= -V_THRESHOLD:
+        result, status_type = "V-pattern detected", "danger"
+    elif diff >= A_THRESHOLD:
+        result, status_type = "A-pattern detected", "danger"
+    elif diff <= -TREND_FLOOR:
+        result, status_type = "Mild V-pattern trend (below diagnostic threshold)", "warn"
+    elif diff >= TREND_FLOOR:
+        result, status_type = "Mild A-pattern trend (below diagnostic threshold)", "warn"
+    else:
+        result, status_type = "No directional pattern; deviation comitant", "success"
+
+    return avg_up, avg_down, primary_dev, diff, result, status_type
 
 def generate_pdf_report(personDetails):
     raw_user_name = f"{personDetails.get('userName', '')}_{personDetails.get('id', '')}_{personDetails.get('dob', '')}"
@@ -327,13 +330,20 @@ def generate_pdf_report(personDetails):
     if prelim_txt and os.path.exists(prelim_txt):
         with open(prelim_txt, "r") as f:
             content = f.read()
+            # Flag the eye actually named in the text ("right Esotropia" / "left Exotropia"
+            # etc.), not just whichever diagnosis word appears anywhere in the file - the
+            # old version mapped Esotropia -> RT and Exotropia -> LT unconditionally,
+            # regardless of which eye results_processing.py actually detected it in.
+            if "right Esotropia" in content or "right Exotropia" in content:
+                prelim_rt = "Review Required"
+            if "left Esotropia" in content or "left Exotropia" in content:
+                prelim_lt = "Review Required"
+
             if "Esotropia" in content:
                 prelim_diagnosis = "Horizontal squint (Esotropia) detected."
-                prelim_rt = "Review Required"
             elif "Exotropia" in content:
                 prelim_diagnosis = "Horizontal squint (Exotropia) detected."
-                prelim_lt = "Review Required"
-            
+
             # parse HER/VER
             her_match = re.search(r"HER:\s*([\d\.-]+)", content)
             ver_match = re.search(r"VER:\s*([\d\.-]+)", content)
@@ -617,7 +627,20 @@ def generate_pdf_report(personDetails):
         y_sec3 = y_sec3_p1
     gaze_img, gaze_txt = person_data["gaze"]
     grade_txt = person_data["grade_summary"][1]
-    
+
+    # Calibrated pixel -> mm -> degree deviation chart (Up/Down/Left/Right/Primary),
+    # relative to primary gaze. Provisional/experimental - see nine_gaze_deviation_chart.py.
+    gaze_deg_chart = {}
+    if gaze_img:
+        areal_folder = os.path.dirname(gaze_img)
+        raw_folder_name = os.path.basename(areal_folder).rsplit("_Areal", 1)[0]
+        raw_gaze_folder = os.path.join("9GazeTestImages", raw_folder_name)
+        try:
+            from nine_gaze_deviation_chart import build_cross_chart
+            gaze_deg_chart = build_cross_chart(raw_gaze_folder)
+        except Exception as ge:
+            print(f"Gaze deviation chart failed: {ge}")
+
     # Parse grades
     gaze_table_rows = []
     gaze_directions = {
@@ -717,8 +740,60 @@ def generate_pdf_report(personDetails):
                 pdf.set_font("Helvetica", "", 7.5)
             pdf.cell(16, 4.6, val, border=1, align="C")
 
+    old_table_bottom = table_y3 + 5 + len(gaze_table_rows) * 4.6
+
+    # --- Calibrated Deviation (relative to primary gaze), drawn as a 5-position
+    # prism-cover-test cross diagram (Up/Left/Primary/Right/Down) - the classic
+    # clinical PCT chart layout, rather than a flat table.
+    cross_y = old_table_bottom + 7
+    pdf.set_font("Helvetica", "B", 7)
+    pdf.set_text_color(*C_MUTED)
+    pdf.set_xy(10, cross_y - 4)
+    pdf.cell(90, 3.5, "Calibrated Deviation - Up/Down/Left/Right vs primary, Primary shows eye asymmetry (provisional)", ln=0)
+
+    def cross_label(key):
+        r = gaze_deg_chart.get(key)
+        if not r:
+            return "N/A"
+        return f"{abs(r['degrees']):.1f} deg {r['direction']} ({abs(r['pd']):.1f}D)"
+
+    box_x, box_w, box_h = 10, 90, 24
+    cx = box_x + box_w / 2
+    top_y = cross_y
+    mid_row_top = cross_y + 5 + 4.5
+    mid_row_bottom = mid_row_top + 5
+    bottom_y = mid_row_bottom + 4.5
+
+    pdf.set_draw_color(*C_NAVY)
+    pdf.set_line_width(0.3)
+    pdf.line(cx, top_y + 5, cx, mid_row_top)          # vertical arm: Up -> row
+    pdf.line(cx, mid_row_bottom, cx, bottom_y)         # vertical arm: row -> Down
+    pdf.line(box_x + 16, mid_row_top, box_x + box_w - 16, mid_row_top)  # horizontal rule above the row
+    pdf.set_line_width(0.2)
+
+    def draw_cross_cell(x, y, w, key, bold_if_deviated=True):
+        r = gaze_deg_chart.get(key)
+        deviated = r is not None and r["direction"] not in ("Ortho",)
+        pdf.set_xy(x, y)
+        if deviated and bold_if_deviated:
+            pdf.set_text_color(*C_DANGER)
+            pdf.set_font("Helvetica", "B", 7.5)
+        else:
+            pdf.set_text_color(*C_NAVY)
+            pdf.set_font("Helvetica", "", 7.5)
+        pdf.cell(w, 5, cross_label(key), align="C")
+
+    draw_cross_cell(cx - 30, top_y, 60, "up")
+    draw_cross_cell(cx - 30, bottom_y, 60, "down")
+    draw_cross_cell(box_x, mid_row_top, 28, "left")
+    draw_cross_cell(box_x + box_w - 28, mid_row_top, 28, "right")
+    draw_cross_cell(cx - 15, mid_row_top, 30, "primary", bold_if_deviated=False)
+
+    pdf.set_text_color(*C_NAVY)
+    pdf.set_font("Helvetica", "", 7.5)
+
     # Track gaze table bottom for dynamic Section 4 positioning
-    gaze_table_bottom = table_y3 + 5 + len(gaze_table_rows) * 4.6
+    gaze_table_bottom = bottom_y + 6
     gaze_img_bottom = y_sec3 + 59  # default if no gaze image
 
     # Right Column (Composite Gaze Image)
@@ -757,12 +832,19 @@ def generate_pdf_report(personDetails):
     pattern_status_type = "warn"
     avg_up = avg_down = primary_dev = diff = 0
     pattern_result = "No significant pattern"
-    
-    if blocks:
-        avg_up, avg_down, primary_dev, diff, pattern_result = calculate_av_pattern(blocks)
-        if "detected" in pattern_result.lower():
-            pattern_status = pattern_result.upper()
-            pattern_status_type = "danger"
+
+    if gaze_deg_chart:
+        avg_up, avg_down, primary_dev, diff, pattern_result, pattern_status_type = calculate_av_pattern(gaze_deg_chart)
+        if pattern_result == "V-pattern detected":
+            pattern_status = "V-PATTERN DETECTED"
+        elif pattern_result == "A-pattern detected":
+            pattern_status = "A-PATTERN DETECTED"
+        elif "Mild V-pattern trend" in pattern_result:
+            pattern_status = "V-PATTERN TREND"
+        elif "Mild A-pattern trend" in pattern_result:
+            pattern_status = "A-PATTERN TREND"
+        else:
+            pattern_status = "NO PATTERN"
 
     if section3_on_page1:
         # Section 3 is on the previous page now - Section 4 starts fresh at the top of Page 2.
@@ -810,12 +892,14 @@ def generate_pdf_report(personDetails):
     pdf.set_xy(10, box_y + box_h + 2)
     pdf.set_text_color(*C_NAVY)
     pdf.set_font("Helvetica", "", 8)
-    if "v-pattern" in pattern_result.lower():
-        desc_text = "Deviation increases in upgaze relative to downgaze beyond the primary-gaze baseline, consistent with a V-pattern horizontal deviation. Clinical correlation advised."
-    elif "a-pattern" in pattern_result.lower():
-        desc_text = "Deviation increases in downgaze relative to upgaze, consistent with an A-pattern horizontal deviation. Clinical correlation advised."
+    if pattern_result == "V-pattern detected":
+        desc_text = "Upgaze shows >=15 prism diopters more exodeviation than downgaze, consistent with a V-pattern horizontal deviation. Clinical correlation advised."
+    elif pattern_result == "A-pattern detected":
+        desc_text = "Downgaze shows >=10 prism diopters more exodeviation than upgaze, consistent with an A-pattern horizontal deviation. Clinical correlation advised."
+    elif "trend" in pattern_result.lower():
+        desc_text = f"{pattern_result}. Directionally consistent with a pattern deviation but has not crossed the formal diagnostic cutoff (15 PD for V, 10 PD for A) - consider re-testing rather than ruling out."
     else:
-        desc_text = "No significant horizontal pattern deviation detected across vertical gaze shifts."
+        desc_text = "No significant up/down asymmetry in horizontal deviation - consistent with comitant alignment across vertical gaze shifts."
     pdf.multi_cell(95, 3.5, desc_text, border=0)
     sec4_text_bottom = pdf.get_y()
 
@@ -845,8 +929,10 @@ def generate_pdf_report(personDetails):
     pdf.set_draw_color(148, 163, 184) # Slate-400
     pdf.line(chart_x + 8, axis_y, chart_x + chart_w - 8, axis_y)
     
-    # Values and Heights
-    max_val = max(avg_up, primary_dev, avg_down)
+    # Values and Heights - use magnitude for bar height (values can now be negative
+    # since they're signed calibrated PD, not abs()'d pixel magnitudes); the signed
+    # value is still shown as text above each bar.
+    max_val = max(abs(avg_up), abs(primary_dev), abs(avg_down))
     if max_val <= 0:
         max_val = 10.0
     scale = (chart_h - 15) / max_val
@@ -860,7 +946,7 @@ def generate_pdf_report(personDetails):
     ]
     
     for bx, label, val, color in bar_positions:
-        h = val * scale
+        h = abs(val) * scale
         # Draw bar rectangle
         pdf.set_fill_color(*color)
         pdf.rect(bx, axis_y - h, bar_width, h, style="F")

@@ -1,0 +1,20 @@
+Hirschberg Analysis Report
+
+Input Image Path: hirschberg_bavishya_1003_01_01_1998_2026-07-10.jpg
+lv: 7.00px 
+lh: 9.00px 
+rv: 7.00px 
+rh: 9.00px
+Left Iris White Spot from center: 5.10 px
+Right Iris White Spot: 6.08 px
+Left Reflex Direction: nasal
+Right Reflex Direction: temporal
+No Strabismus Detected
+ 
+rvd: 12.857 deg 
+rhd: 1.667 deg
+ 
+ 
+lvd: 10.714 deg 
+lhd: 1.667 deg 
+ 

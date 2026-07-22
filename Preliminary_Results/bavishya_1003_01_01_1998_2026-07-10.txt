@@ -1,0 +1,10 @@
+Preliminary test  Analysis Report
+
+Input Image Path: bavishya_1003_01_01_1998_2026-07-10.jpg
+ 
+
+No Horizontal Squint
+
+No Vertical Squint
+HER: 1.142
+VER: 1.187
